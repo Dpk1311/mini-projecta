@@ -1,0 +1,21 @@
+{
+  "name": "mini-project",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    "start": "concurrently \"npx tailwindcss -i ./public/src/input.css -o ./public/dist/output.css --watch\" \"nodemon app.js\""
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "concurrently": "^8.2.1",
+    "ejs": "^3.1.9",
+    "express": "^4.18.2",
+    "nodemon": "^3.0.1"
+  },
+  "devDependencies": {
+    "tailwindcss": "^3.3.3"
+  }
+}

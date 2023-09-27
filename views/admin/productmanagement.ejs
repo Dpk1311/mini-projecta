@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="dist/output.css">
+    <title>Document</title>
+</head>
+
+<body>
+    <%- include('adminpartials/navbar') %>
+
+
+        <table class="min-w-full border-collapse block md:table">
+            <thead class="block md:table-header-group">
+                <tr
+                    class="border border-grey-500 md:border-none block md:table-row absolute -top-full md:top-auto -left-full md:left-auto  md:relative ">
+                    <th
+                        class="bg-gray-600 p-2 text-white font-bold md:border md:border-grey-500 text-left block md:table-cell">
+                        Name</th>
+                    <th
+                        class="bg-gray-600 p-2 text-white font-bold md:border md:border-grey-500 text-left block md:table-cell">
+                        Description</th>
+                    <th
+                        class="bg-gray-600 p-2 text-white font-bold md:border md:border-grey-500 text-left block md:table-cell">
+                        Image</th>
+                    <th
+                        class="bg-gray-600 p-2 text-white font-bold md:border md:border-grey-500 text-left block md:table-cell">
+                        Price</th>
+                    <th
+                        class="bg-gray-600 p-2 text-white font-bold md:border md:border-grey-500 text-left block md:table-cell">
+                        Discount</th>
+                    <th
+                        class="bg-gray-600 p-2 text-white font-bold md:border md:border-grey-500 text-left block md:table-cell">
+                        Brand</th>
+                    <th
+                        class="bg-gray-600 p-2 text-white font-bold md:border md:border-grey-500 text-left block md:table-cell">
+                        Color</th>
+                    <th
+                        class="bg-gray-600 p-2 text-white font-bold md:border md:border-grey-500 text-left block md:table-cell">
+                        Size</th>
+                    <th
+                        class="bg-gray-600 p-2 text-white font-bold md:border md:border-grey-500 text-left block md:table-cell">
+                        Quantity</th>
+                    <th
+                        class="bg-gray-600 p-2 text-white font-bold md:border md:border-grey-500 text-left block md:table-cell">
+                        Actions</th>
+                </tr>
+            </thead>
+            <tbody class="block md:table-row-group">
+                <% check1.forEach((product)=> { %>
+                    <tr class="bg-gray-300 border border-grey-500 md:border-none block md:table-row">
+                        <td class="p-2 md:border md:border-grey-500 text-left block md:table-cell"><span
+                                class="inline-block w-1/3 md:hidden font-bold">Name</span>
+                            <%= product.Name %>
+                        </td>
+                        <td class="p-2 md:border md:border-grey-500 text-left block md:table-cell"><span
+                                class="inline-block w-1/3 md:hidden font-bold">Description</span>
+                            <%= product.Description %>
+                        </td>
+                        <td class="p-2 md:border md:border-grey-500 text-left block md:table-cell"><span
+                                class="inline-block w-1/3 md:hidden font-bold"> Image</span>
+                            <%= product.Image %>
+                        </td>
+                        <td class="p-2 md:border md:border-grey-500 text-left block md:table-cell"><span
+                                class="inline-block w-1/3 md:hidden font-bold">Price</span>
+                            <%= product.Price %>
+                        </td>
+                        <td class="p-2 md:border md:border-grey-500 text-left block md:table-cell"><span
+                                class="inline-block w-1/3 md:hidden font-bold">Discount</span>
+                            <%= product.Discount %>
+                        </td>
+                        <td class="p-2 md:border md:border-grey-500 text-left block md:table-cell"><span
+                                class="inline-block w-1/3 md:hidden font-bold">Brand</span>
+                            <%= product.Brand %>
+                        </td>
+                        <td class="p-2 md:border md:border-grey-500 text-left block md:table-cell"><span
+                                class="inline-block w-1/3 md:hidden font-bold">Color</span>
+                            <%= product.Color %>
+                        </td>
+                        <td class="p-2 md:border md:border-grey-500 text-left block md:table-cell"><span
+                                class="inline-block w-1/3 md:hidden font-bold">Size</span>
+                            <%= product.Size %>
+                        </td>
+                        <td class="p-2 md:border md:border-grey-500 text-left block md:table-cell"><span
+                                class="inline-block w-1/3 md:hidden font-bold">Quantity</span>
+                            <%= product.Quantity %>
+                        </td>
+                        <td class="p-2 md:border md:border-grey-500 text-left block md:table-cell">
+                            <span class="inline-block w-1/3 md:hidden font-bold">Actions</span>
+                            <button
+                                class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-2 border border-blue-500 rounded">Edit</button>
+                            <button
+                                class="bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-2 border border-red-500 rounded"><a
+                                    href="/addproduct">Add</a></button>
+                            <button
+                                class="bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-2 border border-red-500 rounded">Delete</button>
+                        </td>
+                    </tr>
+                    <% }); %>
+            </tbody>
+
+        </table>
+</body>
+
+</html>

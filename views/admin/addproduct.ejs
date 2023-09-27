@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="dist/output.css">
+    <title>Document</title>
+</head>
+
+<body>
+
+    <%- include('adminpartials/navbar') %>
+        <div class="min-h-screen flex items-center justify-center">
+            <div class="max-w-md w-full p-6 bg-white rounded-lg shadow-lg">
+                <div class="flex justify-center mb-8">
+                    <h1 class="w-30 h-20 font-bold">V A S T R A</h1>
+                </div>
+                <h1 class="text-2xl font-semibold text-center text-gray-500 mt-8 mb-6">Add Product</h1>
+                <form method="post" action="/addproduct">
+                    <div class="mb-4">
+                        <label for="Name" class="block mb-2 text-sm text-gray-600">Name</label>
+                        <input type="Name" id="Name" name="Name"
+                            class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500"
+                            required>
+                    </div>
+                    <div class="mb-4">
+                        <label for="Description" class="block mb-2 text-sm text-gray-600">Description</label>
+                        <input type="text" id="Description" name="Description"
+                            class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500"
+                            required>
+                    </div>
+                    <div class="mb-4">
+                        <label for="Price" class="block mb-2 text-sm text-gray-600">Price</label>
+                        <input type="number" id="Price" name="Price"
+                            class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500"
+                            required>
+                    </div>
+                    <div class="mb-4">
+                        <label for="images" class="block mb-2 text-sm text-gray-600">Images</label>
+                        <input type="file" id="images" name="images"
+                            class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500"
+                            >
+                    </div>
+                    <div class="mb-6">
+                        <label for="Discount" class="block mb-2 text-sm text-gray-600">Discount</label>
+                        <input type="number" id="Discount" name="Discount"
+                            class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500"
+                            required>
+                    </div>
+                    <div class="mb-6">
+                        <label for="Brand" class="block mb-2 text-sm text-gray-600">Brand</label>
+                        <input type="text" id="Brand" name="Brand"
+                            class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500"
+                            required>
+                    </div>
+                    <div class="mb-6">
+                        <label for="Color" class="block mb-2 text-sm text-gray-600">Color</label>
+                        <input type="text" id="Color" name="Color"
+                            class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500"
+                            required>
+                    </div>
+                    <div class="mb-6">
+                        <label for="Size" class="block mb-2 text-sm text-gray-600">Size</label>
+                        <input type="number" id="Size" name="Size"
+                            class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500"
+                            required>
+                    </div>
+                    <div class="mb-6">
+                        <label for="Quantity" class="block mb-2 text-sm text-gray-600">Quantity</label>
+                        <input type="text" id="Quantity" name="Quantity"
+                            class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500"
+                            required>
+                    </div>
+                    <button type="submit"
+                        class="w-32 bg-gradient-to-r from-cyan-400 to-cyan-600 text-white py-2 rounded-lg mx-auto block focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-cyan-500 mb-2">Submit</button>
+                </form>
+            </div>
+        </div>
+</body>
+
+</html>

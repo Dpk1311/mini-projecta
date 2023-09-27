@@ -10,6 +10,7 @@ router.post('/login',clientController.loginpost)
 router.get('/signup',clientController.signup)
 router.post('/signup',clientController.signuppost)
 router.get('/otp', clientController.otp);
+router.get('/product_shirts',clientController.product_shirts)
 // router.post('/verify-otp', otpController.verifyOTP);
 
 

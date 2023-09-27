@@ -110,6 +110,9 @@ const otp = (req, res) => {
     res.render('user/otp');
 };
 
+const product_shirts = (req,res) =>{
+    res.render('user/product_shirts')
+}
 
 
 module.exports = {
@@ -119,5 +122,6 @@ module.exports = {
     signup,
     signuppost,
     otp,
+    product_shirts
     // verifyOTP,
 };

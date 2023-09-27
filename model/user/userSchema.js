@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 
 const UserSchema = new mongoose.Schema({
-    fullName: {
+    name: {
         type: String,
         required: true
     },
@@ -32,6 +32,6 @@ const UserSchema = new mongoose.Schema({
     // You can add more fields common to both login and signup if needed
 });
 
-const UserModel = mongoose.model("User", UserSchema);
+const UserModel = new mongoose.model("User", UserSchema);
 
 module.exports = { UserModel };

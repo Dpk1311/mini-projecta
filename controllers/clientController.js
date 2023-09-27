@@ -45,8 +45,8 @@ const signup = (req, res) => {
 const signuppost = async (req, res) => {
     try {
         // Get user input from the signup form
-        const { fullName, email, password, phoneNumber } = req.body;
-        console.log('Received signup request:', fullName, email, phoneNumber);
+        const { name, email, password, phoneNumber } = req.body;
+        console.log('Received signup request:', name, email, phoneNumber);
 
         // Generate an OTP
         const otp = generateOTP();
@@ -54,7 +54,7 @@ const signuppost = async (req, res) => {
 
         // Create a new document using the UserModel
         const newUser = new UserModel({
-            fullName,
+            name,
             email,
             password,
             phoneNumber,

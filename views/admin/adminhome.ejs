@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="dist/output.css">
+    <title>Document</title>
+</head>
+<body>
+
+    <!-- Navbar -->
+<nav class="bg-gray-900">
+    <div class="container mx-auto px-4">
+        <div class="flex items-center justify-between h-16">
+            <a class="text-white text-2xl font-bold" href="#">Admin Dashboard</a>
+            <button class="text-white lg:hidden">
+                <span class="text-3xl">
+                    &#9776;
+                </span>
+            </button>
+            <div class="hidden lg:flex lg:items-center lg:w-auto">
+                <ul class="lg:flex lg:space-x-4">
+                    <li><a class="text-white hover:text-gray-400" href="/adminlogout">Logout</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</nav>
+
+<!-- component -->
+<div class=" flex items-center justify-center bg-gray-100">
+    <div class="w-full mx-auto py-16">
+  
+      <!-- Default -->
+      <div
+        class="bg-white px-6 py-4 my-3 w-3/4 mx-auto shadow rounded-md flex items-center"
+      >
+      <div class="w-full text-center mx-auto">
+        <button
+          type="button"
+          class="border  border-gray-200 bg-gray-200 text-gray-700 rounded-md px-4 py-2 m-2 transition duration-500 ease select-none hover:bg-green-600 focus:outline-none focus:shadow-outline"
+        >
+          Category Management
+        </button>
+        <button
+          type="button"
+          class="border border-gray-200 bg-gray-200 text-gray-700 rounded-md px-4 py-2 m-2 transition duration-500 ease select-none hover:bg-green-600 focus:outline-none focus:shadow-outline"
+        >
+          Success
+        </button>
+        <button
+          type="button"
+          class="border border-gray-200 bg-gray-200 text-gray-700 rounded-md px-4 py-2 m-2 transition duration-500 ease select-none hover:bg-red-600 focus:outline-none focus:shadow-outline"
+        >
+          Error
+        </button>
+        <button
+          type="button"
+          class="border border-gray-200 bg-gray-200 text-gray-700 rounded-md px-4 py-2 m-2 transition duration-500 ease select-none hover:bg-yellow-600 focus:outline-none focus:shadow-outline"
+        >
+          Warning
+        </button>
+        <button
+          type="button"
+          class="border border-gray-200 bg-gray-200 text-gray-700 rounded-md px-4 py-2 m-2 transition duration-500 ease select-none hover:bg-teal-600 focus:outline-none focus:shadow-outline"
+        >
+          Info
+        </button>
+        <button
+          type="button"
+          class="border border-gray-200 bg-gray-200 text-gray-700 rounded-md px-4 py-2 m-2 transition duration-500 ease select-none hover:bg-gray-800 focus:outline-none focus:shadow-outline"
+        >
+          Dark
+        </button>
+        <button
+          type="button"
+          class="border border-gray-200 bg-gray-200 text-gray-700 rounded-md px-4 py-2 m-2 transition duration-500 ease select-none hover:bg-gray-300 focus:outline-none focus:shadow-outline"
+        >
+          Light
+        </button>
+        </div>
+      </div>
+      <!-- End Default -->
+    </div>
+  </div>
+
+<!-- component -->
+<section>
+    <main>
+        <div class="container mx-auto mt-5 px-4">
+            <div class="admin-home-container">        
+                <header>
+                    <h1 class="text-2xl font-bold">Admin Panel</h1>
+                    <form action="/usersearch" method="get" class="mt-4">
+                        <div class="flex">
+                            <input type="text" name="searchQuery" placeholder="Search users" class="p-2 border border-gray-300 rounded-l-lg w-50">
+                            <button type="submit" class="bg-gray-900 text-white px-4 py-2 rounded-r-lg">Search</button>
+                        </div>
+                    </form>
+                </header>
+                <div class="mt-6">
+                    <div class="user-list">
+                        <h2 class="text-xl font-semibold">User List</h2>
+                        <ul class="mt-4 space-y-4">
+                            <!-- Sample user data (replace with dynamic data) -->
+                            <% check.forEach((user) => { %>
+                            <li class="bg-white shadow-md p-4 rounded-lg">
+                                <div class="flex justify-between items-center">
+                                    <div>
+                                        <span class="font-semibold">Name:</span>
+                                        <span class="ml-2"><%= user.name %></span>
+                                    </div>
+                                    <div>
+                                        <span class="font-semibold">Email:</span>
+                                        <span class="ml-2"><%= user.email %></span>
+                                    </div>
+                                    <div class="mt-2">
+                                        <% if (user.block) { %>
+                                        <a href="/userUnblock/<%= user._id %>"
+                                            class="block-button bg-red-500 text-white py-1 px-2 rounded-lg inline-block mr-2">Unblock</a>
+                                        <% } else { %>
+                                        <a href="/userblock/<%= user._id %>"
+                                            class="block-button bg-green-500 text-white py-1 px-2 rounded-lg inline-block mr-2">Block</a>
+                                        <% } %>
+                                        
+                                    </div>
+                                </div>
+                               
+                            </li>
+                            <% }); %>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+    </main>
+</section>
+<!-- Content Container -->
+
+
+</body>
+</html>

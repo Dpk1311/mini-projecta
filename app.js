@@ -12,6 +12,7 @@ app.use(express.static('public'));
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs')
 const clientrouter = require('./routes/clientRoutes')
+const adminrouter = require('./routes/adminRoutes')
 
 app.use(session({
     secret: 'your-secret-key', // Change this to a secure secret
@@ -32,6 +33,7 @@ mongoose.connect("mongodb://0.0.0.0/Mini-project")
 
 
 app.use('/',clientrouter)
+app.use('/',adminrouter)
 
 
 app.listen(4000,()=>{

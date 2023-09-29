@@ -18,13 +18,15 @@ const UserSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    otp: String, // Store OTP
-    otpExpiration: {
-        type: Date,
-        default: Date.now,
-        // Set an expires index for otpExpiration field to automatically delete documents after 5 minutes
-        expires: 300 // 300 seconds (5 minutes)
-    },
+    otp: {
+        type:String,
+        otpExpiration: {
+            type: Date,
+            default: Date.now,
+            expires: 300 // 300 seconds (5 minutes)
+        }
+    } 
+    ,
     isOtpVerified: {
         type: Boolean,
         default: false

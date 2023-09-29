@@ -112,6 +112,24 @@ const otp = (req, res) => {
 
 const otppost = async (req,res)=>{
     try{
+        const {otp} = req.body
+        const user = await UserModel.findOne({otp})
+        if (user) {
+            // OTP is valid; you can perform additional actions here
+            // For example, you can update the user's status or log them in
+            // Then, you can delete the OTP from the user document
+            user.otp = null;
+            await user.save();
+
+            // Redirect to a success page or perform further actions
+            res.redirect('/'); // Customize the redirect URL
+            user.isOtpVerified = true
+            await user.save();
+
+        } else {
+            // Invalid OTP; you can redirect to an error page or display an error message
+            res.redirect('/otp'); // Customize the error redirect URL
+        }
 
     }catch(error){
         console.error(error);
@@ -135,6 +153,6 @@ module.exports = {
     signuppost,
     otp,
     product_shirts,
-    productpage
-    // verifyOTP,
+    productpage,
+    otppost,
 };

@@ -30,7 +30,7 @@
 <body class="bg-white">
     <%- include('partials/navbar.ejs') %>
     <%- include('partials/banner.ejs') %>
-    <%- include('partials/cards.ejs') %>
+    <%- include('partials/cards.ejs',{categorycollection}) %>
     
 
 
@@ -56,6 +56,8 @@
         prevEl: ".swiper-button-prev",
       },
     });
+
+
   </script>
 </body>
 

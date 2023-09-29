@@ -9,12 +9,21 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.css" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.css" />
     <script src="https://cdn.tailwindcss.com"></script>
-
+    <script src="https://cdn.jsdelivr.net/npm/medium-zoom@1.0.6/dist/medium-zoom.min.js"></script>
     <title>Document</title>
 </head>
 <body>
     <%- include('partials/navbar.ejs') %>
-    <%- include('partials/cards_products(shirts).ejs') %>
+    <%- include('partials/cards_products(shirts).ejs',productcollection) %>
 
+
+
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const zoomImages = document.querySelectorAll('.product-image');
+            mediumZoom(zoomImages);
+        });
+    </script>
 </body>
 </html>

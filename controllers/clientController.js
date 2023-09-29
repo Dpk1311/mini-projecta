@@ -1,14 +1,19 @@
 const nodemailer = require('nodemailer');
 const { UserModel } = require('../model/user/userSchema');
+const { CategoryModel } = require('../model/admin/categorySchema')
+const { productModel } = require('../model/admin/productSchema')
 
-// Function to generate a random OTP
+
+//  to generate a random OTP
 function generateOTP() {
     return Math.floor(1000 + Math.random() * 9000).toString();
 }
 
 const home = async (req, res) => {
     try {
-        res.render('user/home');
+        const categorycollection = await CategoryModel.find()
+        console.log(categorycollection);
+        res.render('user/home', { categorycollection });
     } catch (error) {
         console.error(error);
         res.status(500).send('Internal Server Error');
@@ -66,19 +71,19 @@ const signuppost = async (req, res) => {
 
         // Send the OTP via email
         const transporter = nodemailer.createTransport({
-            service: 'Gmail', 
+            service: 'Gmail',
             auth: {
-                user: 'j29589289@gmail.com', // your email address
-                pass: 'potl opgm ojjr cbfn', // your email password
+                user: 'j29589289@gmail.com',
+                pass: 'potl opgm ojjr cbfn',
             },
             tls: {
-                rejectUnauthorized: false // Add this line
-            } 
+                rejectUnauthorized: false
+            }
         });
 
         const mailOptions = {
             from: 'j29589289@gmail.com',
-            to: email, // User's email from the signup form
+            to: email,
             subject: 'OTP Verification',
             text: `Your OTP for verification is: ${otp}`,
         };
@@ -110,38 +115,42 @@ const otp = (req, res) => {
     res.render('user/otp');
 };
 
-const otppost = async (req,res)=>{
-    try{
-        const {otp} = req.body
-        const user = await UserModel.findOne({otp})
-        if (user) {
-            // OTP is valid; you can perform additional actions here
-            // For example, you can update the user's status or log them in
-            // Then, you can delete the OTP from the user document
+const otppost = async (req, res) => {
+    try {
+        const { otp } = req.body
+        const user = await UserModel.findOne({ otp })
+        if (!user) {
+            res.redirect('/otp')
+        }
+
+        else if (user) {
+
             user.otp = null;
             await user.save();
 
-            // Redirect to a success page or perform further actions
-            res.redirect('/'); // Customize the redirect URL
+
+            res.redirect('/');
             user.isOtpVerified = true
             await user.save();
 
         } else {
-            // Invalid OTP; you can redirect to an error page or display an error message
-            res.redirect('/otp'); // Customize the error redirect URL
+
+            res.redirect('/otp');
         }
 
-    }catch(error){
+    } catch (error) {
         console.error(error);
     }
 }
 
-const productpage = (req,res)=>{
+const productpage = (req, res) => {
     res.render('user/productpage')
 }
 
-const product_shirts = (req,res) =>{
-    res.render('user/product_shirts')
+const product_shirts = async (req, res) => {
+    const productcollection = await productModel.find()
+    console.log(productcollection);
+    res.render('user/product_shirts', { productcollection })
 }
 
 

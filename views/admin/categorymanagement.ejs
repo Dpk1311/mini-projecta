@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="dist/output.css">
     <link rel="stylesheet"
         href="https://demos.creative-tim.com/notus-js/assets/vendor/@fortawesome/fontawesome-free/css/all.min.css">
+    <script src="https://cdn.tailwindcss.com"></script>
 
     <title>Document</title>
 </head>
@@ -61,40 +62,53 @@
                             </thead>
 
                             <tbody>
-                                <tr>
-                                    <% category.forEach((item)=> {%>
-                                    <th
-                                        class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-left flex items-center">
-                                        <span class="ml-3 font-bold text-white"> <%= item.Name %> </span>
-                                    </th>
-                                    <td
-                                        class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
-                                        <span class="ml-3 font-bold text-white"><%= item.Description %></span>
-                                    </td>
-                                    <td
-                                        class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
-                                        <span class="ml-3 font-bold text-white"> <%= item.gender %> </span>
-                                
-                                    </td>
-                                    <td
-                                        class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
-                                        <div class="flex">
-                                            <span class="ml-3 font-bold text-white"><%= item.image %></span>
-                                        </div>
-                                    </td>
-                                    <td
-                                        class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
-                                        <div class="flex items-center">
-                                            <span class="ml-3 font-bold text-white"><%= item.status %></span>
+                                <% category.forEach((item)=> {%>
+                                    <tr>
 
-                                        </div>
-                                    </td>
-                                    <th
-                                        class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-left flex items-center">
-                                        <span class="ml-3 font-bold text-white"> <%= item.created_at %> </span>
-                                    </th>
+                                        <th
+                                            class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-left flex items-center">
+                                            <span class="ml-3 font-bold text-white">
+                                                <%= item.Name %>
+                                            </span>
+                                        </th>
+                                        <td
+                                            class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
+                                            <span class="ml-3 font-bold text-white">
+                                                <%= item.Description %>
+                                            </span>
+                                        </td>
+                                        <td
+                                            class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
+                                            <span class="ml-3 font-bold text-white">
+                                                <%= item.gender %>
+                                            </span>
+
+                                        </td>
+                                        <td
+                                            class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
+                                            <div class="flex">
+                                                <img class="w-20 rounded-full h-20 object-fill" src="<%= item.image %>">
+                                            </div>
+                                        </td>
+                                        <td
+                                            class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
+                                            <div class="flex items-center">
+                                                <span class="ml-3 font-bold text-white">
+                                                    <%= item.status %>
+                                                </span>
+
+                                            </div>
+                                        </td>
+                                        <th
+                                            class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-left flex items-center">
+                                            <span class="ml-3 font-bold text-white">
+                                                <%= item.created_at %>
+                                            </span>
+                                        </th>
+
+
+                                    </tr>
                                     <% }) %>
-                                </tr>
                             </tbody>
 
                         </table>

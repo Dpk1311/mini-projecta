@@ -1,10 +1,13 @@
+<% categorycollection.forEach((element) => { %>
+  
+
 <div class="px-4 bg-white mb-8 py-8 rounded-3xl mx-auto sm:max-w-xl md:max-w-full lg:max-w-screen-xl md:px-24 lg:px-8 ">
     <div class="flex flex-col items-center justify-between w-full mb-10 lg:flex-row">
       <div class="mb-16 lg:mb-0 lg:max-w-lg lg:pr-5">
         <div class="max-w-xl mb-6">
           
         <h2 class="font-sans text-3xl sm:mt-0 mt-6 font-medium tracking-tight text-black sm:text-4xl sm:leading-none max-w-lg mb-6">
-            SHIRTS
+           <%= element.Name %>
           </h2>
           <p class="text-black text-base md:text-lg">"Discover Your Perfect Style with Our Exquisite Collection of  Shirts!"
         </div>
@@ -14,57 +17,10 @@
         </button>
         </div>
       </div>
-      <img alt="logo" width="420" height="120" src="https://images.unsplash.com/photo-1626497764746-6dc36546b388?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1926&q=80" />
+      <img alt="logo" width="420" height="120" src="<%= element.image %>" />
     </div>
   </div>
+<% }); %>
 
 
 
-
-      <div class="px-4 bg-white mb-8 py-8 rounded-3xl mx-auto sm:max-w-xl md:max-w-full lg:max-w-screen-xl md:px-24 lg:px-8 ">
-    <div class="flex flex-col items-center justify-between w-full mb-10 lg:flex-row">
-      
-      <img alt="logo" width="420" height="120" src="https://images.unsplash.com/photo-1616756141603-6d37d5cde2a2?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1974&q=80" />
-
-
-      <div class="mb-16 lg:mb-0 lg:max-w-lg lg:pr-5">
-        
-        <div class="max-w-xl mb-6">
-          
-        <h2 class="font-sans text-3xl sm:mt-0 mt-6 font-medium tracking-tight text-black sm:text-4xl sm:leading-none max-w-lg mb-6">
-          SAREES
-          </h2>
-          <p class="text-black text-base md:text-lg">Elevate Your Elegance with Our Stunning Saree Collection!
-
-          </p>
-        </div>
-        <div className='space-x-4'>
-        <button class="text-neutral-800  text-lg font-medium inline-flex items-center">
-        <span> More →</span>
-        </button>
-        </div>
-      </div>
-    </div>
-  </div>
-
-
-  <div class="px-4 bg-white mb-8 py-8 rounded-3xl mx-auto sm:max-w-xl md:max-w-full lg:max-w-screen-xl md:px-24 lg:px-8 ">
-    <div class="flex flex-col items-center justify-between w-full mb-10 lg:flex-row">
-      <div class="mb-16 lg:mb-0 lg:max-w-lg lg:pr-5">
-        <div class="max-w-xl mb-6">
-          
-        <h2 class="font-sans text-3xl sm:mt-0 mt-6 font-medium tracking-tight text-black sm:text-4xl sm:leading-none max-w-lg mb-6">
-          PANTS
-          </h2>
-          <p class="text-black text-base md:text-lg">Revamp Your Wardrobe with Our Trendsetting Pants Collection!
-          </p>
-        </div>
-        <div className='space-x-4'>
-        <button class="text-neutral-800  text-lg font-medium inline-flex items-center">
-        <span> get insights →</span>
-        </button>
-        </div>
-      </div>
-      <img alt="logo" width="420" height="120" src="https://images.unsplash.com/photo-1576995853123-5a10305d93c0?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80" />
-    </div>
-  </div>

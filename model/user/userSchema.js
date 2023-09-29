@@ -25,13 +25,15 @@ const UserSchema = new mongoose.Schema({
             default: Date.now,
             expires: 300 // 300 seconds (5 minutes)
         }
-    } 
-    ,
+    },
     isOtpVerified: {
         type: Boolean,
         default: false
-    }
-    // You can add more fields common to both login and signup if needed
+    },
+    block:{
+        type: Boolean,
+        default: false
+    },
 });
 
 const UserModel = new mongoose.model("User", UserSchema);

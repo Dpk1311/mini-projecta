@@ -6,10 +6,9 @@ const multer = require('multer')
 
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
-        cb(null, 'public/uploads/'); // Specify the destination folder
+        cb(null, 'public/uploads/');
     },
     filename: (req, file, cb) => {
-        // Generate a unique file name (you can use Date.now() or any other method)
         const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
         cb(null, uniqueSuffix + '-' + file.originalname);
     },
@@ -29,7 +28,9 @@ router.post('/addproduct',upload.single('Image'),adminController.addproductpost)
 router.get('/categorymanagement',adminController.categorymanagement)
 router.get('/addcategory',adminController.addcategory)
 router.post('/addcategory',upload.single('image'),adminController.addcategorypost)
-
+router.get('/usersearch',adminController.usersearch)
+router.get('/userblock/:userId',adminController.userblock)
+router.get('/userUnblock/:userId',adminController.userUnblock)
 
 
 

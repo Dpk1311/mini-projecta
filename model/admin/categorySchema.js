@@ -11,7 +11,6 @@ const categorySchema = new mongoose.Schema({
     },
     gender:{
         type:String,
-        enum:['Men','Women'],
         required:true
     },
     image: {

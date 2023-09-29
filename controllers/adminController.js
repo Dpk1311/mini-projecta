@@ -25,6 +25,8 @@ const adminloginpost = async (req, res) => {
     }
 }
 
+
+
 const adminhome = async (req, res) => {
     try {
         console.log('1');

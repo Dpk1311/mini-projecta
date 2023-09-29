@@ -42,6 +42,65 @@ const loginpost = async (req, res) => {
     }
 };
 
+const forgotpassword = (req, res) => {
+    const msg = req.query.msg
+    res.render('user/forgotpassword',{msg})
+}
+
+const forgotpasswordpost = async (req, res) => {
+    try {
+        const { email } = req.body; 
+        const user = await UserModel.findOne({ email });
+
+        if (user) {
+            const otp = generateOTP(); 
+
+            const transporter = nodemailer.createTransport({
+                service: 'Gmail',
+                auth: {
+                    user: 'j29589289@gmail.com',
+                    pass: 'potl opgm ojjr cbfn',
+                },
+                tls: {
+                    rejectUnauthorized: false,
+                },
+            });
+
+            const mailOptions = {
+                from: 'j29589289@gmail.com',
+                to: email,
+                subject: 'OTP Verification',
+                text: `Your OTP for verification is: ${otp}`,
+            };
+
+            transporter.sendMail(mailOptions, async (error, info) => {
+                if (error) {
+                    console.error(error);
+                    res.status(500).send('Error sending OTP via email');
+                } else {
+                    console.log('Email sent: ' + info.response);
+
+                    // Set OTP expiration time (e.g., 5 minutes)
+                    // user.otp = otp;
+                    // user.otpExpiration = Date.now() + 5 * 60 * 1000;
+                    // await user.save();
+
+                    // Redirect to the OTP verification page
+                    res.redirect('/otp');
+                }
+            });
+        } else {
+            // Email does not exist in the database
+            res.redirect('/forgotpassword?msg=Invalid Valid Mail');
+        }
+    } catch (error) {
+        console.error(error);
+        res.status(500).send('Internal Server Error');
+    }
+};
+
+
+
 const signup = (req, res) => {
     res.render('user/signup');
 };
@@ -164,4 +223,6 @@ module.exports = {
     product_shirts,
     productpage,
     otppost,
+    forgotpassword,
+    forgotpasswordpost
 };

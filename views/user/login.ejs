@@ -14,20 +14,24 @@
               <h1 class="mb-2 text-2xl">V A S T R A</h1>
               <span class="text-gray-300">Enter Login Details</span>
             </div> 
-            <form action="/login" method="post"> 
-              <div class="mb-4 text-lg">
+            <form action="/login" method="post" class="mb-4">
+              <div class="text-lg">
                 <input class="rounded-3xl border-none bg-yellow-400 bg-opacity-50 px-6 py-2 text-center text-inherit placeholder-slate-200 shadow-lg outline-none backdrop-blur-md" type="text" name="email" placeholder="Email" />
               </div>
       
-              <div class="mb-4 text-lg">
+              <div class="text-lg mt-4">
                 <input class="rounded-3xl border-none bg-yellow-400 bg-opacity-50 px-6 py-2 text-center text-inherit placeholder-slate-200 shadow-lg outline-none backdrop-blur-md" type="Password" name="password" placeholder="Password" />
               </div>
-              <div class="mt-8 flex justify-center text-lg text-black">
+              <div class="mt-8 flex justify-center">
                 <button type="submit" class="rounded-3xl bg-yellow-400 bg-opacity-50 px-10 py-2 text-white shadow-xl backdrop-blur-md transition-colors duration-300 hover:bg-yellow-600">Login</button>
               </div>
             </form>
-            <!-- Add the text here -->
             <p class="mt-4 text-lg text-gray-400">Don't have an account? <a href="/signup" class="text-blue-400 hover:underline">Sign up</a></p>
+            
+            <div class="mt-4">
+              <p class="flex text-lg text-white justify-center"><a href="/forgotpassword" class="hover:underline">Forgot Password</a></p>
+              <p class="flex text-lg text-white justify-center mt-2"><a href="/forgotpassword" class="hover:underline">Login with OTP</a></p>
+            </div>
           </div>
         </div>
       </div>

@@ -11,6 +11,8 @@ router.get('/signup',clientController.signup)
 router.post('/signup',clientController.signuppost)
 router.get('/otp', clientController.otp);
 router.post('/otp',clientController.otppost)
+router.get('/forgotpassword',clientController.forgotpassword)
+router.post('/forgotpassword',clientController.forgotpasswordpost)
 router.get('/product_shirts',clientController.product_shirts)
 router.get('/productpage',clientController.productpage)
 // router.post('/verify-otp', otpController.verifyOTP);

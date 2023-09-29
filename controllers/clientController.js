@@ -110,6 +110,18 @@ const otp = (req, res) => {
     res.render('user/otp');
 };
 
+const otppost = async (req,res)=>{
+    try{
+
+    }catch(error){
+        console.error(error);
+    }
+}
+
+const productpage = (req,res)=>{
+    res.render('user/productpage')
+}
+
 const product_shirts = (req,res) =>{
     res.render('user/product_shirts')
 }
@@ -122,6 +134,7 @@ module.exports = {
     signup,
     signuppost,
     otp,
-    product_shirts
+    product_shirts,
+    productpage
     // verifyOTP,
 };

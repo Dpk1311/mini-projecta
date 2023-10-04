@@ -21,39 +21,54 @@ const home = async (req, res) => {
 };
 
 const login = (req, res) => {
-    res.render('user/login');
+    if(req.session.invalideandu){
+        req.session.invalideandu = false
+      return  res.render('user/login',{msg:req.session.errormsg||''} )
+    }else{
+       res.render('user/login',{msg:''} )
+    }
+
+ 
+    
 };
 
 const loginpost = async (req, res) => {
+
     try {
+
         const { email, password } = req.body;
 
         const user = await UserModel.findOne({ email, password });
 
         if (user) {
             req.session.user = user;
-            res.redirect('/');
-        } else {
-            res.redirect('/login');
+            return res.redirect('/');
+        } else if (!req.body.email || !req.body.password) {
+            req.session.errormsg = "err msg"
+            req.session.invalideandu = true
+            return res.redirect('/login')
+        }
+        else {
+            return res.redirect('/login');
         }
     } catch (error) {
         console.error(error);
-        res.status(500).send('Internal Server Error');
+        return res.status(500).send('Internal Server Error');
     }
 };
 
 const forgotpassword = (req, res) => {
     const msg = req.query.msg
-    res.render('user/forgotpassword',{msg})
+    res.render('user/forgotpassword', { msg })
 }
 
 const forgotpasswordpost = async (req, res) => {
     try {
-        const { email } = req.body; 
+        const { email } = req.body;
         const user = await UserModel.findOne({ email });
 
         if (user) {
-            const otp = generateOTP(); 
+            const otp = generateOTP();
 
             const transporter = nodemailer.createTransport({
                 service: 'Gmail',
@@ -202,17 +217,19 @@ const otppost = async (req, res) => {
     }
 }
 
-const productpage = (req, res) => {
-    res.render('user/productpage')
+const productpage = async (req, res) => {
+    const itemid = req.query.product_Id
+    const productdisplay = await productModel.findById(itemid)
+    console.log('productdisplay:',productdisplay);
+    res.render('user/productpage',{productdisplay})
 }
 
 const product_shirts = async (req, res) => {
     const productcollection = await productModel.find()
-    console.log(productcollection);
     res.render('user/product_shirts', { productcollection })
-}
-
-
+} 
+ 
+ 
 module.exports = {
     home,
     login,

@@ -1,45 +1,50 @@
 const mongoose = require('mongoose');
-const { ObjectId } = mongoose.Schema.Types;
+const ObjectID = mongoose.Schema.Types.ObjectId
 
 
 const productSchema = new mongoose.Schema({
-    Name:{
-        type:String,
-        required:true
+    Owner: {
+        type: ObjectID,
+        required: true,
+        ref: 'User'
     },
-    Description:{
-        type:String,
-        required:true
+    Name: {
+        type: String,
+        required: true
     },
-    Image:{
-        type:[String],
-        required:true
+    Description: {
+        type: String,
+        required: true
     },
-    Price:{
-        type:Number,
-        required:true
+    Image: {
+        type: [String],
+        required: true
     },
-    Discount:{
-        type:Number,
-        required:true
+    Price: {
+        type: Number,
+        required: true
     },
-    Brand:{
-        type:String,
-        required:true
+    Discount: {
+        type: Number,
+        required: true
     },
-    Category:{
-        type:String,
-        required:true
+    Brand: {
+        type: String,
+        required: true
     },
-    Size:{
-        type:Number,
-        required:true
+    Category: {
+        type: String,
+        required: true
     },
-    Quantity:{
-        type:String,
-        required:true
+    Size: {
+        type: Number,
+        required: true
+    },
+    Quantity: {
+        type: String,
+        required: true
     }
-    
+
 })
 
 const productModel = new mongoose.model("Product", productSchema);

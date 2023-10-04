@@ -1,7 +1,7 @@
 const express = require('express')
 const router = express.Router()
 const clientController = require('../controllers/clientController')
-const otpController  = require('../controllers/otpController')
+const cartController = require('../controllers/cartController')
 
 
 router.get('/',clientController.home)
@@ -15,8 +15,7 @@ router.get('/forgotpassword',clientController.forgotpassword)
 router.post('/forgotpassword',clientController.forgotpasswordpost)
 router.get('/product_shirts',clientController.product_shirts)
 router.get('/productpage',clientController.productpage)
-// router.post('/verify-otp', otpController.verifyOTP);
-
+router.get('/cart',cartController.cart)
 
 
 

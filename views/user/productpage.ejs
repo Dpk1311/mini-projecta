@@ -1,207 +1,220 @@
-<!DOCTYPE html>
-<html lang="en">
+<!-- component -->
+<!-- This is an example component -->
+<div>
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="dist/output.css">
-    <title>Document</title>
-    <script src="https://cdn.jsdelivr.net/npm/medium-zoom@1.0.6/dist/medium-zoom.min.js"></script>
-</head>
+    <!DOCTYPE html>
+    <html lang="en">
 
-<body>
-    <nav class="p-5 bg-black shadow md:flex md:items-center md:justify-between">
-        <div class="flex justify-between items-center ">
-          <span class=" text-white text-2xl font-[Poppins] cursor-pointer">
-            <a href="/">V A S T R A</a>
-          </span>
-      
-          <span class=" text-white text-3xl cursor-pointer mx-2 md:hidden block">
-            <ion-icon name="menu" onclick="Menu(this)" style="z-index: 10;"></ion-icon>
-          </span>
-        </div>
-      
-        <ul class="md:flex md:items-center z-[-1] md:z-auto md:static absolute bg-black w-full left-0 md:w-auto md:py-0 py-4 md:pl-0 pl-7 md:opacity-100 opacity-0 top-[-400px] transition-all ease-in duration-500" style="z-index: 9;">
-          <li class="mx-4 my-6 md:my-0">
-            <a href="#" class="text-white text-xl hover:text-cyan-500 duration-500">HOME</a>
-          </li>
-          <li class="mx-4 my-6 md:my-0">
-            <a href="#" class="text-white text-xl hover:text-cyan-500 duration-500">SERVICE</a>
-          </li>
-          <li class="mx-4 my-6 md:my-0">
-            <a href="#" class="text-white text-xl hover:text-cyan-500 duration-500">ABOUT</a>
-          </li>
-          <li class="mx-4 my-6 md:my-0">
-            <a href="#" class="text-white text-xl hover:text-cyan-500 duration-500">CONTACT</a>
-          </li>
-          <li class="mx-4 my-6 md:my-0">
-            <a href="#" class="text-white text-xl hover:text-cyan-500 duration-500">BLOG'S</a>
-          </li>
-          
-      
-          <button class="bg-cyan-400 text-white font-[Poppins] duration-500 px-6 py-2 mx-4 hover:bg-cyan-500 rounded ">
-            LOGIN
-          </button>
-          <button class="bg-cyan-400 text-white font-[Poppins] duration-500 px-6 py-2 mx-4 hover:bg-cyan-500 rounded ">
-            SIGNUP
-          </button>
-        </ul>
-      </nav>
-    <div class="md:flex items-start justify-center py-12 2xl:px-20 md:px-6 px-4">
-        <div class="xl:w-2/6 lg:w-2/5 w-80 md:block hidden">
-            <img class="w-full .product-image" alt="image of a girl posing"
-                src="https://i.ibb.co/QMdWfzX/component-image-one.png" />
-            <img class="mt-6 w-full .product-image" alt="image of a girl posing"
-                src="https://i.ibb.co/qxkRXSq/component-image-two.png" />
-        </div>
-        <div class="md:hidden">
-            <img class="w-full" alt="image of a girl posing"
-                src="https://i.ibb.co/QMdWfzX/component-image-one.png" />
-            <div class="flex items-center justify-between mt-3 space-x-4 md:space-x-0">
-                <img alt="image-tag-one" class="md:w-48 md:h-48 w-full"
-                    src="https://i.ibb.co/cYDrVGh/Rectangle-245.png" />
-                <img alt="image-tag-one" class="md:w-48 md:h-48 w-full"
-                    src="https://i.ibb.co/f17NXrW/Rectangle-244.png" />
-                <img alt="image-tag-one" class="md:w-48 md:h-48 w-full"
-                    src="https://i.ibb.co/cYDrVGh/Rectangle-245.png" />
-                <img alt="image-tag-one" class="md:w-48 md:h-48 w-full"
-                    src="https://i.ibb.co/f17NXrW/Rectangle-244.png" />
-            </div>
-        </div>
-        <div class="xl:w-2/5 md:w-1/2 lg:ml-8 md:ml-6 md:mt-0 mt-6">
-            <div class="border-b border-gray-200 pb-6">
-                <p class="text-sm leading-none text-gray-600 dark:text-gray-300 ">Balenciaga Fall Collection</p>
-                <h1
-                    class="lg:text-2xl text-xl font-semibold lg:leading-6 leading-7 text-gray-800 dark:text-white mt-2">
-                    Balenciaga Signature Sweatshirt</h1>
-            </div>
-            <div class="py-4 border-b border-gray-200 flex items-center justify-between">
-                <p class="text-base leading-4 text-gray-800 dark:text-gray-300">Colours</p>
-                <div class="flex items-center justify-center">
-                    <p class="text-sm leading-none text-gray-600 dark:text-gray-300">Smoke Blue with red accents</p>
-                    <div class="w-6 h-6 bg-gradient-to-b from-gray-900 to-indigo-500 ml-3 mr-4 cursor-pointer">
+    <head>
+        <meta charset="UTF-8">
+        <link rel='stylesheet' href='https://cdn.jsdelivr.net/npm/tailwindcss@2.0.1/dist/tailwind.min.css'>
+        <link rel='stylesheet'
+            href='https://fonts.googleapis.com/css2?family=Rubik:ital,wght@0,400;0,600;0,700;1,400&amp;display=swap'>
+        <!-- <link rel="stylesheet" href="dist/output.css"> -->
+        <link rel="stylesheet" href="./style.css">
+        <script src="https://cdn.tailwindcss.com"></script>
+
+        <style>
+            * {
+                box-sizing: border-box;
+            }
+
+            .img-magnifier-container {
+                position: relative;
+            }
+
+            .img-magnifier-glass {
+                position: absolute;
+                cursor: none;
+                /* Set the size of the magnifier glass */
+                width: 250px;
+                height: 250px;
+            }
+        </style>
+    </head>
+
+    <body class="antialiased">
+        <%- include('partials/navbar.ejs') %>
+            <% if(productdisplay) { %>
+
+
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-6">
+                    <div class="flex flex-col md:flex-row -mx-4">
+                        <div class="md:flex-1 px-4 img-magnifier-container">
+                            <div x-data="{ image: 1 }" x-cloak>
+                                <div class="h-64 md:h-80 rounded-lg bg-gray-100 mb-4">
+                                    <div x-show="image === 1"
+                                        class="h-64 md:h-80 rounded-lg bg-gray-100 mb-4 flex items-center justify-center">
+                                        <img id="myimage" src="<%= productdisplay.Image %>" alt="Image Alt Text"
+                                            class="w-full h-full object-cover" />
+                                    </div>
+
+                                    <div x-show="image === 2"
+                                        class="h-64 md:h-80 rounded-lg bg-gray-100 mb-4 flex items-center justify-center">
+                                        <span class="text-5xl">2</span>
+                                    </div>
+
+                                    <div x-show="image === 3"
+                                        class="h-64 md:h-80 rounded-lg bg-gray-100 mb-4 flex items-center justify-center">
+                                        <span class="text-5xl">3</span>
+                                    </div>
+
+                                    <div x-show="image === 4"
+                                        class="h-64 md:h-80 rounded-lg bg-gray-100 mb-4 flex items-center justify-center">
+                                        <span class="text-5xl">4</span>
+                                    </div>
+                                </div>
+
+                                <div class="flex -mx-2 mb-4">
+                                    <template x-for="i in 4">
+                                        <div class="flex-1 px-2">
+                                            <button x-on:click="image = i"
+                                                :class="{ 'ring-2 ring-indigo-300 ring-inset': image === i }"
+                                                class="focus:outline-none w-full rounded-lg h-24 md:h-32 bg-gray-100 flex items-center justify-center">
+                                                <span x-text="i" class="text-2xl"></span>
+                                            </button>
+                                        </div>
+                                    </template>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="md:flex-1 px-4">
+                            <h2 class="mb-2 leading-tight tracking-tight font-bold text-gray-800 text-2xl md:text-3xl">
+                                <%= productdisplay.Description %>
+                            </h2>
+                            <p class="text-gray-500 text-sm">By <a href="#" class="text-indigo-600 hover:underline">ABC
+                                    Company</a></p>
+
+                            <div class="flex items-center space-x-4 my-4">
+                                <div>
+                                    <div class="rounded-lg bg-gray-100 flex py-2 px-3">
+                                        <span class="text-indigo-400 mr-1 mt-1">$</span>
+                                        <span class="font-bold text-indigo-600 text-3xl">25</span>
+                                    </div>
+                                </div>
+                                <div class="flex-1">
+                                    <p class="text-green-500 text-xl font-semibold">Save 12%</p>
+                                    <p class="text-gray-400 text-sm">Inclusive of all Taxes.</p>
+                                </div>
+                            </div>
+
+                            <p class="text-gray-500">Lorem ipsum, dolor sit, amet consectetur adipisicing elit. Vitae
+                                exercitationem porro saepe ea harum corrupti vero id laudantium enim, libero blanditiis
+                                expedita
+                                cupiditate a est.</p>
+
+                            <div class="flex py-4 space-x-4">
+                                <div class="relative">
+                                    <div
+                                        class="text-center left-0 pt-2 right-0 absolute block text-xs uppercase text-gray-400 tracking-wide font-semibold">
+                                        Qty</div>
+                                    <select
+                                        class="cursor-pointer appearance-none rounded-xl border border-gray-200 pl-4 pr-8 h-14 flex items-end pb-1">
+                                        <option>1</option>
+                                        <option>2</option>
+                                        <option>3</option>
+                                        <option>4</option>
+                                        <option>5</option>
+                                    </select>
+
+                                    <svg class="w-5 h-5 text-gray-400 absolute right-0 bottom-0 mb-2 mr-2"
+                                        xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                        stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M8 9l4-4 4 4m0 6l-4 4-4-4" />
+                                    </svg>
+                                </div>
+
+                                <button type="button"
+                                    class="h-14 px-6 py-2 font-semibold rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white">
+                                    Add to Cart
+                                </button>
+                            </div>
+                        </div>
                     </div>
-                    <svg class="cursor-pointer text-gray-300 dark:text-white" width="6" height="10"
-                        viewBox="0 0 6 10" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M1 1L5 5L1 9" stroke="currentColor" stroke-width="1.25" stroke-linecap="round"
-                            stroke-linejoin="round" />
-                    </svg>
                 </div>
-            </div>
-            <div class="py-4 border-b border-gray-200 flex items-center justify-between">
-                <p class="text-base leading-4 text-gray-800 dark:text-gray-300">Size</p>
-                <div class="flex items-center justify-center">
-                    <p class="text-sm leading-none text-gray-600 dark:text-gray-300 mr-3">38</p>
-                    <svg class="text-gray-300 dark:text-white cursor-pointer" width="6" height="10"
-                        viewBox="0 0 6 10" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M1 1L5 5L1 9" stroke="currentColor" stroke-width="1.25" stroke-linecap="round"
-                            stroke-linejoin="round" />
-                    </svg>
-                </div>
-            </div>
-            <div class="py-4 border-b border-gray-200 flex items-center justify-between">
-                <p class="text-base leading-4 text-gray-800 dark:text-gray-300">Price</p>
-                <div class="flex items-center justify-center">
-                    <p class="text-sm leading-none text-gray-600 dark:text-gray-300 mr-3">$50</p>
-                    <svg class="text-gray-300 dark:text-white cursor-pointer" width="6" height="10"
-                        viewBox="0 0 6 10" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M1 1L5 5L1 9" stroke="currentColor" stroke-width="1.25" stroke-linecap="round"
-                            stroke-linejoin="round" />
-                    </svg>
-                </div>
-            </div>
-            <button
-                class="dark:bg-white dark:text-gray-900 dark:hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-800 text-base flex items-center justify-center leading-none text-white bg-gray-800 w-full py-4 hover:bg-gray-700">
-                <svg class="mr-3 text-white dark:text-gray-900" width="16" height="17" viewBox="0 0 16 17"
-                    fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path
-                        d="M7.02301 7.18999C7.48929 6.72386 7.80685 6.12992 7.93555 5.48329C8.06425 4.83666 7.9983 4.16638 7.74604 3.55724C7.49377 2.94809 7.06653 2.42744 6.51835 2.06112C5.97016 1.6948 5.32566 1.49928 4.66634 1.49928C4.00703 1.49928 3.36252 1.6948 2.81434 2.06112C2.26615 2.42744 1.83891 2.94809 1.58665 3.55724C1.33439 4.16638 1.26843 4.83666 1.39713 5.48329C1.52583 6.12992 1.8434 6.72386 2.30968 7.18999L4.66634 9.54749L7.02301 7.18999Z"
-                        stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round" />
-                    <path d="M4.66699 4.83333V4.84166" stroke="currentColor" stroke-width="1.25"
-                        stroke-linecap="round" stroke-linejoin="round" />
-                    <path
-                        d="M13.69 13.8567C14.1563 13.3905 14.4738 12.7966 14.6025 12.15C14.7312 11.5033 14.6653 10.8331 14.413 10.2239C14.1608 9.61476 13.7335 9.09411 13.1853 8.72779C12.6372 8.36148 11.9926 8.16595 11.3333 8.16595C10.674 8.16595 10.0295 8.36148 9.48133 8.72779C8.93314 9.09411 8.5059 9.61476 8.25364 10.2239C8.00138 10.8331 7.93543 11.5033 8.06412 12.15C8.19282 12.7966 8.51039 13.3905 8.97667 13.8567L11.3333 16.2142L13.69 13.8567Z"
-                        stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round" />
-                    <path d="M11.333 11.5V11.5083" stroke="currentColor" stroke-width="1.25" stroke-linecap="round"
-                        stroke-linejoin="round" />
-                </svg>
-                ADD TO CART
-            </button>
-            <div>
-                <p class="xl:pr-48 text-base lg:leading-tight leading-normal text-gray-600 dark:text-gray-300 mt-7">
-                    It is a long established fact that a reader will be distracted by thereadable content of a page
-                    when looking at its layout. The point of usingLorem Ipsum is that it has a more-or-less normal
-                    distribution of letters.</p>
-                <p class="text-base leading-4 mt-7 text-gray-600 dark:text-gray-300">Product Code: 8BN321AF2IF0NYA
-                </p>
-                <p class="text-base leading-4 mt-4 text-gray-600 dark:text-gray-300">Length: 13.2 inches</p>
-                <p class="text-base leading-4 mt-4 text-gray-600 dark:text-gray-300">Height: 10 inches</p>
-                <p class="text-base leading-4 mt-4 text-gray-600 dark:text-gray-300">Depth: 5.1 inches</p>
-                <p class="md:w-96 text-base leading-normal text-gray-600 dark:text-gray-300 mt-4">Composition: 100%
-                    calf leather, inside: 100% lamb leather</p>
-            </div>
-            <div>
-                <div class="border-t border-b py-4 mt-7 border-gray-200">
-                    <div data-menu class="flex justify-between items-center cursor-pointer">
-                        <p class="text-base leading-4 text-gray-800 dark:text-gray-300">Shipping and returns</p>
-                        <button
-                            class="cursor-pointer focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-400 rounded"
-                            role="button" aria-label="show or hide">
-                            <svg class="transform text-gray-300 dark:text-white" width="10" height="6"
-                                viewBox="0 0 10 6" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <path d="M9 1L5 5L1 1" stroke="currentColor" stroke-width="1.25"
-                                    stroke-linecap="round" stroke-linejoin="round" />
-                            </svg>
-                        </button>
-                    </div>
-                    <div class="hidden pt-4 text-base leading-normal pr-12 mt-4 text-gray-600 dark:text-gray-300"
-                        id="sect">You will be responsible for paying for your own shipping costs for returning your
-                        item. Shipping costs are nonrefundable</div>
-                </div>
-            </div>
-            <div>
-                <div class="border-b py-4 border-gray-200">
-                    <div data-menu class="flex justify-between items-center cursor-pointer">
-                        <p class="text-base leading-4 text-gray-800 dark:text-gray-300">Contact us</p>
-                        <button
-                            class="cursor-pointer focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-400 rounded"
-                            role="button" aria-label="show or hide">
-                            <svg class="transform text-gray-300 dark:text-white" width="10" height="6"
-                                viewBox="0 0 10 6" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <path d="M9 1L5 5L1 1" stroke="currentColor" stroke-width="1.25"
-                                    stroke-linecap="round" stroke-linejoin="round" />
-                            </svg>
-                        </button>
-                    </div>
-                    <div class="hidden pt-4 text-base leading-normal pr-12 mt-4 text-gray-600 dark:text-gray-300"
-                        id="sect">If you have any questions on how to return your item to us, contact us.</div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <script>
-        let elements = document.querySelectorAll("[data-menu]");
-        for (let i = 0; i < elements.length; i++) {
-            let main = elements[i];
-            main.addEventListener("click", function () {
-                let element = main.parentElement.parentElement;
-                let andicators = main.querySelectorAll("svg");
-                let child = element.querySelector("#sect");
-                child.classList.toggle("hidden");
-                andicators[0].classList.toggle("rotate-180");
-            });
-        }
-        function Menu(e){
-    let list = document.querySelector('ul');
-    e.name === 'menu' ? (e.name = "close",list.classList.add('top-[80px]') , list.classList.add('opacity-100')) :( e.name = "menu" ,list.classList.remove('top-[80px]'),list.classList.remove('opacity-100'))
-  }
-  document.addEventListener('DOMContentLoaded', function () {
+                <% } else { %> <!-- Handle the case where productdisplay is null or undefined -->
+                    <p>Product not found.</p>
+                    <% } %>
+</div>
+</body>
+<!-- partial -->
+<script src='https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.7.3/dist/alpine.min.js'>
+    document.addEventListener('DOMContentLoaded', function () {
         const zoomImages = document.querySelectorAll('.product-image');
         mediumZoom(zoomImages);
-    });
-    </script>
-        <!-- component -->
-       
-</body>
+    })
+</script>
+<script>
+    /* Execute the magnify function */
+    magnify("myimage", 3);
+
+    function magnify(imgID, zoom) {
+        let img, glass, w, h, bw;
+        img = document.getElementById(imgID);
+        /* Create magnifier glass */
+        glass = document.createElement("DIV");
+        glass.setAttribute("class", "img-magnifier-glass");
+        /* Insert magnifier glass */
+        img.parentElement.insertBefore(glass, img);
+        /* Set background properties for the magnifier glass */
+        glass.style.backgroundImage = "url('" + img.src + "')";
+        glass.style.backgroundRepeat = "no-repeat";
+        glass.style.backgroundSize = (img.width * zoom) + "px " + (img.height * zoom) + "px";
+        bw = 3;
+        w = glass.offsetWidth / 2;
+        h = glass.offsetHeight / 2;
+        /* Execute a function when someone moves the magnifier glass over the image */
+        glass.addEventListener("mousemove", moveMagnifier);
+        img.addEventListener("mousemove", moveMagnifier);
+        /* Execute a function when the mouse leaves the image or the magnifier glass */
+        glass.addEventListener("mouseleave", hideMagnifier);
+        img.addEventListener("mouseleave", hideMagnifier);
+        /* And also for touch screens */
+        glass.addEventListener("touchmove", moveMagnifier);
+        img.addEventListener("touchmove", moveMagnifier);
+
+        function hideMagnifier(e) {
+            glass.style.display = 'none';
+        }
+        function moveMagnifier(e) {
+            glass.style.display = 'block';
+            let pos, x, y;
+            /* Prevent any other actions that may occur when moving over the image */
+            e.preventDefault();
+            /* Get the cursor's x and y positions */
+            pos = getCursorPos(e);
+            x = pos.x;
+            y = pos.y;
+            /* Prevent the magnifier glass from being positioned outside the image */
+            if (x > img.width - (w / zoom)) { x = img.width - (w / zoom); }
+            if (x < w / zoom) { x = w / zoom; }
+            if (y > img.height - (h / zoom)) { y = img.height - (h / zoom); }
+            if (y < h / zoom) { y = h / zoom; }
+            /* Set the position of the magnifier glass */
+            glass.style.left = (x - w) + "px";
+            glass.style.top = (y - h) + "px";
+            /* Display what the magnifier glass "sees" */
+            glass.style.backgroundPosition = "-" + ((x * zoom) - w + bw) + "px -" + ((y * zoom) - h + bw) + "px";
+        }
+
+        function getCursorPos(e) {
+            let a, x = 0, y = 0;
+            e = e || window.event;
+            /* Get the x and y positions of the image */
+            a = img.getBoundingClientRect();
+            /* Calculate the cursor's x and y coordinates, relative to the image */
+            x = e.pageX - a.left;
+            y = e.pageY - a.top;
+            /* Consider any page scrolling */
+            x = x - window.pageXOffset;
+            y = y - window.pageYOffset;
+            return { x: x, y: y };
+        }
+    }
+</script>
+
 
 </html>
+
+</div>

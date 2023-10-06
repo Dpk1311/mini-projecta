@@ -12,25 +12,25 @@ function generateOTP() {
 const home = async (req, res) => {
     try {
         const categorycollection = await CategoryModel.find()
-        console.log(categorycollection);
+        // console.log(categorycollection);
         res.render('user/home', { categorycollection });
     } catch (error) {
         console.error(error);
         res.status(500).send('Internal Server Error');
     }
 };
-
-const login = (req, res) => {
-    if(req.session.invalideandu){
-        req.session.invalideandu = false
-      return  res.render('user/login',{msg:req.session.errormsg||''} )
-    }else{
-       res.render('user/login',{msg:''} )
-    }
-
  
-    
-};
+const login = (req, res) => {
+    if (req.session.invalid) {
+        req.session.invalid = false
+        return res.render('user/login', { msg: req.session.errormsg || '' })
+    } else if (req.session.user) {
+        res.render('user/home', { msg: '' })
+    }
+    else {
+        res.render('user/login', { msg: '' })
+    }
+}
 
 const loginpost = async (req, res) => {
 
@@ -38,23 +38,41 @@ const loginpost = async (req, res) => {
 
         const { email, password } = req.body;
 
-        const user = await UserModel.findOne({ email, password });
+        const user = await UserModel.findOne({ email });
 
-        if (user) {
-            req.session.user = user;
-            return res.redirect('/');
-        } else if (!req.body.email || !req.body.password) {
-            req.session.errormsg = "err msg"
-            req.session.invalideandu = true
-            return res.redirect('/login')
-        }
-        else {
+        if (!user) {
+            req.session.invalid = true;
+            req.session.errormsg = "Incorrect Email";
             return res.redirect('/login');
         }
+
+        // Compare the provided password with the stored password
+        if (user.password === password) {
+            req.session.user = user;
+            return res.redirect('/');
+        }
+        else {
+            req.session.invalid = true;
+            req.session.errormsg = "Incorrect Password";
+            return res.redirect('/login');
+        }
+
     } catch (error) {
         console.error(error);
         return res.status(500).send('Internal Server Error');
     }
+};
+
+const logout = (req, res) => {
+    req.session.user = null;
+    req.session.destroy((err) => {
+        if (err) {
+            console.error('Error destroying session:', err);
+            res.status(500).send('Error destroying session');
+        } else {
+            res.redirect('/login');
+        }
+    });
 };
 
 const forgotpassword = (req, res) => {
@@ -220,20 +238,20 @@ const otppost = async (req, res) => {
 const productpage = async (req, res) => {
     const itemid = req.query.product_Id
     const productdisplay = await productModel.findById(itemid)
-    console.log('productdisplay:',productdisplay);
-    res.render('user/productpage',{productdisplay})
+    res.render('user/productpage', { productdisplay })
 }
 
 const product_shirts = async (req, res) => {
     const productcollection = await productModel.find()
     res.render('user/product_shirts', { productcollection })
-} 
- 
- 
+}
+
+
 module.exports = {
     home,
     login,
     loginpost,
+    logout,
     signup,
     signuppost,
     otp,
@@ -241,5 +259,6 @@ module.exports = {
     productpage,
     otppost,
     forgotpassword,
-    forgotpasswordpost
+    forgotpasswordpost,
+
 };

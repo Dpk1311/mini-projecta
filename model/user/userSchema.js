@@ -1,11 +1,6 @@
 const mongoose = require('mongoose');
 
 
-const Usercart = new mongoose.Schema({
-    
-})
-
-
 const UserSchema = new mongoose.Schema({
     name: {
         type: String,

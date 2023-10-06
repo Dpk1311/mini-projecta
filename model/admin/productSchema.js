@@ -1,12 +1,13 @@
 const mongoose = require('mongoose');
-const ObjectID = mongoose.Schema.Types.ObjectId
+const { Schema } = mongoose;
 
 
-const productSchema = new mongoose.Schema({
+const productSchema = new Schema({
     Owner: {
-        type: ObjectID,
+        type: Schema.Types.ObjectId,
+        ref: 'User',
         required: true,
-        ref: 'User'
+      
     },
     Name: {
         type: String,
@@ -49,4 +50,4 @@ const productSchema = new mongoose.Schema({
 
 const productModel = new mongoose.model("Product", productSchema);
 
-module.exports = { productModel };
+module.exports =  productModel 

@@ -18,7 +18,7 @@ router.get('/product_shirts',clientController.product_shirts)
 router.get('/productpage',clientController.productpage)
 router.get('/cart',cartController.cart) 
 router.get('/cartpost',cartController.addToCart) 
-router.get('/userprofile',clientController.userprofile)
+router.get('/userprofile',clientController.userprofile) 
 router.get('/addaddress',clientController.addaddress)
 router.post('/addaddress',clientController.addaddresspost)
 

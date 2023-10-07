@@ -162,7 +162,7 @@ const signuppost = async (req, res) => {
         });
 
         // Save the new user to the database
-        await newUser.save();
+        await newUser.save(); 
         console.log('User saved to database');
 
         // Send the OTP via email
@@ -170,13 +170,13 @@ const signuppost = async (req, res) => {
             service: 'Gmail',
             auth: {
                 user: 'j29589289@gmail.com',
-                pass: 'potl opgm ojjr cbfn',
+                pass: 'potl opgm ojjr cbfn', 
             },
             tls: {
                 rejectUnauthorized: false
             }
         });
-
+ 
         const mailOptions = {
             from: 'j29589289@gmail.com',
             to: email,

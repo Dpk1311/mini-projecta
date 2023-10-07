@@ -7,6 +7,7 @@ const { UserModel } = require('../model/user/userSchema')
 
 const cart = async (req, res) => {
   try {
+    const user = req.session.user
     const userId = req.session.user._id
     console.log('uid:', userId);
     if (userId) {
@@ -31,11 +32,11 @@ const cart = async (req, res) => {
       };
 
       const data1 = {
-        Owner: user._id
+        Owner: user._id 
       }
       console.log('data1',data1);
 
-      res.render('user/cart', { data, subtotal,data1 })
+      res.render('user/cart', { data, subtotal,data1,user })
     } else {
       res.render('user/cart', { data: null })
     }

@@ -2,6 +2,7 @@ const nodemailer = require('nodemailer');
 const { UserModel } = require('../model/user/userSchema');
 const { CategoryModel } = require('../model/admin/categorySchema')
 const { productModel } = require('../model/admin/productSchema')
+const { addressModel } = require('../model/user/addressSchema')
 
 
 //  to generate a random OTP
@@ -11,15 +12,17 @@ function generateOTP() {
 
 const home = async (req, res) => {
     try {
+
+        const user = req.session.user
         const categorycollection = await CategoryModel.find()
         // console.log(categorycollection);
-        res.render('user/home', { categorycollection });
+        res.render('user/home', { categorycollection, user });
     } catch (error) {
         console.error(error);
         res.status(500).send('Internal Server Error');
     }
-};
- 
+}
+
 const login = (req, res) => {
     if (req.session.invalid) {
         req.session.invalid = false
@@ -49,6 +52,7 @@ const loginpost = async (req, res) => {
         // Compare the provided password with the stored password
         if (user.password === password) {
             req.session.user = user;
+            req.session.useremail = email
             return res.redirect('/');
         }
         else {
@@ -235,6 +239,58 @@ const otppost = async (req, res) => {
     }
 }
 
+const userprofile = (req, res) => {
+    try {
+        const user = req.session.user
+        console.log('user:', user);
+        if (user) {
+            res.render('user/userprofile', { user })
+        }
+    }
+    catch (error) {
+        console.error(error);
+    }
+}
+
+const addaddress = (req, res) => {
+    try {
+        if (req.session.user) {
+            res.render('user/addaddress')
+        }
+    }
+    catch (error) {
+        console.error(error);
+    }
+}
+
+const addaddresspost = async (req,res) =>{
+    try{
+       const usermail = req.session.useremail
+        const{street,city,state,pincode,country} = req.body
+        const verifymail = await UserModel.findOne({email:usermail})
+            if(!verifymail){
+                res.redirect('/')
+            }
+        const newAddress = new addressModel({
+            street,
+            city,
+            state,
+            pincode,
+            country
+        })
+        await newAddress.save()
+
+        verifymail.address.push(newAddress)
+        await verifymail.save()
+        console.log('newaddress saved to database');
+        res.redirect('/userprofile')
+
+    }
+    catch(error){
+        console.error(error);
+    }
+}
+
 const productpage = async (req, res) => {
     const itemid = req.query.product_Id
     const productdisplay = await productModel.findById(itemid)
@@ -260,5 +316,8 @@ module.exports = {
     otppost,
     forgotpassword,
     forgotpasswordpost,
+    userprofile,
+    addaddress,
+    addaddresspost
 
 };

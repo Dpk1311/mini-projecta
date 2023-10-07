@@ -1,7 +1,8 @@
 const mongoose = require('mongoose');
+const { Schema } = mongoose;
 
 
-const UserSchema = new mongoose.Schema({
+const UserSchema = new Schema({
     name: {
         type: String,
         required: true
@@ -35,6 +36,12 @@ const UserSchema = new mongoose.Schema({
         type: Boolean,
         default: false
     },
+
+    address:[{
+        type: Schema.Types.ObjectId,
+        ref:'address',
+        required:true
+    }],
 });
 
 const UserModel = new mongoose.model("User", UserSchema);

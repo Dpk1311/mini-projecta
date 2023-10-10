@@ -34,7 +34,7 @@
     </head>
 
     <body class="antialiased">
-        <%- include('partials/navbar.ejs') %>
+        <%- include('partials/navbar.ejs',user) %>
             <% if(productdisplay) { %>
 
 
@@ -124,7 +124,7 @@
                                             d="M8 9l4-4 4 4m0 6l-4 4-4-4" />
                                     </svg>
                                 </div>
-                                <a href="/cartpost?product_Id=<%= productdisplay._id %>">
+                                <a href="/cartpost/<%= productdisplay._id %>">
                                 <button type="button" 
                                     class="h-14 px-6 py-2 font-semibold rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white">
                                     Add to Cart

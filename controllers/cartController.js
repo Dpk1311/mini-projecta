@@ -1,5 +1,5 @@
 const cartModel = require('../model/user/cartSchema');
-const productModel = require('../model/admin/productSchema');
+const { productModel } = require('../model/admin/productSchema');
 const { UserModel } = require('../model/user/userSchema')
 
 
@@ -16,8 +16,9 @@ const cart = async (req, res) => {
           path: 'products.product',
           model: 'Product', // Replace with your product model name
         });
+      console.log('cartdata:', cartData);
 
-      
+
       let subtotal = 0
       for (const item of cartData.products) {
         subtotal += item.product.Price * item.quantity
@@ -31,12 +32,12 @@ const cart = async (req, res) => {
         products: cartData.products, // Include the cart products
       };
 
-      const data1 = {
-        Owner: user._id 
-      }
-      console.log('data1',data1);
+      // const data1 = {
+      //   Owner: user._id
+      // } 
+      // console.log('data1', data1);
 
-      res.render('user/cart', { data, subtotal,data1,user })
+      res.render('user/cart', { data, subtotal, user })
     } else {
       res.render('user/cart', { data: null })
     }
@@ -52,7 +53,7 @@ const addToCart = async (req, res) => {
     if (req.session.user && req.session.user._id) {
       const userId = req.session.user._id // Assuming you have user information in the session
       console.log("userId", userId);
-      const productId = req.query.product_Id // Assuming the product ID is passed as a query parameter
+      const productId = req.params.productId // Assuming the product ID is passed as a query parameter
       console.log('productId:', productId);
 
       // Find the product by ID 
@@ -70,7 +71,7 @@ const addToCart = async (req, res) => {
         // Create a new cart for the user if it doesn't exist
         userCart = new cartModel({
           user: userId,
-          products: [],
+          products: [], 
         });
       }
 
@@ -82,8 +83,9 @@ const addToCart = async (req, res) => {
       if (existingProduct) {
         // If the product is already in the cart, increase the quantity
         existingProduct.quantity += 1;
-
-      } else {
+      
+      } 
+       else {
         // If not, add it to the cart with quantity 1
         userCart.products.push({
           product: productId,
@@ -91,6 +93,7 @@ const addToCart = async (req, res) => {
           // price: product.price, // You may need to adjust this based on your schema
         });
       }
+
 
       // Save the updated cart
       await userCart.save();
@@ -109,7 +112,45 @@ const addToCart = async (req, res) => {
   }
 };
 
+const removefromcart = async (req,res) =>{
+  try{
+    if(req.session.user && req.session.user._id){
+      const userId = req.session.user._id // Assuming you have user information in the session
+      console.log("userId", userId);
+      const productId = req.params.productId // Assuming the product ID is passed as a query parameter
+      console.log('productId:', productId);
+
+
+      let userCart = await cartModel.findOne({ user: userId });
+      console.log('userCart:', userCart);
+
+      const existingProduct = userCart.products.find((item) =>
+      item.product.equals(productId)
+    );
+
+    if (existingProduct) {
+      // If the product is already in the cart, increase the quantity
+      existingProduct.quantity -= 1;
+    
+    }
+
+    // Save the updated cart
+    await userCart.save();
+    console.log('cart saved');
+
+    // Redirect or respond with a success message
+    return res.redirect('/cart'); // You can redirect the user to their cart page
+    }else {
+      console.log('session not found');
+    }
+  }
+  catch(error){
+    console.error(error);
+  }
+} 
+
 module.exports = {
   addToCart,
   cart,
+  removefromcart,
 };

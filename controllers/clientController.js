@@ -293,19 +293,22 @@ const addaddresspost = async (req,res) =>{
 
 const productpage = async (req, res) => {
     const itemid = req.query.product_Id
+    const user = req.session.user
     const productdisplay = await productModel.findById(itemid)
-    res.render('user/productpage', { productdisplay })
+    res.render('user/productpage', { productdisplay,user })
 }
 
 const product_shirts = async (req, res) => {
     const productcollection = await productModel.find()
-    res.render('user/product_shirts', { productcollection })
+    const user = req.session.user
+    console.log('productcollection',productcollection);
+    res.render('user/product_shirts', { productcollection,user })
 }
 
 
 module.exports = {
     home,
-    login,
+    login, 
     loginpost,
     logout,
     signup,

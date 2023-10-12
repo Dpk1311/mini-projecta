@@ -71,7 +71,7 @@ const addToCart = async (req, res) => {
         // Create a new cart for the user if it doesn't exist
         userCart = new cartModel({
           user: userId,
-          products: [], 
+          products: [],
         });
       }
 
@@ -83,9 +83,9 @@ const addToCart = async (req, res) => {
       if (existingProduct) {
         // If the product is already in the cart, increase the quantity
         existingProduct.quantity += 1;
-      
-      } 
-       else {
+
+      }
+      else {
         // If not, add it to the cart with quantity 1
         userCart.products.push({
           product: productId,
@@ -112,9 +112,9 @@ const addToCart = async (req, res) => {
   }
 };
 
-const removefromcart = async (req,res) =>{
-  try{
-    if(req.session.user && req.session.user._id){
+const removefromcart = async (req, res) => {
+  try {
+    if (req.session.user && req.session.user._id) {
       const userId = req.session.user._id // Assuming you have user information in the session
       console.log("userId", userId);
       const productId = req.params.productId // Assuming the product ID is passed as a query parameter
@@ -125,32 +125,52 @@ const removefromcart = async (req,res) =>{
       console.log('userCart:', userCart);
 
       const existingProduct = userCart.products.find((item) =>
-      item.product.equals(productId)
-    );
+        item.product.equals(productId)
+      );
 
-    if (existingProduct) {
-      // If the product is already in the cart, increase the quantity
-      existingProduct.quantity -= 1;
-    
-    }
+      if (existingProduct) {
+        // If the product is already in the cart, increase the quantity
+        existingProduct.quantity -= 1;
 
-    // Save the updated cart
-    await userCart.save();
-    console.log('cart saved');
+      }
 
-    // Redirect or respond with a success message
-    return res.redirect('/cart'); // You can redirect the user to their cart page
-    }else {
+      // Save the updated cart
+      await userCart.save();
+      console.log('cart saved');
+
+      // Redirect or respond with a success message
+      return res.redirect('/cart'); // You can redirect the user to their cart page
+    } else {
       console.log('session not found');
     }
   }
-  catch(error){
+  catch (error) {
     console.error(error);
   }
-} 
+}
+
+const checkout = async (req, res) => {
+  try {
+    const userid = req.session.user._id
+    console.log(userid);
+    const user = await UserModel.findById(userid)
+    console.log('user ixs', user);
+    const cartData = await cartModel.findOne({ user: userid })
+    console.log('cartdata is', cartData);
+    const data = {
+      user: user.name, // Include the user's name
+      products: cartData.products, // Include the cart products
+    }
+    res.render('user/checkout', { user,data })
+  }
+  catch (error) {
+    console.error(error);
+  }
+}
 
 module.exports = {
   addToCart,
   cart,
   removefromcart,
+  checkout
 };

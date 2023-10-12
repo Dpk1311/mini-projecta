@@ -30,7 +30,6 @@
 <body>
     <%- include('partials/navbar'),{user} %>
         <div>
-
             <div class="container mx-auto my-5 p-5">
                 <div class="md:flex no-wrap md:-mx-2 ">
                     <!-- Left Side -->
@@ -139,22 +138,40 @@
                                             <%= user.email %>
                                         </div>
                                     </div>
+
                                     <div class="grid grid-cols-2">
-                                        <div class="px-4 py-2 font-semibold">Current Address</div>
-                                        <div class="px-4 py-2">Beech Creek, PA, Pennsylvania</div>
+                                        <div class="px-4 py-2 font-semibold">Address</div>
+                                        <div class="px-4 py-2">
+                                            <% address.forEach((element)=> { %>
+                                                <%= element.street %>
+                                                    <%= element.city %>
+                                                        <%= element.state %>
+                                                            <%= element.pincode %>
+                                                                <%= element.country %>
+                                                                    <br>
+                                                                    <hr>
+                                                                    <% }); %>
+                                        </div>
+
                                     </div>
-                                    <div class="grid grid-cols-2">
-                                        <div class="px-4 py-2 font-semibold">Permanant Address</div>
-                                        <div class="px-4 py-2">Arlington Heights, IL, Illinois</div>
-                                    </div>
+
                                 </div>
                             </div>
-                            <form action="/addaddress" method="get">
-                                <button
-                                    class="block w-full text-blue-800 text-sm font-semibold rounded-lg hover:bg-gray-100 focus:outline-none focus:shadow-outline focus:bg-gray-100 hover:shadow-xs p-3 my-4">
-                                    Add Address
-                                </button>
-                            </form>
+                            <div class="flex space-x-4">
+                                <form action="/addaddress" method="get">
+                                    <button
+                                        class="text-blue-800 text-sm font-semibold rounded-lg hover:bg-gray-100 focus:outline-none focus:shadow-outline focus:bg-gray-100 hover:shadow-xs px-3 my-4">
+                                        Add Address
+                                    </button>
+                                </form>
+
+                                <form action="/editaddress/<%= user._id %>" method="get">
+                                    <button
+                                        class="text-green-800 text-sm font-semibold rounded-lg hover:bg-gray-100 focus:outline-none focus:shadow-outline focus:bg-gray-100 hover:shadow-xs px-3 my-4">
+                                        Edit
+                                    </button>
+                                </form>
+                            </div>
                         </div>
                         <!-- End of about section -->
 

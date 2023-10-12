@@ -239,12 +239,13 @@ const otppost = async (req, res) => {
     }
 }
 
-const userprofile = (req, res) => {
+const userprofile = async (req, res) => {
     try {
-        const user = req.session.user
-        console.log('user:', user);
+        const userid = req.session.user._id
+        const user = await UserModel.findById(userid)
+        const address = await addressModel.find()
         if (user) {
-            res.render('user/userprofile', { user })
+            res.render('user/userprofile', { user,address })
         }
     }
     catch (error) {
@@ -257,8 +258,46 @@ const addaddress = (req, res) => {
         if (req.session.user) {
             res.render('user/addaddress')
         }
+        res.redirect('/userprofile')
     }
+    
     catch (error) {
+        console.error(error);
+    }
+}  
+
+const editaddress = async (req,res)=>{
+    try{
+        const userId = req.session.user._id
+        const user = await UserModel.findById(userId)
+        console.log('user:',user);
+        if(user){
+            res.render('user/edituser',{user})
+        }
+    }
+    catch(error){
+        console.error(error);
+    }
+}
+
+const editpost = async (req,res) =>{
+    try{
+        const userId = req.session.user._id
+        console.log('userid',userId);
+        const user = await UserModel.findById(userId)
+        console.log('user is',user);
+
+        user.name = req.body.name || user.name
+        user.email = req.body.email || user.email
+        user.phoneNumber = req.body.phoneNumber || user.phoneNumber
+
+        await user.save()
+        const user1 = req.session.user
+        console.log('user1',user1);
+        console.log('changes saved in database');
+        res.redirect('/userprofile')
+    }
+    catch(error){
         console.error(error);
     }
 }
@@ -321,6 +360,8 @@ module.exports = {
     forgotpasswordpost,
     userprofile,
     addaddress,
-    addaddresspost
+    addaddresspost,
+    editaddress,
+    editpost
 
 };

@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="dist/output.css">
+
+    <title>Document</title>
+</head>
+
+<body>
+    <form action="/editaddress/<%= user._id %>" method="post">
+        <div class="mt-4 flex flex-col bg-gray-100 rounded-lg p-4 shadow-sm">
+            <h2 class="text-black font-bold text-lg">Edit Profile</h2>
+
+            <div class="mt-4">
+                <label class="text-black" for="street">Name</label>
+                <input class="w-full bg-white rounded-md border-gray-300 text-black px-2 py-1" id="name"
+                    name="name" value="<%= user.name %>">
+            </div>
+
+            <div class="mt-4 flex flex-row space-x-2">
+                <div class="flex-1">
+                    <label class="text-black" for="city">Email</label>
+                    <input class="w-full bg-white rounded-md border-gray-300 text-black px-2 py-1" id="email"
+                        name="email" type="email" value="<%= user.email %>">
+                </div>
+
+                <div class="flex-1">
+                    <label class="text-black" for="state">Contact No.</label>
+                    <input class="w-full bg-white rounded-md border-gray-300 text-black px-2 py-1" id="phoneNumber"
+                        name="phoneNumber" type="text" value="<%= user.phoneNumber %>">
+                </div>
+            </div>
+
+            <div class="mt-4 flex justify-end">
+                <button class="bg-white text-black rounded-md px-4 py-1 hover:bg-gray-200 hover:text-gray-900"
+                    type="submit">Submit</button>
+            </div>
+        </div>
+    </form>
+</body>
+
+</html>

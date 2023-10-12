@@ -17,11 +17,15 @@ router.post('/forgotpassword',clientController.forgotpasswordpost)
 router.get('/product_shirts',clientController.product_shirts)
 router.get('/productpage',clientController.productpage)
 router.get('/cart',cartController.cart) 
+router.get('/cartpost/:productId',cartController.addToCart)
 router.get('/cartadd/:productId',cartController.addToCart) 
 router.get('/cartremove/:productId',cartController.removefromcart) 
 router.get('/userprofile',clientController.userprofile) 
 router.get('/addaddress',clientController.addaddress)
 router.post('/addaddress',clientController.addaddresspost)
+router.get('/editaddress/:userId',clientController.editaddress)
+router.post('/editaddress/:userId',clientController.editpost)
+router.get('/checkout',cartController.checkout)
 
 
 

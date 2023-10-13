@@ -152,15 +152,17 @@ const removefromcart = async (req, res) => {
 const checkout = async (req, res) => {
   try {
     const userid = req.session.user._id
+
     const user = await UserModel.findById(userid)
-      .populate('address')
+      .populate('selectedAddress')
+    console.log('selected is', user.selectedAddress);
+
     const cartData = await cartModel.findOne({ user: userid })
       .populate({
         path: 'products.product',
         model: 'Product', // Replace with your product model name
       })
-    const address12 = req.session.address
-    console.log('saved address is', address12);
+
 
     let subtotal = 0
     for (const item of cartData.products) {
@@ -170,6 +172,7 @@ const checkout = async (req, res) => {
     const data = {
       user: user.name, // Include the user's name
       products: cartData.products, // Include the cart products
+      selectedAddress: user.selectedAddress, // Include the selected address
     }
     res.render('user/checkout', { user, data, subtotal })
   }
@@ -178,9 +181,12 @@ const checkout = async (req, res) => {
   }
 }
 
+
+
+
 module.exports = {
   addToCart,
   cart,
   removefromcart,
-  checkout
+  checkout,
 };

@@ -2,6 +2,7 @@ const express = require('express')
 const router = express.Router()
 const clientController = require('../controllers/clientController')
 const cartController = require('../controllers/cartController')
+const orderController = require('../controllers/orderController')
 
 
 router.get('/',clientController.home)
@@ -27,6 +28,8 @@ router.get('/editaddress/:userId',clientController.editaddress)
 router.post('/editaddress/:userId',clientController.editpost)
 router.get('/checkout',cartController.checkout)
 router.post('/addresssave',clientController.saveaddress)
+router.get('/confirmpage',orderController.confirmpage)
+router.get('/orders',orderController.orders)
 
 
 module.exports = router 

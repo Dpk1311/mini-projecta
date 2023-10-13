@@ -42,6 +42,16 @@ const UserSchema = new Schema({
         ref:'address',
         required:true
     }],
+    selectedAddress: [{
+        type: Schema.Types.ObjectId,
+        ref: 'address'
+    }],
+    product: {
+        type: Schema.Types.ObjectId,
+        ref: 'Product',
+        required: true,
+      
+    }
 });
 
 const UserModel = new mongoose.model("User", UserSchema);

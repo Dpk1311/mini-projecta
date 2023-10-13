@@ -245,7 +245,7 @@ const userprofile = async (req, res) => {
         const user = await UserModel.findById(userid)
             .populate('address')
 
-       
+
 
         if (user) {
             res.render('user/userprofile', { user })
@@ -263,14 +263,13 @@ const saveaddress = async (req, res) => {
             .populate('address')
         const selectedAddressIndex = req.body.address;
         // Retrieve the selected address based on the index
-        const selectedAddress = user.address[selectedAddressIndex]
-        req.session.address = selectedAddress
-
+        user.selectedAddress = user.address[selectedAddressIndex]
+        await user.save()
+        console.log('new address saved');
 
         // Use selectedAddress for saving logic
 
         console.log('Selected address index:', selectedAddressIndex);
-        console.log('Selected address:', selectedAddress);
         res.redirect('/userprofile')
     }
     catch (error) {
@@ -321,10 +320,10 @@ const editpost = async (req, res) => {
         console.log('user1', user1);
         console.log('changes saved in database');
         res.redirect('/userprofile')
-    }
+    } 
     catch (error) {
         console.error(error);
-    }
+    } 
 }
 
 const addaddresspost = async (req, res) => {
@@ -370,6 +369,8 @@ const product_shirts = async (req, res) => {
 }
 
 
+
+
 module.exports = {
     home,
     login,
@@ -388,6 +389,7 @@ module.exports = {
     addaddresspost,
     editaddress,
     editpost,
-    saveaddress
+    saveaddress,
+    
 
 };

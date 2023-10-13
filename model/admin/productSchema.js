@@ -3,12 +3,6 @@ const { Schema } = mongoose;
 
 
 const productSchema = new Schema({
-    Owner: {
-        type: Schema.Types.ObjectId,
-        ref: 'User',
-        required: true,
-      
-    },
     Name: {
         type: String,
         required: true

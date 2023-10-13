@@ -162,7 +162,7 @@ const signuppost = async (req, res) => {
         });
 
         // Save the new user to the database
-        await newUser.save(); 
+        await newUser.save();
         console.log('User saved to database');
 
         // Send the OTP via email
@@ -170,13 +170,13 @@ const signuppost = async (req, res) => {
             service: 'Gmail',
             auth: {
                 user: 'j29589289@gmail.com',
-                pass: 'potl opgm ojjr cbfn', 
+                pass: 'potl opgm ojjr cbfn',
             },
             tls: {
                 rejectUnauthorized: false
             }
         });
- 
+
         const mailOptions = {
             from: 'j29589289@gmail.com',
             to: email,
@@ -243,10 +243,35 @@ const userprofile = async (req, res) => {
     try {
         const userid = req.session.user._id
         const user = await UserModel.findById(userid)
-        const address = await addressModel.find()
+            .populate('address')
+
+       
+
         if (user) {
-            res.render('user/userprofile', { user,address })
+            res.render('user/userprofile', { user })
         }
+    }
+    catch (error) {
+        console.error(error);
+    }
+}
+
+const saveaddress = async (req, res) => {
+    try {
+        const userid = req.session.user._id
+        const user = await UserModel.findById(userid)
+            .populate('address')
+        const selectedAddressIndex = req.body.address;
+        // Retrieve the selected address based on the index
+        const selectedAddress = user.address[selectedAddressIndex]
+        req.session.address = selectedAddress
+
+
+        // Use selectedAddress for saving logic
+
+        console.log('Selected address index:', selectedAddressIndex);
+        console.log('Selected address:', selectedAddress);
+        res.redirect('/userprofile')
     }
     catch (error) {
         console.error(error);
@@ -260,32 +285,32 @@ const addaddress = (req, res) => {
         }
         res.redirect('/userprofile')
     }
-    
-    catch (error) {
-        console.error(error);
-    }
-}  
 
-const editaddress = async (req,res)=>{
-    try{
-        const userId = req.session.user._id
-        const user = await UserModel.findById(userId)
-        console.log('user:',user);
-        if(user){
-            res.render('user/edituser',{user})
-        }
-    }
-    catch(error){
+    catch (error) {
         console.error(error);
     }
 }
 
-const editpost = async (req,res) =>{
-    try{
+const editaddress = async (req, res) => {
+    try {
         const userId = req.session.user._id
-        console.log('userid',userId);
         const user = await UserModel.findById(userId)
-        console.log('user is',user);
+        console.log('user:', user);
+        if (user) {
+            res.render('user/edituser', { user })
+        }
+    }
+    catch (error) {
+        console.error(error);
+    }
+}
+
+const editpost = async (req, res) => {
+    try {
+        const userId = req.session.user._id
+        console.log('userid', userId);
+        const user = await UserModel.findById(userId)
+        console.log('user is', user);
 
         user.name = req.body.name || user.name
         user.email = req.body.email || user.email
@@ -293,23 +318,23 @@ const editpost = async (req,res) =>{
 
         await user.save()
         const user1 = req.session.user
-        console.log('user1',user1);
+        console.log('user1', user1);
         console.log('changes saved in database');
         res.redirect('/userprofile')
     }
-    catch(error){
+    catch (error) {
         console.error(error);
     }
 }
 
-const addaddresspost = async (req,res) =>{
-    try{
-       const usermail = req.session.useremail
-        const{street,city,state,pincode,country} = req.body
-        const verifymail = await UserModel.findOne({email:usermail})
-            if(!verifymail){
-                res.redirect('/')
-            }
+const addaddresspost = async (req, res) => {
+    try {
+        const usermail = req.session.useremail
+        const { street, city, state, pincode, country } = req.body
+        const verifymail = await UserModel.findOne({ email: usermail })
+        if (!verifymail) {
+            res.redirect('/')
+        }
         const newAddress = new addressModel({
             street,
             city,
@@ -325,7 +350,7 @@ const addaddresspost = async (req,res) =>{
         res.redirect('/userprofile')
 
     }
-    catch(error){
+    catch (error) {
         console.error(error);
     }
 }
@@ -334,20 +359,20 @@ const productpage = async (req, res) => {
     const itemid = req.query.product_Id
     const user = req.session.user
     const productdisplay = await productModel.findById(itemid)
-    res.render('user/productpage', { productdisplay,user })
+    res.render('user/productpage', { productdisplay, user })
 }
 
 const product_shirts = async (req, res) => {
     const productcollection = await productModel.find()
     const user = req.session.user
-    console.log('productcollection',productcollection);
-    res.render('user/product_shirts', { productcollection,user })
+    console.log('productcollection', productcollection);
+    res.render('user/product_shirts', { productcollection, user })
 }
 
 
 module.exports = {
     home,
-    login, 
+    login,
     loginpost,
     logout,
     signup,
@@ -362,6 +387,7 @@ module.exports = {
     addaddress,
     addaddresspost,
     editaddress,
-    editpost
+    editpost,
+    saveaddress
 
 };

@@ -26,7 +26,7 @@ router.post('/addaddress',clientController.addaddresspost)
 router.get('/editaddress/:userId',clientController.editaddress)
 router.post('/editaddress/:userId',clientController.editpost)
 router.get('/checkout',cartController.checkout)
-
+router.post('/addresssave',clientController.saveaddress)
 
 
 module.exports = router 

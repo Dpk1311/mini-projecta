@@ -1,7 +1,7 @@
 const cartModel = require('../model/user/cartSchema');
 const { productModel } = require('../model/admin/productSchema');
 const { UserModel } = require('../model/user/userSchema')
-
+const { addressModel } = require('../model/user/addressSchema')
 
 
 
@@ -152,16 +152,26 @@ const removefromcart = async (req, res) => {
 const checkout = async (req, res) => {
   try {
     const userid = req.session.user._id
-    console.log(userid);
     const user = await UserModel.findById(userid)
-    console.log('user ixs', user);
+      .populate('address')
     const cartData = await cartModel.findOne({ user: userid })
-    console.log('cartdata is', cartData);
+      .populate({
+        path: 'products.product',
+        model: 'Product', // Replace with your product model name
+      })
+    const address12 = req.session.address
+    console.log('saved address is', address12);
+
+    let subtotal = 0
+    for (const item of cartData.products) {
+      subtotal += item.product.Price * item.quantity
+    }
+
     const data = {
       user: user.name, // Include the user's name
       products: cartData.products, // Include the cart products
     }
-    res.render('user/checkout', { user,data })
+    res.render('user/checkout', { user, data, subtotal })
   }
   catch (error) {
     console.error(error);

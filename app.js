@@ -5,6 +5,8 @@ const path = require('path')
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 const nocache = require('nocache')
+const dotenv = require('dotenv');
+dotenv.config();
 app.use(express.urlencoded({ extended: true }));
 
 app.use(nocache())
@@ -22,7 +24,7 @@ app.use(session({
 }));
 
 
- 
+const PORT = process.env.PORT;
 
 mongoose.connect("mongodb://0.0.0.0/Mini-project")
 .then(()=>{
@@ -37,6 +39,6 @@ app.use('/',clientrouter)
 app.use('/',adminrouter)
 
 
-app.listen(4000,()=>{
+app.listen(PORT,()=>{
     console.log('Server is at port 4000');
 })

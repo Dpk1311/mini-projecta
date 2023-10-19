@@ -51,9 +51,13 @@
                             <ul
                                 class="bg-gray-100 text-gray-600 hover:text-gray-700 hover:shadow py-2 px-3 mt-3 divide-y rounded shadow-sm">
                                 <li class="flex items-center py-3">
-                                    <span>Status</span>
-                                    <span class="ml-auto"><span
-                                            class="bg-green-500 py-1 px-2 rounded text-white text-sm">Active</span></span>
+                                    <span>Orders</span>
+                                    <span class="ml-auto">
+                                        <form action="/orderhistory" method="get">
+                                            <button>
+                                        <span class="bg-green-500 py-1 px-2 rounded text-white text-sm">History</span></button>
+                                    </form>
+                                    </span>
                                 </li>
                                 <li class="flex items-center py-3">
                                     <span>Member since</span>
@@ -143,31 +147,32 @@
                                         <div class="px-4 py-2 font-semibold">Address</div>
                                         <div class="px-4 py-2 space-y-2">
                                             <form action="/addresssave" method="post">
-                                            <% user.address.forEach((element, index)=> {%>
-                                                <label class="inline-flex items-center">
-                                                    <input type="radio" class="form-radio text-blue-600" name="address"
-                                                        value="<%= index %>">
-                                                    <span class="ml-2">
-                                                        <%= element.street %>, <%= element.city %>, <%= element.state %>
-                                                                    , <%= element.pincode %>, <%= element.country %>
-                                                    </span>
-                                                </label>
-                                                <% }); %>
-                                                
-                                                    <button type="submit"
-                                                        class="cursor-pointer transition-all 
+                                                <% user.address.forEach((element, index)=> {%>
+                                                    <label class="inline-flex items-center">
+                                                        <input type="radio" class="form-radio text-blue-600"
+                                                            name="address" value="<%= index %>">
+                                                        <span class="ml-2">
+                                                            <%= element.street %>, <%= element.city %>, <%=
+                                                                        element.state %>
+                                                                        , <%= element.pincode %>, <%= element.country %>
+                                                        </span>
+                                                    </label>
+                                                    <% }); %>
+
+                                                        <button type="submit"
+                                                            class="cursor-pointer transition-all 
                 bg-gray-700 text-white px-6 py-2 rounded-lg mt-4
                 border-green-400
                 border-b-[4px] hover:brightness-110 hover:-translate-y-[1px] hover:border-b-[6px]
-                active:border-b-[2px] active:brightness-90 active:translate-y-[2px] hover:shadow-xl hover:shadow-green-300 shadow-green-300 active:shadow-none" >
-                                                        SAVE 
-                                                    </button>
-                                                </form>
+                active:border-b-[2px] active:brightness-90 active:translate-y-[2px] hover:shadow-xl hover:shadow-green-300 shadow-green-300 active:shadow-none">
+                                                            SAVE
+                                                        </button>
+                                            </form>
                                         </div>
 
                                     </div>
 
-                                </div> 
+                                </div>
                             </div>
                             <div class="flex space-x-4 mt-4">
                                 <form action="/addaddress" method="get">
@@ -191,7 +196,7 @@ active:border-b-[2px] active:brightness-90 active:translate-y-[2px] hover:shadow
                                         Edit
                                     </button>
                                 </form>
-                                
+
                             </div>
                         </div>
                         <!-- End of about section -->

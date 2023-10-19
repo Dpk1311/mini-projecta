@@ -36,31 +36,27 @@ const login = (req, res) => {
 }
 
 const loginpost = async (req, res) => {
-
     try {
-
         const { email, password } = req.body;
-
         const user = await UserModel.findOne({ email });
 
         if (!user) {
             req.session.invalid = true;
             req.session.errormsg = "Incorrect Email";
             return res.redirect('/login');
-        }
-
-        // Compare the provided password with the stored password
-        if (user.password === password) {
+        } else if (user.block) {
+            req.session.invalid = true;
+            req.session.errormsg = "User is Blocked";
+            return res.redirect('/login');
+        } else if (user.password === password) {
             req.session.user = user;
-            req.session.useremail = email
+            req.session.useremail = email;
             return res.redirect('/');
-        }
-        else {
+        } else {
             req.session.invalid = true;
             req.session.errormsg = "Incorrect Password";
             return res.redirect('/login');
         }
-
     } catch (error) {
         console.error(error);
         return res.status(500).send('Internal Server Error');
@@ -320,10 +316,10 @@ const editpost = async (req, res) => {
         console.log('user1', user1);
         console.log('changes saved in database');
         res.redirect('/userprofile')
-    } 
+    }
     catch (error) {
         console.error(error);
-    } 
+    }
 }
 
 const addaddresspost = async (req, res) => {
@@ -390,6 +386,6 @@ module.exports = {
     editaddress,
     editpost,
     saveaddress,
-    
+
 
 };

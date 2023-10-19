@@ -23,7 +23,7 @@
 
 <body>
     <%- include('partials/navbar'),{user} %>
-        <% if (data) { %>
+        <% if (data) {;%>
             <div class="h-screen bg-gray-100 pt-20">
                 <h1 class="mb-10 text-center text-2xl font-bold">CART ITEMS</h1>
                 <div class="mx-auto max-w-5xl justify-center px-6 md:flex md:space-x-6 xl:px-0">
@@ -45,29 +45,29 @@
                                         </p>
                                     </div>
                                     <div class="mt-4 flex justify-between sm:space-y-6 sm:mt-0 sm:block sm:space-x-6">
-                                        <div x-data="{ quantity: <%= product.quantity %>, price: <%= product.product.Price %> }"
-                                            x-init="quantity = Math.max(1, quantity)">
+                                        <div class="product" data-product-id="<%= product.product._id %>"
+                                            data-quantity="<%= product.quantity %>"
+                                            data-price="<%= product.product.Price %>">
                                             <div class="flex items-center border-gray-100">
-                                                <a href="/cartremove/<%= product.product._id %>"><span
-                                                    class="cursor-pointer rounded-l bg-gray-100 py-1 px-3.5 duration-100 hover:bg-blue-500 hover:text-blue-50"
-                                                    x-on:click="quantity > 1 ? (quantity--, price -= product.product.Price) : null">
+                                                <button
+                                                    class="decrement-button cursor-pointer rounded-l bg-gray-100 py-1 px-3.5 duration-100 hover:bg-blue-500 hover-text-blue-50">
                                                     -
-                                                </span></a>
-                                                <input class="h-8 w-8 border bg-white text-center text-xs outline-none"
-                                                    type="number" x-model="quantity" min="1" />
-                                                <a href="/cartadd/<%= product.product._id %>"><span
-                                                    class="cursor-pointer rounded-r bg-gray-100 py-1 px-3 duration-100 hover:bg-blue-500 hover:text-blue-50"
-                                                    x-on:click="quantity++, price += product.product.Price">
+                                                </button>
+                                                <input
+                                                    class="quantity-input h-8 w-8 border bg-white text-center text-xs outline-none"
+                                                    type="number" value="<%= product.quantity %>" min="1" />
+                                                <button
+                                                    class="increment-button cursor-pointer rounded-r bg-gray-100 py-1 px-3 duration-100 hover:bg-blue-500 hover-text-blue-50">
                                                     +
-                                                </span></a>
+                                                </button>
                                             </div>
-                                            <p class="text-sm">Total Price: ₹<span x-text="price*quantity"></span></p>
+                                            <p class="text-sm">Total Price: <span class="total-price"></span></p>
                                         </div>
-
                                         <div class="flex items-center space-x-4">
-                                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                                                stroke-width="1.5" stroke="currentColor"
-                                                class="h-5 w-5 cursor-pointer duration-150 hover:text-red-500">
+                                            <svg id="removeIcon" xmlns="http://www.w3.org/2000/svg" fill="none"
+                                                viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
+                                                class="h-5 w-5 cursor-pointer duration-150 hover:text-red-500"
+                                                onclick="removeItem('<%= product.product._id %>')">
                                                 <path stroke-linecap="round" stroke-linejoin="round"
                                                     d="M6 18L18 6M6 6l12 12" />
                                             </svg>
@@ -76,15 +76,15 @@
                                 </div>
                             </div>
                             <% }); %>
-                                <% } else { %> <!-- Handle the case where data is null or undefined -->
-                                    <p>Product not found.</p>
-                                    <% } %>
+
                     </div>
                     <!-- Sub total -->
                     <div class="mt-6 h-full rounded-lg border bg-white p-6 shadow-md md:mt-0 md:w-1/3">
-                        <div class="mb-2 flex justify-between">
+                        <div class="subtotal mb-2 flex justify-between">
                             <p class="text-gray-700">Subtotal</p>
-                            <p class="text-gray-700">₹<%= subtotal %>
+                            <p class="text-gray-700"><span id="subtotal">
+                                    <%= subtotal.toFixed(2) %>
+                                </span>
                             </p>
                         </div>
                         <div class="flex justify-between">
@@ -94,18 +94,173 @@
                         <hr class="my-4" />
                         <div class="flex justify-between">
                             <p class="text-lg font-bold">Total</p>
-                            <div class="">
-                                <p class="mb-1 text-lg font-bold">₹<%= (subtotal + 4.99) %>
+                            <div>
+                                <p class="mb-1 text-lg font-bold"><span id="finaltotal">
+                                        <%= (subtotal.toFixed(2)) %>
+                                    </span>
                                 </p>
                                 <p class="text-sm text-gray-700">including VAT</p>
                             </div>
                         </div>
                         <a href="/checkout"><button
-                            class="mt-6 w-full rounded-md bg-blue-500 py-1.5 font-medium text-blue-50 hover:bg-blue-600">
-                            Check out</button></a>
+                                class="mt-6 w-full rounded-md bg-blue-500 py-1.5 font-medium text-blue-50 hover:bg-blue-600">
+                                Check out</button></a>
                     </div>
                 </div>
             </div>
+            <% } else { %> <!-- Handle the case where data is null or undefined -->
+                <p>Product not found.</p>
+                <% } %>
+                    <script>
+
+                        document.addEventListener("DOMContentLoaded", function () {
+                            // Function to update the subtotal
+                            function updateSubtotal() {
+                                fetch('/cart', {
+                                    headers: {
+                                        Accept: 'application/json',
+                                        // Other headers, if needed
+                                    }
+                                })
+                                    .then(response => {
+                                        if (!response.ok) {
+                                            throw new Error('Failed to fetch subtotal');
+                                        }
+                                        if (!response.headers.get('content-type')?.includes('application/json')) {
+                                            throw new Error('Response is not JSON');
+                                        }
+                                        return response.json();
+                                    })
+                                    .then(data => {
+                                        // Update the subtotal element
+                                        const subtotalElement = document.getElementById('subtotal');
+                                        subtotalElement.textContent = `₹${data.subtotal.toFixed(2)}`;
+                                        const shippingCharge = 4.99; // Your shipping charge
+                                        const finalTotal = data.subtotal + shippingCharge;
+                                        const finaltotalElement = document.getElementById('finaltotal')
+                                        finaltotalElement.textContent = `₹${finalTotal.toFixed(2)}`
+                                    })
+                                    .catch(error => {
+                                        console.error('Failed to fetch subtotal:', error);
+                                    });
+                            }
+
+
+                            // Call the initial updateSubtotal function when the page loads
+                            updateSubtotal();
+
+                            // You can call updateSubtotal() when you add or remove items from the cart
+
+
+                            document.querySelectorAll('.product').forEach(product => {
+                                const incrementButton = product.querySelector('.increment-button');
+                                const decrementButton = product.querySelector('.decrement-button');
+                                const quantityInput = product.querySelector('.quantity-input');
+                                const totalPriceSpan = product.querySelector('.total-price');
+
+                                // Function to calculate and update the total price
+                                function updateTotalPrice() {
+                                    const price = parseFloat(product.getAttribute('data-price'));
+                                    const quantity = parseInt(quantityInput.value);
+                                    const total = price * quantity;
+                                    totalPriceSpan.textContent = `₹${total}`;
+                                }
+
+                                function finalTotalPrice() {
+                                    const price = parseFloat(product.getAttribute('data-price'))
+                                    const quantity = parseInt(quantityInput.value)
+                                    const total = price * quantity
+                                }
+
+                                // Call the initial total price calculation when the page loads
+                                updateTotalPrice();
+
+                                incrementButton.addEventListener('click', async () => {
+                                    const productId = product.getAttribute('data-product-id');
+                                    const quantity = parseInt(quantityInput.value) + 1;
+                                    quantityInput.value = quantity;
+                                    updateTotalPrice();
+
+
+                                    const addToCartUrl = `/cartadd/${productId}`;
+                                    try {
+                                        const response = await fetch(addToCartUrl, {
+                                            method: 'get',
+                                            headers: {
+                                                'Content-Type': 'application/json',
+                                            },
+                                        });
+
+                                        if (!response.ok) {
+                                            throw new Error('Failed to add item to cart');
+                                        }
+                                        updateSubtotal();
+                                    } catch (error) {
+                                        console.error('Failed to add item to cart:', error);
+                                    }
+                                });
+
+                                decrementButton.addEventListener('click', async () => {
+                                    const productId = product.getAttribute('data-product-id');
+                                    const quantity = parseInt(quantityInput.value);
+                                    if (quantity > 1) {
+                                        quantityInput.value = quantity - 1;
+                                        updateTotalPrice();
+
+                                        const removeFromCartUrl = `/cartremove/${productId}`;
+                                        try {
+                                            const response = await fetch(removeFromCartUrl, {
+                                                method: 'get',
+                                                headers: {
+                                                    'Content-Type': 'application/json',
+                                                },
+                                            });
+
+                                            if (!response.ok) {
+                                                throw new Error('Failed to remove item from cart');
+                                            }
+                                            updateSubtotal();
+                                        } catch (error) {
+                                            console.error('Failed to remove item from cart:', error);
+                                        }
+                                    }
+                                });
+                            });
+
+                        });
+
+
+                        function removeItem(productId) {
+                            console.log('productId:', productId);
+                            fetch(`/deletecart/${productId}`, {
+                                method: 'POST', // Change the request method to POST
+                                headers: {
+                                    'Content-Type': 'application/json',
+                                },
+                            })
+
+                                .then((response) => {
+                                    if (response.ok) {
+                                        // Successfully removed item from the server
+                                        // Now remove the item from the UI
+                                        location.reload();
+                                    } else {
+                                        console.error('Failed to remove item from cart');
+                                    }
+                                })
+                                .catch((error) => {
+                                    console.error('Failed to remove item from cart:', error);
+                                });
+                        }
+
+
+
+
+                        // Add an event listener to the "+" button
+
+
+
+                    </script>
 </body>
 
 </html>

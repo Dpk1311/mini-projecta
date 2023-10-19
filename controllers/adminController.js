@@ -2,6 +2,7 @@ const { Admin } = require('../model/admin/adminSchema')
 const { UserModel } = require('../model/user/userSchema')
 const { productModel } = require('../model/admin/productSchema')
 const { CategoryModel } = require('../model/admin/categorySchema')
+const OrderModel = require('../model/user/orderSchema')
 
 const adminlogin = (req, res) => {
     res.render('admin/login')
@@ -194,8 +195,20 @@ const addcategorypost = async (req, res) => {
         console.error("Internal Server error", error);
     }
 }
+ 
+
+const ordermanagement = async (req,res)=>{
+    try{
+        const order = await OrderModel.find()
+        console.log('order admin',order);
+        res.render('admin/ordermanagement',{order})
+    }
+    catch(error){
+        console.error(error);
+    }
+}
 module.exports = {
     adminlogin, adminloginpost, adminhome, productmanagement, addproduct, addproductpost, categorymanagement, addcategory, addcategorypost, usersearch,
-    userblock, userUnblock
+    userblock, userUnblock,ordermanagement
 }
 

@@ -21,6 +21,7 @@ router.get('/cart',cartController.cart)
 router.get('/cartpost/:productId',cartController.addToCart)
 router.get('/cartadd/:productId',cartController.addToCart) 
 router.get('/cartremove/:productId',cartController.removefromcart) 
+router.post('/deletecart/:productId',cartController.deleteFromCart)
 router.get('/userprofile',clientController.userprofile) 
 router.get('/addaddress',clientController.addaddress)
 router.post('/addaddress',clientController.addaddresspost)
@@ -30,6 +31,7 @@ router.get('/checkout',cartController.checkout)
 router.post('/addresssave',clientController.saveaddress)
 router.get('/confirmpage',orderController.confirmpage)
 router.get('/orders',orderController.orders)
+router.get('/orderhistory',orderController.orderhistory)
 
 
 module.exports = router 

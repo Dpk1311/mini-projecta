@@ -31,6 +31,7 @@ router.post('/addcategory',upload.single('image'),adminController.addcategorypos
 router.get('/usersearch',adminController.usersearch)
 router.get('/userblock/:userId',adminController.userblock)
 router.get('/userUnblock/:userId',adminController.userUnblock)
+router.get('/ordermanagement',adminController.ordermanagement)
 
 
 

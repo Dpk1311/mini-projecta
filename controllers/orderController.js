@@ -8,8 +8,8 @@ const orders = async (req, res) => {
     try {
         const userid = req.session.user._id
         const user = await UserModel.findById(userid)
-        .populate('selectedAddress');
-        console.log('orders',user.selectedAddress);
+            .populate('selectedAddress');
+        console.log('orders', user.selectedAddress);
         const cartData = await cartModel.findOne({ user: userid })
             .populate({
                 path: 'products.product',
@@ -21,14 +21,14 @@ const orders = async (req, res) => {
         for (const item of cartData.products) {
             subtotal += item.product.Price * item.quantity
         }
-        const addressId = req.session.selectedAddressId
-        console.log('address is',addressId);
+        const addressId = req.session.user.selectedAddress
+        console.log('address is', req.session.user.selectedAddress);
 
         const orderData = {
             user: user._id, // Store user's ID
             products: cartData.products,
-            totalAmount: subtotal+4.99, 
-            shippingAddress: user.selectedAddress, // Use the selected address
+            totalAmount: subtotal + 4.99,
+            shippingAddress: addressId, // Use the selected address
             paymentMethod: 'Cash on Delivery', // Example payment method
         };
 
@@ -40,7 +40,7 @@ const orders = async (req, res) => {
 
         res.redirect('/confirmpage');
 
-    }  
+    }
     catch (error) {
         console.error(error);
     }
@@ -77,6 +77,41 @@ const confirmpage = async (req, res) => {
     }
 }
 
+
+const orderhistory = async (req, res) => {
+    try {
+        const userid = req.session.user._id
+        const user = await UserModel.findById(userid)
+            .populate('selectedAddress')
+        // console.log('user is',user);
+        const orderData = await OrderModel.findOne({ user: userid })
+            .populate({
+                path: 'products.product', // Use 'path' to specify the nested reference
+                model: 'Product' // Replace with your product model name
+
+            })
+
+        // console.log('order data', orderData);
+
+        const data = {
+            user: user.name,
+            products: orderData.products,
+            address: user.selectedAddress,
+        }
+     
+        // console.log('products are', data);
+
+        res.render('user/orderhistory', { user,data});
+    }
+    catch (error) {
+        console.error(error) 
+    }
+}
+
+
+
+
+
 module.exports = {
-    orders, confirmpage
+    orders, confirmpage, orderhistory,
 }

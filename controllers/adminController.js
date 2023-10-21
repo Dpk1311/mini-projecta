@@ -180,6 +180,11 @@ const addcategorypost = async (req, res) => {
             imagePath = imagePath.replace('public/', '');
         }
 
+        const existingCategory = await CategoryModel.findOne({ Name: { $regex: new RegExp(`^${Name}$`, 'i') } });
+        if (existingCategory) {
+            throw new Error('Category already exists');
+        }
+
 
         const newCategory = new CategoryModel({
             Name, Description, gender, image: imagePath, status
@@ -195,20 +200,53 @@ const addcategorypost = async (req, res) => {
         console.error("Internal Server error", error);
     }
 }
- 
 
-const ordermanagement = async (req,res)=>{
-    try{
+
+const ordermanagement = async (req, res) => {
+    try {
         const order = await OrderModel.find()
-        console.log('order admin',order);
-        res.render('admin/ordermanagement',{order})
+            .populate({
+                path: 'shippingAddress', // Use 'path' to specify the nested reference
+                model: 'address' // Replace with your product model name
+
+            })
+            .populate({
+                path: 'user',
+                model: 'User'
+            })
+            .populate({
+                path: 'products.product',
+                model: 'Product'
+            })
+        // console.log('order admin',order);
+        res.render('admin/ordermanagement', { order })
     }
-    catch(error){
+    catch (error) {
         console.error(error);
+    }
+}
+
+const orderstatusupdate = async (req, res) => {
+    try {
+        if (req.params.orderid) {
+            const orderId = req.params.orderid;
+            const order = await OrderModel.findById(orderId);
+            const status = req.query.status
+            order.Status = status;
+            await order.save();
+            console.log('order updated');
+
+        }
+
+        res.json({success:true});
+    }
+    catch (error) {
+        console.error(error);
+        res.json({success:false});
     }
 }
 module.exports = {
     adminlogin, adminloginpost, adminhome, productmanagement, addproduct, addproductpost, categorymanagement, addcategory, addcategorypost, usersearch,
-    userblock, userUnblock,ordermanagement
+    userblock, userUnblock, ordermanagement, orderstatusupdate
 }
 

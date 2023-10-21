@@ -1,6 +1,7 @@
 const OrderModel = require('../model/user/orderSchema')
 const { UserModel } = require('../model/user/userSchema')
 const cartModel = require('../model/user/cartSchema');
+const { assign } = require('nodemailer/lib/shared');
 
 
 
@@ -9,7 +10,7 @@ const orders = async (req, res) => {
         const userid = req.session.user._id
         const user = await UserModel.findById(userid)
             .populate('selectedAddress');
-        console.log('orders', user.selectedAddress);
+        console.log('orders', user);
         const cartData = await cartModel.findOne({ user: userid })
             .populate({
                 path: 'products.product',
@@ -21,14 +22,14 @@ const orders = async (req, res) => {
         for (const item of cartData.products) {
             subtotal += item.product.Price * item.quantity
         }
-        const addressId = req.session.user.selectedAddress
-        console.log('address is', req.session.user.selectedAddress);
+        // const addressId = req.session.user.selectedAddress
+        // console.log('address is', req.session.user.selectedAddress);
 
         const orderData = {
             user: user._id, // Store user's ID
             products: cartData.products,
             totalAmount: subtotal + 4.99,
-            shippingAddress: addressId, // Use the selected address
+            shippingAddress: user.selectedAddress[0], // Use the selected address
             paymentMethod: 'Cash on Delivery', // Example payment method
         };
 
@@ -84,27 +85,70 @@ const orderhistory = async (req, res) => {
         const user = await UserModel.findById(userid)
             .populate('selectedAddress')
         // console.log('user is',user);
-        const orderData = await OrderModel.findOne({ user: userid })
+        const orderData = await OrderModel.find({ user: userid })
             .populate({
                 path: 'products.product', // Use 'path' to specify the nested reference
                 model: 'Product' // Replace with your product model name
 
             })
+            .populate({
+                path: 'shippingAddress',
+                model: 'address', // Replace with your address model name
+            });
+
+        // Check if the cancel button is clicked
+        if (req.query.cancelOrderId) {
+            const orderId = req.query.cancelOrderId;
+            console.log(orderId);
+            const order = await OrderModel.findById(orderId);
+            console.log(order);
+
+            // Check if the order status is "Order Pending"
+            if (order.Status === 'OrderPending') {
+                order.Status = 'Order Cancelled';
+                await order.save();
+                console.log('order cancelled');
+            } 
+        }
 
         // console.log('order data', orderData);
-
-        const data = {
-            user: user.name,
-            products: orderData.products,
-            address: user.selectedAddress,
-        }
-     
-        // console.log('products are', data);
-
-        res.render('user/orderhistory', { user,data});
+        res.render('user/orderhistory', { user, orderData });
     }
     catch (error) {
-        console.error(error) 
+        console.error(error)
+    }
+}
+
+
+const orderdetail = async (req, res) => {
+    try {
+        const userid = req.session.user._id
+        const user = await UserModel.findById(userid)
+        const orderId = req.query.orderId
+        const orderData = await OrderModel.findById(orderId)
+            .populate({
+                path: 'products.product',
+                model: 'Product', // Replace with your product model name
+            })
+            .populate({
+                path: 'shippingAddress',
+                model: 'address', // Replace with your address model name
+            });
+        // console.log('orderdata is', orderData);
+
+        // Combine the user's name with the cart data
+        // const data = {
+        //     user: user.name, // Include the user's name
+        //     products: orderData.products, // Include the cart products
+        // };
+
+        // console.log('detail data',data);
+
+        res.render('user/orderdetailpage', { user, orderData })
+
+    }
+    catch (error) {
+        console.error(error);
     }
 }
 
@@ -112,6 +156,7 @@ const orderhistory = async (req, res) => {
 
 
 
+
 module.exports = {
-    orders, confirmpage, orderhistory,
+    orders, confirmpage, orderhistory, orderdetail,
 }

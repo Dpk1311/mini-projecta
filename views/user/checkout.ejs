@@ -64,76 +64,107 @@
                             <section>
                                 <h2 class="uppercase tracking-wide text-lg font-semibold text-gray-700 my-2">Shipping &
                                     Billing Information</h2>
-                                <% user.selectedAddress.forEach(element=> {
-                                    console.log('address is',element);%>
-                                    <fieldset class="mb-3 bg-white shadow-lg rounded text-gray-600">
-                                        <label class="flex border-b border-gray-200 h-12 py-3 items-center">
-                                            <span class="text-right px-2">Name</span>
-                                            <input name="name" class="focus:outline-none px-3"
-                                                placeholder="Try Odinsson" value="<%= user.name%>" required="">
-                                        </label>
-                                        <label class="flex border-b border-gray-200 h-12 py-3 items-center">
-                                            <span class="text-right px-2">Email</span>
-                                            <input name="email" type="email" class="focus:outline-none px-3"
-                                                placeholder="try@example.com" required="" value="<%= user.email%>">
-                                        </label>
-                                        <label class="flex border-b border-gray-200 h-12 py-3 items-center">
-                                            <span class="text-right px-2">Address</span>
-                                            <input name="address" class="focus:outline-none px-3"
-                                                placeholder="10 Street XYZ 654" value="<%=element.street%>">
-                                        </label>
-                                        <label class="flex border-b border-gray-200 h-12 py-3 items-center">
-                                            <span class="text-right px-2">City</span>
-                                            <input name="city" class="focus:outline-none px-3"
-                                                placeholder="San Francisco " value="<%=element.city%>">
-                                        </label>
-                                        <label class="inline-flex w-2/4 border-gray-200 py-3">
-                                            <span class="text-right px-2">State</span>
-                                            <input name="state" class="focus:outline-none px-3" placeholder="CA"
-                                                value="<%=element.state%>">
-                                        </label>
-                                        <label
-                                            class="xl:w-1/4 xl:inline-flex py-3 items-center flex xl:border-none border-t border-gray-200 py-3">
-                                            <span class="text-right px-2 xl:px-0 xl:text-none">ZIP</span>
-                                            <input name="postal_code" class="focus:outline-none px-3"
-                                                placeholder="98603" value="<%=element.pincode%>">
-                                        </label>
-                                        <label
-                                            class="flex border-t border-gray-200 h-12 py-3 items-center select relative">
-                                            <span class="text-right px-2">Country</span>
-                                            <div id="country" class="focus:outline-none px-3 w-full flex items-center">
-                                                <select name="country"
-                                                    class="border-none bg-transparent flex-1 cursor-pointer appearance-none focus:outline-none">
-                                                    <option value="AU">Australia</option>
-                                                    <option value="BE">Belgium</option>
-                                                    <option value="BR">Brazil</option>
-                                                    <option value="CA">Canada</option>
-                                                    <option value="CN">China</option>
-                                                    <option value="DK">Denmark</option>
-                                                    <option value="FI">Finland</option>
-                                                    <option value="FR">France</option>
-                                                    <option value="DE">Germany</option>
-                                                    <option value="HK">Hong Kong</option>
-                                                    <option value="IE">Ireland</option>
-                                                    <option value="IT">Italy</option>
-                                                    <option value="JP">Japan</option>
-                                                    <option value="LU">Luxembourg</option>
-                                                    <option value="MX">Mexico</option>
-                                                    <option value="NL">Netherlands</option>
-                                                    <option value="PL">Poland</option>
-                                                    <option value="PT">Portugal</option>
-                                                    <option value="SG">Singapore</option>
-                                                    <option value="ES">Spain</option>
-                                                    <option value="TN">Tunisia</option>
-                                                    <option value="GB">United Kingdom</option>
-                                                    <option value="US" selected="selected">United States</option>
-                                                </select>
-                                            </div>
-                                        </label>
-                                    </fieldset>
+                                <button id="addressButton" type="button"
+                                    class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                                    Select Address
+                                </button>
+                                <% user.selectedAddress.forEach(element=> {%>
+                                    <%#console.log('address is',element);%>
+                                        <fieldset class="mb-3 bg-white shadow-lg rounded text-gray-600">
+                                            <label class="flex border-b border-gray-200 h-12 py-3 items-center">
+                                                <span class="text-right px-2">Name</span>
+                                                <input name="name" class="focus:outline-none px-3"
+                                                    placeholder="Try Odinsson" value="<%= user.name%>" required="">
+                                            </label>
+                                            <label class="flex border-b border-gray-200 h-12 py-3 items-center">
+                                                <span class="text-right px-2">Email</span>
+                                                <input name="email" type="email" class="focus:outline-none px-3"
+                                                    placeholder="try@example.com" required="" value="<%= user.email%>">
+                                            </label>
+                                            <label class="flex border-b border-gray-200 h-12 py-3 items-center">
+                                                <span class="text-right px-2">Address</span>
+                                                <input name="address" class="focus:outline-none px-3"
+                                                    placeholder="10 Street XYZ 654" value="<%=element.street%>">
+                                            </label>
+                                            <label class="flex border-b border-gray-200 h-12 py-3 items-center">
+                                                <span class="text-right px-2">City</span>
+                                                <input name="city" class="focus:outline-none px-3"
+                                                    placeholder="San Francisco " value="<%=element.city%>">
+                                            </label>
+                                            <label class="inline-flex w-2/4 border-gray-200 py-3">
+                                                <span class="text-right px-2">State</span>
+                                                <input name="state" class="focus:outline-none px-3" placeholder="CA"
+                                                    value="<%=element.state%>">
+                                            </label>
+                                            <label
+                                                class="xl:w-1/4 xl:inline-flex py-3 items-center flex xl:border-none border-t border-gray-200 py-3">
+                                                <span class="text-right px-2 xl:px-0 xl:text-none">ZIP</span>
+                                                <input name="postal_code" class="focus:outline-none px-3"
+                                                    placeholder="98603" value="<%=element.pincode%>">
+                                            </label>
+                                            <label
+                                                class="flex border-t border-gray-200 h-12 py-3 items-center select relative">
+                                                <span class="text-right px-2">Country</span>
+                                                <div id="country"
+                                                    class="focus:outline-none px-3 w-full flex items-center">
+                                                    <select name="country"
+                                                        class="border-none bg-transparent flex-1 cursor-pointer appearance-none focus:outline-none">
+                                                        <option value="AU">Australia</option>
+                                                        <option value="BE">Belgium</option>
+                                                        <option value="BR">Brazil</option>
+                                                        <option value="CA">Canada</option>
+                                                        <option value="CN">China</option>
+                                                        <option value="DK">Denmark</option>
+                                                        <option value="FI">Finland</option>
+                                                        <option value="FR">France</option>
+                                                        <option value="DE">Germany</option>
+                                                        <option value="HK">Hong Kong</option>
+                                                        <option value="IE">Ireland</option>
+                                                        <option value="IT">Italy</option>
+                                                        <option value="JP">Japan</option>
+                                                        <option value="LU">Luxembourg</option>
+                                                        <option value="MX">Mexico</option>
+                                                        <option value="NL">Netherlands</option>
+                                                        <option value="PL">Poland</option>
+                                                        <option value="PT">Portugal</option>
+                                                        <option value="SG">Singapore</option>
+                                                        <option value="ES">Spain</option>
+                                                        <option value="TN">Tunisia</option>
+                                                        <option value="GB">United Kingdom</option>
+                                                        <option value="US" selected="selected">United States</option>
+                                                    </select>
+                                                </div>
+                                            </label>
+                                        </fieldset>
                             </section>
                             <% }) %>
                         </form>
+
+                        <!-- Modal -->
+
+                        <div id="addressModal" class="hidden fixed z-10 inset-0 overflow-y-auto">
+                            <div
+                                class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+                                <div
+                                    class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
+                                    <form id="addressForm">
+                                        <!-- For each saved address, add a radio input and a label like this: -->
+                                        <% user.address.forEach((element)=> {%>
+                                            <% console.log('modaladddress',element); %>
+                                            <div>
+                                                <input type="radio" id="<%= element.id %>" name="address"
+                                                    value="<%= element.street %>, <%= element.city %>, <%= element.state %>, <%= element.pincode %>, <%= element.country %>">
+                                                <label for="<%= element.id %>">
+                                                    <%= element.street %>, <%= element.city %>, <%= element.state %>,
+                                                                <%= element.pincode %>, <%= element.country %>
+                                                </label>
+                                            </div>
+                                            <% }) %>
+                                                <button type="submit">Update Address</button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                     <div class="rounded-md">
                         <section>
@@ -161,10 +192,10 @@
                     </div>
                     <form action="/orders" method="get">
                         <button
-                        class="submit-button px-4 py-3 rounded-full bg-pink-400 text-white focus:ring focus:outline-none w-full text-xl font-semibold transition-colors">
-                        Pay₹<%= (subtotal + 4.99) %>
-                    </button>
-                </form>
+                            class="submit-button px-4 py-3 rounded-full bg-pink-400 text-white focus:ring focus:outline-none w-full text-xl font-semibold transition-colors">
+                            Pay₹<%= (subtotal + 4.99) %>
+                        </button>
+                    </form>
                 </div>
                 <div class="col-span-1 bg-white lg:block hidden">
                     <h1 class="py-6 border-b-2 text-xl text-gray-600 px-8">Order Summary</h1>
@@ -210,6 +241,61 @@
             <% } else { %> <!-- Handle the case where data is null or undefined -->
                 <p>Product not found.</p>
                 <% } %>
+
+
+
+
+                    <script>
+
+                        document.getElementById('addressButton').addEventListener('click', function () {
+                            document.getElementById('addressModal').classList.remove('hidden');
+                        });
+
+                        document.getElementById('addressForm').addEventListener('submit', function (event) {
+                            // Prevent the form from being submitted normally
+                            event.preventDefault();
+                            // Get the selected address
+                            var selectedAddress = this.elements.address.value;
+                            // Split the address into its components
+                            var [street, city, state, pincode, country] = selectedAddress.split(', ');
+                            // Update the form fields with the selected address
+                            document.querySelector('input[name="address"]').value = street;
+                            document.querySelector('input[name="city"]').value = city;
+                            document.querySelector('input[name="state"]').value = state;
+                            document.querySelector('input[name="postal_code"]').value = pincode;
+                            document.querySelector('select[name="country"]').value = country;
+                            // Close the modal
+                            document.getElementById('addressModal').classList.add('hidden');
+
+                            // Now we need to update the selected address in the database
+                            // Depending on what technology you're using on the server side, this could be done with an AJAX request or by calling a function provided by your framework
+                            // Here's an example using fetch to send a POST request to a hypothetical '/updateAddress' endpoint:
+                            fetch('/updateAddress', {
+                                method: 'POST',
+                                headers: {
+                                    'Content-Type': 'application/json',
+                                },
+                                body: JSON.stringify({
+                                    address: selectedAddress,
+                                    // You might also need to include other information, like the user's ID
+                                }),
+                            })
+                                .then(response => response.json())
+                                .then(data => {
+                                    // The server should respond with the updated data
+                                    // You could use this to update the page without reloading
+                                    console.log('Success:', data);
+                                })
+                                .catch((error) => {
+                                    console.error('Error:', error);
+                                });
+                        });
+
+
+
+
+
+                    </script>
 </body>
 
 </html>

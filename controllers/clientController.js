@@ -286,7 +286,7 @@ const addaddress = (req, res) => {
     }
 }
 
-const editaddress = async (req, res) => {
+const edituser = async (req, res) => {
     try {
         const userId = req.session.user._id
         const user = await UserModel.findById(userId)
@@ -320,7 +320,99 @@ const editpost = async (req, res) => {
     catch (error) {
         console.error(error);
     }
-}
+} 
+
+const editaddress = async (req, res) => {
+    try {
+      const addressIds = req.query.addressId; // Get the array of addressIds from the query parameters
+      const userId = req.session.user._id;
+      const user = await UserModel.findById(userId).populate('selectedAddress');
+      console.log('user:', user);
+      if (user) {
+        // Filter the user's selected addresses based on the addressIds
+        const selectedAddresses = user.selectedAddress.filter((address) =>
+          addressIds.includes(address._id.toString())
+        );
+        res.render('user/editaddress', { user, selectedAddresses });
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
+  
+  const editaddresspost = async (req, res) => {
+    try {
+      const userId = req.session.user._id;
+      console.log('userid', userId);
+      const user = await UserModel.findById(userId).populate('address');
+      console.log('user is', user);
+  
+      const addressId = req.params.addressId;
+      console.log('addressid is', addressId);
+
+      // Retrieve the updated address details from the request body
+  
+      // Find the selected address in the user's address array
+      const selectedAddress = user.address.find(address => address._id.toString() === addressId);
+  console.log('selectedAddress',selectedAddress);
+      // Update the address fields if provided
+      if (selectedAddress) {
+        selectedAddress.street = req.body. street0 || selectedAddress.street
+        selectedAddress.city = req.body.city0 || selectedAddress.city
+        selectedAddress.state = req.body.state0 || selectedAddress.state 
+        selectedAddress.pincode = req.body.pincode0 || selectedAddress.pincode
+        selectedAddress.country = req.body.country0 || selectedAddress.country
+  
+        await selectedAddress.save();
+        console.log(' req.body.street ', req.body );
+      } else {
+        console.log('Selected address not found');
+      }
+  
+      res.redirect('/userprofile');
+    } catch (error) {
+      console.error(error);
+    }
+  };
+  
+  
+  
+  
+
+
+const updateAddress = async (req, res) => {
+    try {
+      const { address } = req.body;
+      const userId = req.session.user._id;
+  
+      // Update the address field with the new address
+      await UserModel.findOneAndUpdate(
+        { _id: userId },
+        { $push: { address: address } }
+      );
+  
+      // Update the selectedAddress field with the new selected address
+      await UserModel.findOneAndUpdate(
+        { _id: userId },
+        { selectedAddress: address }
+      );
+  
+      // Fetch the updated user data
+      const updatedUser = await UserModel.findById(userId);
+    //   updatedUser.selectedAddress = address;
+    //   await updatedUser.save();
+
+      
+  
+      // Send the updated user data as the response
+      res.json(updatedUser);
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ error: 'Failed to update address' });
+    }
+  };
+  
+  
 
 const addaddresspost = async (req, res) => {
     try {
@@ -383,9 +475,12 @@ module.exports = {
     userprofile,
     addaddress,
     addaddresspost,
-    editaddress,
+    edituser,
     editpost,
     saveaddress,
+    updateAddress,
+    editaddress,
+    editaddresspost,
 
 
 };

@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="dist/output.css">
+    <link href="https://unpkg.com/tailwindcss@^1.0/dist/tailwind.min.css" rel="stylesheet">
+
+
+    <title>Document</title>
+</head>
+<body>
+    
+    <% user.selectedAddress.forEach((element, index) => { %>
+    <form action="/editaddress/<%= element._id %>" method="post">
+        <div class="mt-4 flex flex-col bg-gray-100 rounded-lg p-4 shadow-sm">
+          <h2 class="text-black font-bold text-lg">Edit Address</h2>
+      
+          
+            <div class="mt-4">
+              <label class="text-black" for="street<%= index %>">Street</label>
+              <textarea placeholder="Your Street" class="w-full bg-white rounded-md border-gray-300 text-black px-2 py-1" id="street<%= index %>" name="street<%= index %>"><%= element.street %></textarea>
+            </div>
+      
+            <div class="mt-4 flex flex-row space-x-2">
+              <div class="flex-1">
+                <label class="text-black" for="city<%= index %>">City</label>
+                <input placeholder="Your city" class="w-full bg-white rounded-md border-gray-300 text-black px-2 py-1" id="city<%= index %>" name="city<%= index %>" type="text" value="<%= element.city %>">
+              </div>
+      
+              <div class="flex-1">
+                <label class="text-black" for="state<%= index %>">State</label>
+                <input placeholder="Your state" class="w-full bg-white rounded-md border-gray-300 text-black px-2 py-1" id="state<%= index %>" name="state<%= index %>" type="text" value="<%= element.state %>">
+              </div>
+            </div>
+      
+            <div class="mt-4 flex flex-row space-x-2">
+              <div class="flex-1">
+                <label class="text-black" for="pincode<%= index %>">Pin Code</label>
+                <input placeholder="Your ZIP code" class="w-full bg-white rounded-md border-gray-300 text-black px-2 py-1" id="pincode<%= index %>" name="pincode<%= index %>" type="text" value="<%= element.pincode %>">
+              </div>
+      
+              <div class="flex-1">
+                <label class="text-black" for="country<%= index %>">Country</label>
+                <select class="w-full bg-white rounded-md border-gray-300 text-black px-2 py-1" id="country<%= index %>" name="country<%= index %>">
+                  <option value="">Select a country</option>
+                  <!-- Add your country options here -->
+                </select>
+              </div>
+            </div>
+      
+            <input type="hidden" name="addressId[]" value="<%= element._id %>">
+          <% }); %>
+      
+          <div class="mt-4 flex justify-end">
+            <button class="bg-white text-black rounded-md px-4 py-1 hover:bg-gray-200 hover:text-gray-900" type="submit">Submit</button>
+          </div>
+        </div>
+      </form>
+      
+</body>
+</html>

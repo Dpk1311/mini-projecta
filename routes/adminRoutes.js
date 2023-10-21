@@ -32,7 +32,7 @@ router.get('/usersearch',adminController.usersearch)
 router.get('/userblock/:userId',adminController.userblock)
 router.get('/userUnblock/:userId',adminController.userUnblock)
 router.get('/ordermanagement',adminController.ordermanagement)
-
+router.get('/orderstatusupdate/:orderid',adminController.orderstatusupdate)
 
 
 

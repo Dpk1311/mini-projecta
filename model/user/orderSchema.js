@@ -12,12 +12,12 @@ const orderSchema = new Schema({
             type: Number,
             required: true
         },
-            product: {
-                type: Schema.Types.ObjectId,
-                ref: 'Product',
-                required: true
-            },
-        
+        product: {
+            type: Schema.Types.ObjectId,
+            ref: 'Product',
+            required: true
+        },
+
         price: {
             type: Number,
             // required: true
@@ -39,6 +39,10 @@ const orderSchema = new Schema({
     orderDate: {
         type: Date,
         default: Date.now
+    },
+    Status:{
+        default: 'OrderPending',
+        type: String
     }
 });
 

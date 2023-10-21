@@ -1,137 +1,230 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>OrderManagement</title>
-</head>
-<body>
-    <!DOCTYPE html>
-<html lang="en">
 
 <head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<link rel="stylesheet" href="dist/output.css">
 	<script src="https://cdn.tailwindcss.com"></script>
+	<script src="https://cdn.jsdelivr.net/npm/alpinejs@2.x.x/dist/alpine.js" defer></script>
 	<title>Document</title>
 </head>
 
 <body>
 	<%- include('adminpartials/navbar') %>
-		
-			<div class="bg-white p-8 rounded-md w-full">
-				<div class=" flex items-center justify-between pb-6">
-					<div>
-						<h2 class="text-gray-600 font-semibold">Products Oder</h2>
-						<span class="text-xs">All products item</span>
-					</div>
-					<div class="flex items-center justify-between">
-						<div class="flex bg-gray-50 items-center p-2 rounded-md">
-							<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-400" viewBox="0 0 20 20"
-								fill="currentColor">
-								<path fill-rule="evenodd"
-									d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z"
-									clip-rule="evenodd" />
-							</svg>
-							<input class="bg-gray-50 outline-none ml-1 block " type="text" name="" id=""
-								placeholder="search...">
-						</div>
-						<div class="lg:ml-40 ml-10 space-x-8">
-							<button
-								class="bg-indigo-600 px-4 py-2 rounded-md text-white font-semibold tracking-wide cursor-pointer">New
-								Report</button>
-							<button
-								class="bg-indigo-600 px-4 py-2 rounded-md text-white font-semibold tracking-wide cursor-pointer">Create</button>
-						</div>
-					</div>
-				</div>
+
+
+		<div class="bg-white p-8 rounded-md w-full">
+			<div class=" flex items-center justify-between pb-6">
 				<div>
-					<div class="-mx-4 sm:-mx-8 px-4 sm:px-8 py-4 overflow-x-auto">
-						<div class="inline-block min-w-full shadow rounded-lg overflow-hidden">
-							<table class="min-w-full leading-normal">
-								<thead>
-									<tr>
-										<th
-											class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
-											Status
-										</th>
-										<th
-											class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
-											Date
-										</th>
-										<th
-											class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
-											Customer
-										</th>
-										<th
-											class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
-											Products
-										</th>
-										<th
-											class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
-											Quantity
-										</th>
-                                        <th
-											class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
-											Price
-										</th>
-                                        <th
-											class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
-											Action
-										</th>
-									</tr>
-								</thead>
-								
-									<tbody>
-										<tr>
-											<td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
-												<div class="flex items-center">
-													<div class="flex-shrink-0 w-10 h-10">
-														<img class="w-full h-full rounded-full"
-															src=""
-															alt="photos of products" />
-													</div>
-													<div class="ml-3">
-														<p class="text-gray-900 whitespace-no-wrap">
-															
-														</p>
-													</div>
-												</div>
-											</td>
-											<td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
-												<p class="text-gray-900 whitespace-no-wrap">
-													
-												</p>
-											</td>
-											<td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
-												<p class="text-gray-900 whitespace-no-wrap">
-													
-												</p>
-											</td>
-											<td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
-												<p class="text-gray-900 whitespace-no-wrap">
-													
-											</td>
-											<td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
-												<span
-													class="relative inline-block px-3 py-1 font-semibold text-green-900 leading-tight">
-													<span aria-hidden
-														class="absolute inset-0 bg-green-200 opacity-50 rounded-full"></span>
-													<span class="relative">Activo</span>
-												</span>
-											</td>
-										</tr>
-									</tbody>
-									
-							</table>
-						</div>
+					<h2 class="text-gray-600 font-semibold">Products Oder</h2>
+					<span class="text-xs">All products item</span>
+				</div>
+				<div class="flex items-center justify-between">
+					<div class="flex bg-gray-50 items-center p-2 rounded-md">
+						<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-400" viewBox="0 0 20 20"
+							fill="currentColor">
+							<path fill-rule="evenodd"
+								d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z"
+								clip-rule="evenodd" />
+						</svg>
+						<input class="bg-gray-50 outline-none ml-1 block " type="text" name="" id=""
+							placeholder="search...">
+					</div>
+					<div class="lg:ml-40 ml-10 space-x-8">
+						<button
+							class="bg-indigo-600 px-4 py-2 rounded-md text-white font-semibold tracking-wide cursor-pointer">New
+							Report</button>
+						<button
+							class="bg-indigo-600 px-4 py-2 rounded-md text-white font-semibold tracking-wide cursor-pointer">Create</button>
 					</div>
 				</div>
 			</div>
-			
+			<div>
+				<div class="-mx-4 sm:-mx-8 px-4 sm:px-8 py-4 overflow-x-auto">
+					<div class="inline-block min-w-full shadow rounded-lg overflow-hidden">
+						<table class="min-w-full leading-normal">
+							<thead>
+								<tr>
+									<th
+										class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+										Image
+									</th>
+									<th
+										class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+										Date
+									</th>
+									<th
+										class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+										Products
+									</th>
+									<th
+										class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+										Customer
+									</th>
+									<th
+										class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+										Quantity
+									</th>
+									<th
+										class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+										Price
+									</th>
+									<th
+										class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+										Status
+									</th>
+									<th
+										class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+										Action
+									</th>
+								</tr>
+							</thead>
+							<% order.forEach((element, index)=> {%>
+								<%# console.log('managementejs',element); %>
+									<% element.products.forEach((item, itemIndex)=> { %>
+										<% console.log('productdetailejs',item); %>
+
+											<tbody>
+												<tr>
+											<tbody class="border-black">
+												<td class="px-5 py-5  border-gray-200 bg-white text-sm">
+													<div class="flex items-center">
+														<div class="flex-shrink-0 w-10 h-10">
+															<img class="w-full h-full rounded-full"
+																src="<%= item.product.Image %>"
+																alt="photos of products" />
+														</div>
+													</div>
+												</td>
+												<td class="px-5 py-5  border-gray-200 bg-white text-sm">
+													<p class="text-gray-900 whitespace-no-wrap">
+														cc
+													</p>
+												<td class="px-5 py-5  border-gray-200 bg-white text-sm">
+													<p class="text-gray-900 whitespace-no-wrap">
+														<%= item.product.Name %>
+												</td>
+												</td>
+												<td class="px-5 py-5  border-gray-200 bg-white text-sm">
+													<p class="text-gray-900 whitespace-no-wrap">
+														<%= element.user.name %>
+													</p>
+												</td>
+												<td class="px-5 py-5  border-gray-200 bg-white text-sm">
+													<p class="text-gray-900 whitespace-no-wrap">
+														<%= item.quantity%>
+												</td>
+												<td class="px-5 py-5  border-gray-200 bg-white text-sm">
+													<p class="text-gray-900 whitespace-no-wrap">
+														₹<%= item.product.Price%>
+												</td>
+												<td class="px-5 py-5  border-gray-200 bg-white text-sm">
+													<p class="text-gray-900 whitespace-no-wrap">
+														<% console.log(element.Status);%>
+															<%= element.Status %>
+												</td>
+												<td class="px-5 py-5  border-gray-200 bg-white text-sm">
+													<p class="text-gray-900 whitespace-no-wrap">
+														<select class="select_input"
+															id="dropdown-<%= index %>-<%= itemIndex %>"
+															data-id="<%= element._id %>">
+															<% if (element.Status==='OrderPending' ) { %>
+																<option class="change_status" value="Order Delivered">
+																	Order Delivered</option>
+																<option selected class="change_status active"
+																	value="OrderPending">Order Pending</option>
+																<option class="change_status" value="Order Shipped">
+																	Order Shipped</option>
+																<option class="change_status" value="Order Cancelled">
+																	Order Cancelled</option>
+																<% } else if (element.Status==='Order Cancelled' ) { %>
+																	<option disabled value="Order Delivered">Order
+																		Delivered</option>
+																	<option disabled value="Pending">Order Pending
+																	</option>
+																	<option disabled value="Order Shipped">Order Shipped
+																	</option>
+																	<option selected class="change_status active"
+																		value="Order Cancelled">Order Cancelled</option>
+																	<% } else if(element.Status==='Order Delivered' ){
+																		%>
+																		<option selected class="change_status active"
+																			value="Order Delivered">Order Delivered
+																		</option>
+																		<option disabled value="Pending">Order Pending
+																		</option>
+																		<option disabled value="Order Shipped">Order
+																			Shipped</option>
+																		<option disabled value="Order Cancelled">Order
+																			Cancelled</option>
+																		<% }else{%>
+																			<option value="Order Delivered">Order
+																				Delivered</option>
+																			<option disabled value="Pending">Order
+																				Pending</option>
+																			<option selected
+																				class="change_status active"
+																				value="Order Shipped">Order Shipped
+																			</option>
+																			<option disabled value="Order Cancelled">
+																				Order Cancelled</option>
+																			<%} %>
+														</select>
+												</td>
+											</tbody>
+											</tr>
+											</tbody>
+											<%}); %>
+												<%}); %>
+						</table>
+					</div>
+				</div>
+			</div>
+		</div>
+
+
+		<script>
+			// Get all dropdown elements
+			const select_input = document.querySelectorAll('.select_input');
+
+			select_input.forEach(ele => {
+				ele.addEventListener('change', (event) => {
+
+					if (event.target.selectedOptions[0].classList.contains('active')) return
+
+					fetch(`/orderstatusupdate/${ele.dataset.id}?status=${ele.value}`)
+						.then(function (res) {
+							console.log(res);
+							if (res.ok) {
+								const selectedOption = event.target.selectedOptions[0];
+
+								// Iterate through all options in the <select>
+								const options = event.target.options;
+								console.log(options)
+								for (let i = 0; i < options.length; i++) {
+									// Disable all options except the selected one
+									if (options[i] !== selectedOption) {
+										console.log(options[i]);
+										options[i].disabled = true;
+									}
+								}
+							}
+						})
+						.catch(function (error) {
+							console.error(error)
+						})
+				})
+			})
+			// Add event listener for each dropdown
+
+		</script>
+
+
+
+
+
+
 </body>
 
-</html>
-</body>
 </html>

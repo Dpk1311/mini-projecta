@@ -202,7 +202,8 @@ const checkout = async (req, res) => {
 
     const user = await UserModel.findById(userid)
       .populate('selectedAddress')
-    console.log('selected is checkout', user.selectedAddress);
+      .populate('address')
+    // console.log('selected is checkout', user.selectedAddress);
 
     const cartData = await cartModel.findOne({ user: userid })
       .populate({

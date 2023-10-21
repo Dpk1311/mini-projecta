@@ -5,7 +5,7 @@ const path = require('path')
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 const nocache = require('nocache')
-const dotenv = require('dotenv');
+const dotenv = require('dotenv');;
 dotenv.config();
 app.use(express.urlencoded({ extended: true }));
 

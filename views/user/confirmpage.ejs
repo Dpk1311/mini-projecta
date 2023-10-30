@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/easyinvoice/dist/easyinvoice.min.js"></script>
     <title>Document</title>
 </head>
 
@@ -43,7 +44,11 @@
                                         <div class="w-full flex flex-col justify-start items-start space-y-8">
                                             <h3
                                                 class="text-xl dark:text-white xl:text-2xl font-semibold leading-6 text-gray-800">
-                                                <%= element.product.Name %>
+                                                <span>
+                                                    <input class="productname" type="hidden"
+                                                        value="<%- element.product.Name%>">
+                                                    <%= element.product.Name %>
+                                                </span>
                                             </h3>
                                             <div class="flex justify-start items-start flex-col space-y-2">
                                                 <p class="text-sm dark:text-white leading-none text-gray-800"><span
@@ -61,10 +66,14 @@
                                             </div>
                                         </div>
                                         <div class="flex justify-between space-x-8 items-start w-full">
-                                            <p class="text-base dark:text-white xl:text-lg leading-6">₹<%=
-                                                    element.product.Price%>
+                                            <p class="text-base dark:text-white xl:text-lg leading-6">
+                                                <input class="productprice" type="hidden"
+                                                    value="<%- element.product.Price %>"> ₹<%=element.product.Price%>
                                             </p>
-                                            <p class="text-base dark:text-white xl:text-lg leading-6 text-gray-800">01
+                                            <p class="text-base dark:text-white xl:text-lg leading-6 text-gray-800">
+                                                <input class="productquantity" type="hidden"
+                                                    value="<%- element.quantity %>">
+                                                <%= element.quantity %>
                                             </p>
                                         </div>
                                     </div>
@@ -110,7 +119,7 @@
                         </div>
                         <div
                             class="flex flex-col justify-center px-4 py-6 md:p-6 xl:p-8 w-full bg-gray-50 dark:bg-gray-800 space-y-6">
-                            <h3 class="text-xl dark:text-white font-semibold leading-5 text-gray-800">Shipping</h3>
+                            <h3 class="text-xl dark:text-white font-semibold leading-5 text-gray-800">Invoice</h3>
                             <div class="flex justify-between items-start w-full">
                                 <div class="flex justify-center items-center space-x-4">
                                     <div class="w-8 h-8">
@@ -118,17 +127,16 @@
                                             src="https://i.ibb.co/L8KSdNQ/image-3.png" />
                                     </div>
                                     <div class="flex flex-col justify-start items-center">
-                                        <p class="text-lg leading-6 dark:text-white font-semibold text-gray-800">DPD
-                                            Delivery<br /><span class="font-normal">Delivery with 24 Hours</span>
+                                        <p class="text-lg leading-6 dark:text-white font-semibold text-gray-800">Details
+                                            of your Order
                                         </p>
                                     </div>
                                 </div>
-                                <p class="text-lg font-semibold leading-6 dark:text-white text-gray-800">₹4.99</p>
                             </div>
                             <div class="w-full flex justify-center items-center">
-                                <button
+                                <button onclick="downloadInvoice()"
                                     class="hover:bg-black dark:bg-white dark:text-gray-800 dark:hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-800 py-5 w-96 md:w-full bg-gray-800 text-base font-medium leading-4 text-white">View
-                                    Carrier Details</button>
+                                    Invoice</button>
                             </div>
                         </div>
                     </div>
@@ -143,7 +151,7 @@
                                 class="flex justify-center w-full md:justify-start items-center space-x-4 py-8 border-b border-gray-200">
                                 <img src="https://i.ibb.co/5TSg7f6/Rectangle-18.png" alt="avatar" />
                                 <div class="flex justify-start items-start flex-col space-y-2">
-                                    <p
+                                    <p id="nameinvoice"
                                         class="text-base dark:text-white font-semibold leading-4 text-left text-gray-800">
                                         <%= user.name %>
                                     </p>
@@ -195,10 +203,18 @@
                                         Billing Address</p>
                                     <p
                                         class="w-48 lg:w-full dark:text-gray-300 xl:w-48 text-center md:text-left text-sm leading-5 text-gray-600">
-                                        <%= element.street%>,
-                                            <%= element.city%>,
-                                                <%= element.state%>
-                                                    <%= element.pincode%>
+                                        <span id="addressstreet">
+                                            <%= element.street%>
+                                        </span>
+                                        <span id="addresscity">
+                                            <%= element.city%>
+                                        </span>
+                                        <span id="addressstate">
+                                            <%= element.state%>
+                                        </span>
+                                        <span id="addresspincode">
+                                            <%= element.pincode%>
+                                        </span>
                                     </p>
                                 </div>
                                 <% }) %>
@@ -217,5 +233,160 @@
                 <p>Product not found.</p>
                 <% } %>
 </body>
+<script>
+
+
+    const name = document.getElementById('nameinvoice').textContent
+    console.log('name_is', name)
+    const street = document.getElementById('addressstreet').textContent
+    console.log('address_is', street)
+    const city = document.getElementById('addresscity').textContent
+    console.log('address_is', city)
+    const state = document.getElementById('addressstate').textContent
+    console.log('address_is', state)
+    const pincode = document.getElementById('addresspincode').textContent
+    console.log('address_is', pincode)
+    const productnames = document.querySelectorAll('.productname');
+    const productquantitys = document.querySelectorAll('.productquantity')
+    const productprices = document.querySelectorAll('.productprice')
+
+    const productsnamearray = []
+    const productsquantityarray = []
+    const productspricearray = []
+
+    productnames.forEach(element => {
+        const productnames = element.value
+        productsnamearray.push(productnames)
+    });
+    productquantitys.forEach(element => {
+        const productquantitys = element.value
+        productsquantityarray.push(productquantitys)
+    })
+
+    productprices.forEach(element => {
+        const productprices = element.value
+        productspricearray.push(productprices)
+    })
+    console.log('product name', productsnamearray);
+    console.log('product_quantity', productsquantityarray);
+    console.log('product_price', productspricearray);
+
+    function downloadInvoice() {
+        var data = {
+            // Customize enables you to provide your own templates
+            // Please review the documentation for instructions and examples
+            "customize": {
+                //  "template": fs.readFileSync('template.html', 'base64') // Must be base64 encoded html 
+            },
+            "images": {
+                // The logo on top of your invoice
+                "logo": "https://public.easyinvoice.cloud/img/logo_en_original.png",
+                // The invoice background
+                "background": "https://public.easyinvoice.cloud/img/watermark-draft.jpg"
+            },
+            // Your own data
+            "sender": {
+                "company": "VASTRA Private Inc",
+                "address": "New field, Pink City",
+                "zip": "987112",
+                "city": "SquareCity",
+                "country": "India"
+            },
+            // Your recipient
+            "client": {
+                "company": name,
+                "address": street,
+                "city": city,
+                "country": state,
+                "zip": pincode,
+
+            },
+            "information": {
+                // Invoice number
+                "number": "2021.0001",
+                // Invoice data
+                "date": "12-12-2021",
+                // Invoice due date
+                "due-date": "31-12-2021"
+            },
+            // The products you would like to see on your invoice
+            // Total values are being calculated automatically
+            "products": [{}],
+            // The message you would like to display on the bottom of your invoice
+            "bottom-notice": "Kindly pay your invoice within 15 days.",
+            // Settings to customize your invoice
+            "settings": {
+                "currency": "INR", // See documentation 'Locales and Currency' for more info. Leave empty for no currency.
+                // "locale": "nl-NL", // Defaults to en-US, used for number formatting (See documentation 'Locales and Currency')        
+                // "margin-top": 25, // Defaults to '25'
+                // "margin-right": 25, // Defaults to '25'
+                // "margin-left": 25, // Defaults to '25'
+                // "margin-bottom": 25, // Defaults to '25'
+                // "format": "A4", // Defaults to A4, options: A3, A4, A5, Legal, Letter, Tabloid
+                // "height": "1000px", // allowed units: mm, cm, in, px
+                // "width": "500px", // allowed units: mm, cm, in, px
+                // "orientation": "landscape", // portrait or landscape, defaults to portrait
+            },
+            // Translate your invoice to your preferred language
+            "translate": {
+                // "invoice": "FACTUUR",  // Default to 'INVOICE'
+                // "number": "Nummer", // Defaults to 'Number'
+                // "date": "Datum", // Default to 'Date'
+                // "due-date": "Verloopdatum", // Defaults to 'Due Date'
+                // "subtotal": "Subtotaal", // Defaults to 'Subtotal'
+                // "products": "Producten", // Defaults to 'Products'
+                // "quantity": "Aantal", // Default to 'Quantity'
+                // "price": "Prijs", // Defaults to 'Price'
+                // "product-total": "Totaal", // Defaults to 'Total'
+                // "total": "Totaal", // Defaults to 'Total'
+                // "vat": "btw" // Defaults to 'vat'
+            },
+        };
+
+        const products = [];
+
+        // Calculate the subtotal
+        let subtotal = 0;
+
+        for (let i = 0; i < productsnamearray.length; i++) {
+            const productName = productsnamearray[i];
+            const productQuantity = parseFloat(productsquantityarray[i]);
+            const productPrice = parseFloat(productspricearray[i]);
+
+            // Calculate the total for the product
+            const productTotal = productQuantity * productPrice;
+
+            // Add the product total to the subtotal
+            subtotal += productTotal;
+
+            products.push({
+                "description": productName,
+                "quantity": productQuantity,
+                "price": productPrice
+            });
+        }
+
+        // Add shipping charges to the subtotal
+        const shippingCharges = 4.99;
+        const total = subtotal + shippingCharges;
+
+        
+        delete data.translate.vat;
+
+        // Set the 'products' array within the 'data' object
+        data.products = products;
+
+        // Set the 'total' in 'data' and remove 'vat' from 'translate'
+        data.total = total;
+
+        easyinvoice.createInvoice(data, function (result) {
+            //The response will contain a base64 encoded PDF file
+            console.log(result.pdf)
+            easyinvoice.download("Invoice.pdf")
+        });
+    }
+
+
+</script>
 
 </html>

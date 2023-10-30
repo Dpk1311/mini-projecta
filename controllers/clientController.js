@@ -15,6 +15,7 @@ const home = async (req, res) => {
     try {
 
         const user = req.session.user
+        // console.log('user home',user);
         const categorycollection = await CategoryModel.find()
         // console.log(categorycollection);
         res.render('user/home', { categorycollection, user });
@@ -49,20 +50,25 @@ const loginpost = async (req, res) => {
             req.session.invalid = true;
             req.session.errormsg = "User is Blocked";
             return res.redirect('/login');
-        } else if (user.password === password) {
-            req.session.user = user;
-            req.session.useremail = email;
-            return res.redirect('/');
         } else {
-            req.session.invalid = true;
-            req.session.errormsg = "Incorrect Password";
-            return res.redirect('/login');
+            // Compare hashed passwords
+            const passwordMatch = await bcrypt.compare(password, user.password);
+
+            if (passwordMatch) {
+                req.session.user = user;
+                req.session.useremail = email;
+                return res.redirect('/'); 
+            } else {
+                req.session.invalid = true;
+                req.session.errormsg = "Incorrect Password";
+                return res.redirect('/login');
+            }
         }
     } catch (error) {
         console.error(error);
         return res.status(500).send('Internal Server Error');
     }
-};;
+};
 
 const logout = (req, res) => {
     req.session.user = null;
@@ -150,11 +156,15 @@ const signuppost = async (req, res) => {
         const otp = generateOTP();
         console.log('Generated OTP:', otp);
 
+
+        // Hash the user's password
+        const hashedPassword = await bcrypt.hash(password, 10); // Adjust the number of rounds as needed
+
         // Create a new document using the UserModel
         const newUser = new UserModel({
             name,
             email,
-            password,
+            password: hashedPassword,
             phoneNumber,
         });
 

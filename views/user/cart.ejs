@@ -157,6 +157,7 @@
                                 const decrementButton = product.querySelector('.decrement-button');
                                 const quantityInput = product.querySelector('.quantity-input');
                                 const totalPriceSpan = product.querySelector('.total-price');
+                                console.log(totalPriceSpan);
 
                                 // Function to calculate and update the total price
                                 function updateTotalPrice() {
@@ -178,6 +179,7 @@
                                 incrementButton.addEventListener('click', async () => {
                                     const productId = product.getAttribute('data-product-id');
                                     const quantity = parseInt(quantityInput.value) + 1;
+                                    console.log(quantity);
                                     quantityInput.value = quantity;
                                     updateTotalPrice();
 

@@ -151,16 +151,17 @@
                                         <!-- For each saved address, add a radio input and a label like this: -->
                                         <% user.address.forEach((element)=> {%>
                                             <% console.log('modaladddress',element); %>
-                                            <div>
-                                                <input type="radio" id="<%= element.id %>" name="address"
-                                                    value="<%= element.street %>, <%= element.city %>, <%= element.state %>, <%= element.pincode %>, <%= element.country %>">
-                                                <label for="<%= element.id %>">
-                                                    <%= element.street %>, <%= element.city %>, <%= element.state %>,
-                                                                <%= element.pincode %>, <%= element.country %>
-                                                </label>
-                                            </div>
-                                            <% }) %>
-                                                <button type="submit">Update Address</button>
+                                                <div>
+                                                    <input type="radio" id="<%= element.id %>" name="address"
+                                                        value="<%= element.street %>, <%= element.city %>, <%= element.state %>, <%= element.pincode %>, <%= element.country %>">
+                                                    <label for="<%= element.id %>">
+                                                        <%= element.street %>, <%= element.city %>, <%= element.state %>
+                                                                    ,
+                                                                    <%= element.pincode %>, <%= element.country %>
+                                                    </label>
+                                                </div>
+                                                <% }) %>
+                                                    <button type="submit">Update Address</button>
                                     </form>
                                 </div>
                             </div>
@@ -173,10 +174,6 @@
                             <fieldset class="mb-3 bg-white shadow-lg rounded text-gray-600">
                                 <label class="flex border-b border-gray-200 h-12 py-3 items-center">
                                     <span class="text-right px-2">Payment Methods</span>
-                                    <label class="flex items-center cursor-pointer">
-                                        <input type="radio" name="paymentMethod" value="creditCard" required>
-                                        <span class="ml-2">Credit Card</span>
-                                    </label>
                                     <label class="flex items-center cursor-pointer ml-4">
                                         <input type="radio" name="paymentMethod" value="paypal" required>
                                         <span class="ml-2">PayPal</span>
@@ -190,8 +187,8 @@
                         </section>
 
                     </div>
-                    <form action="/orders" method="get">
-                        <button
+                    <form>
+                        <button id="rzp-button1"
                             class="submit-button px-4 py-3 rounded-full bg-pink-400 text-white focus:ring focus:outline-none w-full text-xl font-semibold transition-colors">
                             Pay₹<%= (subtotal + 4.99) %>
                         </button>
@@ -234,7 +231,7 @@
                             </div>
                             <div class="font-semibold text-xl px-8 flex justify-between py-8 text-gray-600">
                                 <span>Total</span>
-                                <span>₹<%= (subtotal + 4.99) %></span>
+                                <span id="Total">₹<%= (subtotal + 4.99) %></span>
                             </div>
                 </div>
             </div>
@@ -244,8 +241,41 @@
 
 
 
-
+                    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
                     <script>
+
+
+                        const totalamount1 = document.getElementById('Total').textContent;
+                        const totalamount = totalamount1.replace(/₹/g, '');
+
+                        document.getElementById('rzp-button1').onclick = async function (e) {
+                            e.preventDefault();
+
+                            let paymentMethod = document.querySelector('input[name="paymentMethod"]:checked').value;
+
+                            if (paymentMethod === "paypal") {
+                                let response = await fetch(`/payment/${totalamount}`);
+                                let orderData = await response.json();
+
+                                var options = {
+                                    key: "rzp_test_46W9ONQBaPn6A8",
+                                    amount: orderData.order.amount,
+                                    currency: "INR",
+                                    order_id: orderData.id,
+                                    handler: function (response) {
+                                        window.location.href = '/orders';
+                                    },
+                                };
+
+                                var rzp1 = new Razorpay(options);
+                                rzp1.open();
+                            } else {
+                                window.location.href = '/orders';
+                            }
+                        };
+
+
+
 
                         document.getElementById('addressButton').addEventListener('click', function () {
                             document.getElementById('addressModal').classList.remove('hidden');

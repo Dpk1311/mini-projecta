@@ -19,12 +19,13 @@ const upload = multer({ storage: storage });
 
 
 
+
 router.get('/adminlogin', adminController.adminlogin)
 router.post('/adminlogin', adminController.adminloginpost)
 router.get('/adminhome', adminController.adminhome)
 router.get('/productmanagement', adminController.productmanagement)
 router.get('/addproduct', adminController.addproduct)
-router.post('/addproduct',upload.single('Image'),adminController.addproductpost)
+router.post('/addproduct',upload.array('Image',5),adminController.addproductpost)
 router.get('/categorymanagement',adminController.categorymanagement)
 router.get('/addcategory',adminController.addcategory)
 router.post('/addcategory',upload.single('image'),adminController.addcategorypost)

@@ -4,25 +4,21 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="dist/output.css">
-    <script src="https://cdn.tailwindcss.com"></script>
-
-    <title>Document</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.15/dist/tailwind.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <title>Admin Dashboard</title>
 </head>
 
-<body>
-
+<body class="bg-gray-100">
     <%- include('adminpartials/navbar') %>
 
-        <!-- component -->
-        <div class=" flex items-center justify-center bg-gray-100">
+        <div class="flex items-center justify-center">
             <div class="w-full mx-auto py-16">
-
-                <!-- Default -->
-                <div class="bg-white px-6 py-4 my-3 w-3/4 mx-auto shadow rounded-md flex items-center">
+                <!-- Buttons -->
+                <div class="bg-white px-6 py-4 my-3 w-3/4 mx-auto shadow-md rounded-md flex items-center">
                     <div class="w-full text-center mx-auto">
                         <button type="button"
-                            class="border  border-gray-200 bg-gray-200 text-gray-700 rounded-md px-4 py-2 m-2 transition duration-500 ease select-none hover:bg-green-600 focus:outline-none focus:shadow-outline">
+                            class="border border-gray-200 bg-gray-200 text-gray-700 rounded-md px-4 py-2 m-2 transition duration-500 ease select-none hover:bg-green-600 focus:outline-none focus:shadow-outline">
                             <a href="/categorymanagement">Category Management</a>
                         </button>
                         <button type="button"
@@ -33,32 +29,10 @@
                             class="border border-gray-200 bg-gray-200 text-gray-700 rounded-md px-4 py-2 m-2 transition duration-500 ease select-none hover:bg-red-600 focus:outline-none focus:shadow-outline">
                             <a href="/ordermanagement">Order Management</a>
                         </button>
-                        <!-- <button type="button"
-                            class="border border-gray-200 bg-gray-200 text-gray-700 rounded-md px-4 py-2 m-2 transition duration-500 ease select-none hover:bg-yellow-600 focus:outline-none focus:shadow-outline">
-                            Warning
-                        </button>
-                        <button type="button"
-                            class="border border-gray-200 bg-gray-200 text-gray-700 rounded-md px-4 py-2 m-2 transition duration-500 ease select-none hover:bg-teal-600 focus:outline-none focus:shadow-outline">
-                            Info
-                        </button>
-                        <button type="button"
-                            class="border border-gray-200 bg-gray-200 text-gray-700 rounded-md px-4 py-2 m-2 transition duration-500 ease select-none hover:bg-gray-800 focus:outline-none focus:shadow-outline">
-                            Dark
-                        </button>
-                        <button type="button"
-                            class="border border-gray-200 bg-gray-200 text-gray-700 rounded-md px-4 py-2 m-2 transition duration-500 ease select-none hover:bg-gray-300 focus:outline-none focus:shadow-outline">
-                            Light
-                        </button> -->
                     </div>
                 </div>
-                <!-- End Default -->
-            </div>
-        </div>
 
-        <!-- component -->
-        <section>
-            <main>
-                <div class="container mx-auto mt-5 px-4">
+                <section class="container mx-auto mt-5 px-4">
                     <div class="admin-home-container">
                         <header>
                             <h1 class="text-2xl font-bold">Admin Panel</h1>
@@ -99,23 +73,74 @@
                                                             <a href="/userblock/<%= user._id %>"
                                                                 class="block-button bg-green-500 text-white py-1 px-2 rounded-lg inline-block mr-2">Block</a>
                                                             <% } %>
-
                                                 </div>
                                             </div>
-
                                         </li>
                                         <% }); %>
                                 </ul>
                             </div>
                         </div>
                     </div>
-                </div>
+                </section>
 
-            </main>
-        </section>
-        <!-- Content Container -->
+                <!-- Chart container -->
+                <% orderData.forEach((element)=>{%>
+                    <% console.log('orderejs',element)%>
+                        <%}) %>
+                            <div class="bg-white p-4 my-5 mx-auto w-3/4 shadow-md rounded-lg">
+                                <p class="font-bold ">Order Chart</p>
+                                <canvas id="myChart" class="w-full h-auto"></canvas>
+                            </div>
+            </div>
+        </div>
 
+        <script>
+            const ctx = document.getElementById('myChart');
 
+            const labels = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Satuarday'];
+
+            const data = {
+                labels: labels,
+                datasets: [{
+                    label: 'Number of Orders',
+                    data: [6, 10, 0, 8, 6, 5, 4],
+                    backgroundColor: [
+                        'rgba(255, 99, 132, 0.2)',
+                        'rgba(255, 159, 64, 0.2)',
+                        'rgba(255, 205, 86, 0.2)',
+                        'rgba(75, 192, 192, 0.2)',
+                        'rgba(54, 162, 235, 0.2)',
+                        'rgba(153, 102, 255, 0.2)',
+                        'rgba(201, 203, 207, 0.2)'
+                    ],
+                    borderColor: [
+                        'rgb(255, 99, 132)',
+                        'rgb(255, 159, 64)',
+                        'rgb(255, 205, 86)',
+                        'rgb(75, 192, 192)',
+                        'rgb(54, 162, 235)',
+                        'rgb(153, 102, 255)',
+                        'rgb(201, 203, 207)'
+                    ],
+                    borderWidth: 1
+                }]
+            };
+
+            const config = {
+                type: 'bar',
+                data: data,
+                options: {
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+
+                        }
+                    }
+                }
+            };
+
+            new Chart(ctx, config); // Create the chart
+        </script>
 </body>
 
 </html>

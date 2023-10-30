@@ -4,186 +4,113 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="dist/output.css">
-    <link href="https://unpkg.com/tailwindcss@^1.0/dist/tailwind.min.css" rel="stylesheet">
-    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.16/dist/tailwind.min.css">
     <title>Document</title>
-    <style>
-        :root {
-            --main-color: #4a76a8;
-        }
-
-        .bg-main-color {
-            background-color: var(--main-color);
-        }
-
-        .text-main-color {
-            color: var(--main-color);
-        }
-
-        .border-main-color {
-            border-color: var(--main-color);
-        }
-    </style>
 </head>
 
-<body>
+<body class="bg-gray-100">
     <%- include('partials/navbar'),{user} %>
-        <div>
-            <div class="container mx-auto my-5 p-5">
-                <div class="md:flex no-wrap md:-mx-2 ">
-                    <!-- Left Side -->
-                    <div class="w-full md:w-3/12 md:mx-2">
-                        <!-- Profile Card -->
-                        <div class="bg-white p-3 border-t-4 border-green-400">
-                            <div class="image overflow-hidden">
-                                <img class="h-auto w-full mx-auto"
-                                    src="https://lavinephotography.com.au/wp-content/uploads/2017/01/PROFILE-Photography-112.jpg"
-                                    alt="">
-                            </div>
-                            <h1 class="text-gray-900 font-bold text-xl leading-8 my-1">
-                                <%= user.name %>
-                            </h1>
-                            <h3 class="text-gray-600 font-lg text-semibold leading-6">Owner at Her Company Inc.</h3>
-                            <p class="text-sm text-gray-500 hover:text-gray-600 leading-6">Lorem ipsum dolor sit amet
-                                consectetur adipisicing elit.
-                                Reprehenderit, eligendi dolorum sequi illum qui unde aspernatur non deserunt</p>
-                            <ul
-                                class="bg-gray-100 text-gray-600 hover:text-gray-700 hover:shadow py-2 px-3 mt-3 divide-y rounded shadow-sm">
-                                <li class="flex items-center py-3">
-                                    <span>Orders</span>
-                                    <span class="ml-auto">
-                                        <form action="/orderhistory" method="get">
-                                            <button>
-                                                <span
-                                                    class="bg-green-500 py-1 px-2 rounded text-white text-sm">History</span></button>
-                                        </form>
-                                    </span>
-                                </li>
-                                <li class="flex items-center py-3">
-                                    <span>Member since</span>
-                                    <span class="ml-auto">Nov 07, 2016</span>
-                                </li>
-                            </ul>
-                        </div>
-                        <!-- End of profile card -->
-                        <div class="my-4"></div>
+    <div class="container mx-auto my-5 p-5">
+        <div class="md:flex md:flex-no-wrap md:-mx-2">
+            <!-- Left Side -->
+            <div class="w-full md:w-3/12 md:mx-2">
+                <!-- Profile Card -->
+                <div class="bg-white p-3 border-t-4 border-green-400">
+                    <!-- <div class="overflow-hidden">
+                        <img class="h-auto w-full mx-auto"
+                            src="https://lavinephotography.com.au/wp-content/uploads/2017/01/PROFILE-Photography-112.jpg"
+                            alt="User Profile Image">
+                    </div> -->
+                    <h1 class="text-gray-900 font-bold text-xl leading-8 my-1">
+                        <%= user.name %>
+                    </h1>
+                    <h3 class="text-gray-600 font-semibold text-lg leading-6">Owner at Her Company Inc.</h3>
+                    <p class="text-sm text-gray-500 hover:text-gray-600 leading-6">Lorem ipsum dolor sit amet consectetur adipisicing
+                        elit. Reprehenderit, eligendi dolorum sequi illum qui unde aspernatur non deserunt</p>
+                    <ul class="bg-gray-100 text-gray-600 hover:text-gray-700 hover:shadow py-2 px-3 mt-3 divide-y rounded shadow-sm">
+                        <li class="flex items-center py-3">
+                            <span>Orders</span>
+                            <span class="ml-auto">
+                                <form action="/orderhistory" method="get">
+                                    <button class="bg-green-500 py-1 px-2 rounded text-white text-sm">History</button>
+                                </form>
+                            </span>
+                        </li>
+                        <li class="flex items-center py-3">
+                            <span>Member since</span>
+                            <span class="ml-auto">Nov 07, 2016</span>
+                        </li>
+                    </ul>
+                </div>
+                <!-- End of profile card -->
+                <div class="my-4"></div>
+            </div>
+            <!-- Right Side -->
+            <div class="w-full md:w-9/12 mx-2 h-64">
+                <!-- Profile tab -->
+                <!-- About Section -->
+                <div class="bg-white p-3 shadow-sm rounded-sm">
+                    <div class="flex items-center space-x-2 font-semibold text-gray-900 leading-8">
+                        <span class="text-green-500">
+                            <svg class="h-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                            </svg>
+                        </span>
+                        <span class="tracking-wide">Details</span>
                     </div>
-                    <!-- Right Side -->
-                    <div class="w-full md:w-9/12 mx-2 h-64">
-                        <!-- Profile tab -->
-                        <!-- About Section -->
-                        <div class="bg-white p-3 shadow-sm rounded-sm">
-                            <div class="flex items-center space-x-2 font-semibold text-gray-900 leading-8">
-                                <span class="text-green-500">
-                                    <svg class="h-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                                        stroke="currentColor">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                            d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-                                    </svg>
-                                </span>
-                                <span class="tracking-wide">Details</span>
+                    <div class="text-gray-700">
+                        <div class="grid grid-cols-2 text-sm">
+                            <div class="grid grid-cols-2">
+                                <div class="px-4 py-2 font-semibold">Name</div>
+                                <div class="px-4 py-2"><%= user.name %></div>
                             </div>
-                            <div class="text-gray-700">
-                                <div class="grid md:grid-cols-2 text-sm">
-                                    <div class="grid grid-cols-2">
-                                        <div class="px-4 py-2 font-semibold">Name</div>
-                                        <div class="px-4 py-2">
-                                            <%= user.name %>
-                                        </div>
-                                    </div>
-                                    <div class="grid grid-cols-2">
-                                        <div class="px-4 py-2 font-semibold">Contact No.</div>
-                                        <div class="px-4 py-2">
-                                            <%= user.phoneNumber %>
-                                        </div>
-                                    </div>
-                                    <div class="grid grid-cols-2">
-                                        <div class="px-4 py-2 font-semibold">Email</div>
-                                        <div class="px-4 py-2">
-                                            <%= user.email %>
-                                        </div>
-                                    </div>
-
-                                    <div class="grid grid-cols-2">
-                                        <div class="px-4 py-2 font-semibold">Address</div>
-                                        <div class="px-4 py-2 space-y-2">
-                                            <form action="/addresssave" method="post">
-                                                <% user.address.forEach((element, index)=> {%>
-                                                    <label class="inline-flex items-center">
-                                                        <input type="radio" class="form-radio text-blue-600"
-                                                            name="address" value="<%= index %>">
-                                                        <span class="ml-2">
-                                                            <%= element.street %>, <%= element.city %>, <%=
-                                                                        element.state %>
-                                                                        , <%= element.pincode %>, <%= element.country %>
-                                                        </span>
-                                                    </label>
-                                                    
-                                                    <% }); %>
-
-                                                        <button type="submit"
-                                                            class="cursor-pointer transition-all 
-                bg-gray-700 text-white px-6 py-2 rounded-lg mt-4
-                border-green-400
-                border-b-[4px] hover:brightness-110 hover:-translate-y-[1px] hover:border-b-[6px]
-                active:border-b-[2px] active:brightness-90 active:translate-y-[2px] hover:shadow-xl hover:shadow-green-300 shadow-green-300 active:shadow-none">
-                                                            SAVE
-                                                        </button>
-                                                    </form>
-                                                    <% user.selectedAddress.forEach((element, index) => { %>
-                                                    <form action="/editaddress/<%= element._id %>" method="get">
-                                                        
-                                                          <input type="hidden" name="addressId[]" value="<%= element._id %>">
-                                                        <% }); %>
-                                                        <button class="cursor-pointer transition-all bg-gray-700 text-white px-6 py-2 rounded-lg border-green-400 border-b-[4px] hover:brightness-110 hover:-translate-y-[1px] hover:border-b-[6px] active:border-b-[2px] active:brightness-90 active:translate-y-[2px] hover:shadow-xl hover:shadow-green-300 shadow-green-300 active:shadow-none">
-                                                          Edit Address
-                                                        </button>
-                                                      </form>
-                                            
-                                        </div>
-
-                                    </div>
-
+                            <div class="grid grid-cols-2">
+                                <div class="px-4 py-2 font-semibold">Contact No.</div>
+                                <div class="px-4 py-2"><%= user.phoneNumber %></div>
+                            </div>
+                            <div class="grid grid-cols-2">
+                                <div class="px-4 py-2 font-semibold">Email</div>
+                                <div class="px-4 py-2"><%= user.email %></div>
+                            </div>
+                            <div class="grid grid-cols-2">
+                                <div class="px-4 py-2 font-semibold">Address</div>
+                                <div class="px-4 py-2 space-y-2">
+                                    <form action="/addresssave" method="post">
+                                        <% user.address.forEach((element, index)=> {%>
+                                            <label class="inline-flex items-center">
+                                                <input type="radio" class="form-radio text-blue-600" name="address" value="<%= index %>">
+                                                <span class="ml-2">
+                                                    <%= element.street %>, <%= element.city %>, <%= element.state %>,
+                                                    <%= element.pincode %>, <%= element.country %>
+                                                </span>
+                                            </label>
+                                        <% }); %>
+                                        <button type="submit"
+                                            class="cursor-pointer transition-all bg-gray-700 text-white px-6 py-2 rounded-lg border-green-400 border-b-[4px] hover:brightness-110 hover:-translate-y-[1px] hover:border-b-[6px] active:border-b-[2px] active:brightness-90 active:translate-y-[2px] hover:shadow-xl hover:shadow-green-300 shadow-green-300 active:shadow-none">SAVE</button>
+                                    </form>
+                                    <% user.selectedAddress.forEach((element, index)=> { %>
+                                        <form action="/editaddress/<%= element._id %>" method="get">
+                                            <input type="hidden" name="addressId[]" value="<%= element._id %>">
+                                    <% }); %>
+                                    <button class="cursor-pointer transition-all bg-gray-700 text-white px-6 py-2 rounded-lg border-green-400 border-b-[4px] hover:brightness-110 hover:-translate-y-[1px] hover:border-b-[6px] active:border-b-[2px] active:brightness-90 active:translate-y-[2px] hover:shadow-xl hover:shadow-green-300 shadow-green-300 active:shadow-none">Edit Address</button>
+                                    </form>
                                 </div>
                             </div>
-                            <div class="flex space-x-4 mt-4">
-                                <form action="/addaddress" method="get">
-                                    <button
-                                        class="cursor-pointer transition-all 
-bg-gray-700 text-white px-6 py-2 rounded-lg
-border-green-400
-border-b-[4px] hover:brightness-110 hover:-translate-y-[1px] hover:border-b-[6px]
-active:border-b-[2px] active:brightness-90 active:translate-y-[2px] hover:shadow-xl hover:shadow-green-300 shadow-green-300 active:shadow-none">
-                                        Add Address
-                                    </button>
-                                </form>
-
-                                <form action="/edituser/<%= user._id %>" method="get">
-                                    <button
-                                        class="cursor-pointer transition-all 
-bg-gray-700 text-white px-6 py-2 rounded-lg
-border-green-400
-border-b-[4px] hover:brightness-110 hover:-translate-y-[1px] hover:border-b-[6px]
-active:border-b-[2px] active:brightness-90 active:translate-y-[2px] hover:shadow-xl hover:shadow-green-300 shadow-green-300 active:shadow-none">
-                                        Edit
-                                    </button>
-                                </form>
-                                
-
-                            </div>
                         </div>
-                        <!-- End of about section -->
-
-                        <div class="my-4"></div>
-
-                        <!-- Experience and education -->
-
+                    </div>
+                    <div class="flex space-x-4 mt-4">
+                        <form action="/addaddress" method="get">
+                            <button class="cursor-pointer transition-all bg-gray-700 text-white px-6 py-2 rounded-lg border-green-400 border-b-[4px] hover:brightness-110 hover:-translate-y-[1px] hover:border-b-[6px] active:border-b-[2px] active:brightness-90 active:translate-y-[2px] hover:shadow-xl hover:shadow-green-300 shadow-green-300 active:shadow-none">Add Address</button>
+                        </form>
+                        <form action="/edituser/<%= user._id %>" method="get">
+                            <button class="cursor-pointer transition-all bg-gray-700 text-white px-6 py-2 rounded-lg border-green-400 border-b-[4px] hover:brightness-110 hover:-translate-y-[1px] hover:border-b-[6px] active:border-b-[2px] active:brightness-90 active:translate-y-[2px] hover:shadow-xl hover:shadow-green-300 shadow-green-300 active:shadow-none">Edit</button>
+                        </form>
                     </div>
                 </div>
             </div>
         </div>
-
+    </div>
 </body>
 
 </html>

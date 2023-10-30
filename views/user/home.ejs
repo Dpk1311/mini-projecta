@@ -28,7 +28,7 @@
 
 
 <body class="bg-white">
-    <%- include('partials/navbar.ejs'),{user} %>
+    <%- include('partials/navbar.ejs',{ user: user }) %>
     <%- include('partials/banner.ejs') %>
     <%- include('partials/cards.ejs',{categorycollection}) %>
     

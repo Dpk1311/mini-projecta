@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -12,18 +13,90 @@
     <script src="https://cdn.jsdelivr.net/npm/medium-zoom@1.0.6/dist/medium-zoom.min.js"></script>
     <title>Document</title>
 </head>
+
 <body>
     <%- include('partials/navbar.ejs',user) %>
-    <%- include('partials/cards_products(shirts).ejs',productcollection) %>
+        <div class="flex bg-white items-center p-2 rounded-md m-5">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-400" viewBox="0 0 20 20"
+                fill="currentColor">
+                <path fill-rule="evenodd"
+                    d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z"
+                    clip-rule="evenodd" />
+            </svg>
+            <input class="bg-gray-50 outline-none ml-1 block " type="text" name="" id="" placeholder="search...">
+        </div>
+
+        <div class="flex space-x-4">
+            <label for="sort">Sort by:</label>
+            <select name="sort" id="sort">
+                <option value="price">Price</option>
+                <option value="name">Name</option>
+            </select>
+
+            <label for="category">Filter by category:</label>
+            <select name="category" id="category">
+                <option value="all">All</option>
+                <option value="shirts">Shirts</option>
+                <option value="pants">Pants</option>
+                <!-- Add more categories as needed -->
+            </select>
+        </div>
+        <%- include('partials/cards_products(shirts).ejs',productcollection) %>
 
 
 
 
-    <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            const zoomImages = document.querySelectorAll('.product-image');
-            mediumZoom(zoomImages);
-        });
-    </script>
+
+
+
+        <!-- <script>
+            const products = <%- JSON.stringify(productcollection) %>; // Load products data
+        
+            // Function to sort products by price or name
+            const sortProducts = (field) => {
+                products.sort((a, b) => (a[field] > b[field]) ? 1 : -1);
+                // Render the sorted products on the page
+                renderProducts(products);
+            };
+        
+            // Function to filter products by category
+            const filterProducts = (category) => {
+                if (category === 'all') {
+                    renderProducts(products); // Show all products
+                } else {
+                    const filteredProducts = products.filter(product => product.category === category);
+                    renderProducts(filteredProducts); // Show filtered products
+                }
+            };
+        
+            // Function to render products on the page
+            const renderProducts = (productsToRender) => {
+                // Clear the existing product listing
+                // Replace "productsContainer" with the actual container ID where you display products
+                const productsContainer = document.getElementById('productsContainer');
+                productsContainer.innerHTML = '';
+        
+                // Loop through the products and create HTML elements for each
+                productsToRender.forEach(product => {
+                    // Create product HTML elements and append them to "productsContainer"
+                    // You can use EJS templating here to generate the product cards
+                });
+            };
+        
+            // Event listeners for sorting and filtering
+            document.getElementById('sort').addEventListener('change', (event) => {
+                sortProducts(event.target.value);
+            });
+        
+            document.getElementById('category').addEventListener('change', (event) => {
+                filterProducts(event.target.value);
+            });
+        
+            // Initial rendering of products
+            renderProducts(products);
+        </script> -->
+        
+        
 </body>
+
 </html>

@@ -30,9 +30,13 @@ const adminloginpost = async (req, res) => {
 
 const adminhome = async (req, res) => {
     try {
+
         console.log('1');
         const check = await UserModel.find();
-        res.render('admin/adminhome', { check })
+        // console.log('check is',check);
+        const orderData = await OrderModel.find()
+        console.log('product is',orderData);
+        res.render('admin/adminhome', { check,orderData })
     }
     catch (error) {
         console.error('error in loading');
@@ -127,19 +131,20 @@ const addproductpost = async (req, res) => {
         const { Name, Description, Image, Price, Discount, Brand, Category, Size, Quantity } = req.body;
         console.log('Received signup request:', Name, Description, Image, Price, Discount, Brand, Category, Size, Quantity);
 
-        let imagePath = req.file.path;
+        const imagePaths = req.files.map(file => {
+            let imagePath = file.path;
 
-        if (imagePath.includes('public\\')) {
-
-            imagePath = imagePath.replace('public\\', '');
-        } else if (imagePath.includes('public/')) {
-
-            imagePath = imagePath.replace('public/', '');
-        }
-
+            if (imagePath.includes('public\\')) {
+                imagePath = imagePath.replace('public\\', '');
+            } else if (imagePath.includes('public/')) {
+                imagePath = imagePath.replace('public/', '');
+            }
+            return imagePath;
+        });
+        console.log('image is', imagePaths);
 
         const newProduct = new productModel({
-            Name, Description, Image: imagePath, Price, Discount, Brand, Category, Size, Quantity
+            Name, Description, Image: imagePaths, Price, Discount, Brand, Category, Size, Quantity
         });
         console.log(newProduct);
 
@@ -238,11 +243,11 @@ const orderstatusupdate = async (req, res) => {
 
         }
 
-        res.json({success:true});
+        res.json({ success: true });
     }
     catch (error) {
         console.error(error);
-        res.json({success:false});
+        res.json({ success: false });
     }
 }
 module.exports = {

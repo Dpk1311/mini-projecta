@@ -9,7 +9,7 @@ const cart = async (req, res) => {
   try {
     const user = req.session.user;
     const userId = req.session.user._id;
-    // console.log('uid:', userId);
+    console.log('uid:', userId);
 
     if (userId) {
       const cartData = await cartModel.findOne({ user: userId })
@@ -17,6 +17,7 @@ const cart = async (req, res) => {
           path: 'products.product',
           model: 'Product', // Replace with your product model name
         });
+        console.log(cartData);
 
       let subtotal = 0;
       for (const item of cartData.products) {

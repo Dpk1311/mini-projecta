@@ -46,7 +46,7 @@ const loginpost = async (req, res) => {
             req.session.invalid = true;
             req.session.errormsg = "Incorrect Email";
             return res.redirect('/login');
-        } else if (user.block) {
+        } else if (user.block) { 
             req.session.invalid = true;
             req.session.errormsg = "User is Blocked";
             return res.redirect('/login');
@@ -69,6 +69,7 @@ const loginpost = async (req, res) => {
         return res.status(500).send('Internal Server Error');
     }
 };
+
 
 const logout = (req, res) => {
     req.session.user = null;

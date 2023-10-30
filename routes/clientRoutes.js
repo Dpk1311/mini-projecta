@@ -3,7 +3,7 @@ const router = express.Router()
 const clientController = require('../controllers/clientController')
 const cartController = require('../controllers/cartController')
 const orderController = require('../controllers/orderController')
-
+const authMiddleware = require('../middlewares/Authmiddleware')
 
 router.get('/',clientController.home)
 router.get('/login',clientController.login)

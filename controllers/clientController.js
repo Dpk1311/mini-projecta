@@ -57,7 +57,7 @@ const loginpost = async (req, res) => {
             if (passwordMatch) {
                 req.session.user = user;
                 req.session.useremail = email;
-                return res.redirect('/'); 
+                return res.redirect('/');
             } else {
                 req.session.invalid = true;
                 req.session.errormsg = "Incorrect Password";
@@ -391,6 +391,7 @@ const editaddresspost = async (req, res) => {
 
 
 
+
 const updateAddress = async (req, res) => {
     try {
         const { address } = req.body;
@@ -454,7 +455,7 @@ const addaddresspost = async (req, res) => {
 }
 
 const productpage = async (req, res) => {
-    const itemid = req.query.product_Id
+    const itemid = req.query.product_Id 
     const user = req.session.user
     const productdisplay = await productModel.findById(itemid)
     res.render('user/productpage', { productdisplay, user })
@@ -463,8 +464,50 @@ const productpage = async (req, res) => {
 const product_shirts = async (req, res) => {
     const productcollection = await productModel.find()
     const user = req.session.user
-    console.log('productcollection', productcollection);
+    // console.log('productcollection', productcollection);
     res.render('user/product_shirts', { productcollection, user })
+}
+
+
+const productsort = async (req, res) => {
+    let sortBy = req.query.sort;
+    // console.log('sortby',sortBy);
+    let order = 1; // Default order
+
+    if (sortBy === 'Price') {
+        sortBy = 'Price';
+        order = -1; // If sorting by price, sort in descending order
+    } else if (sortBy === 'Name') {
+        sortBy = 'Name';
+        order = 1;
+    }
+
+    productModel.find().sort({ [sortBy]: order })
+        .then(products => {
+            console.log('products are',products);
+            res.json(products);
+        })
+        .catch(err => {
+            console.log(err);
+            res.status(500).send('Error occurred while fetching products');
+        });
+}
+
+const productsearch = async (req,res)=>{
+    const { searchQuery } = req.query;
+    const user = req.session.user
+    console.log('search',searchQuery);
+    try{
+        if (!searchQuery) {
+            res.redirect('/product_shirts');
+            return;
+        }
+        const  productcollection = await productModel.find({ Name: { $regex: searchQuery, $options: 'i' } });
+        res.render('user/product_shirts', { productcollection,user })
+    }
+    catch(error){
+        console.error(error);
+    }
 }
 
 
@@ -492,6 +535,7 @@ module.exports = {
     updateAddress,
     editaddress,
     editaddresspost,
-
+    productsort,
+    productsearch,
 
 };

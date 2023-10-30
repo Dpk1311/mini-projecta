@@ -35,8 +35,8 @@ const adminhome = async (req, res) => {
         const check = await UserModel.find();
         // console.log('check is',check);
         const orderData = await OrderModel.find()
-        console.log('product is',orderData);
-        res.render('admin/adminhome', { check,orderData })
+        console.log('product is', orderData);
+        res.render('admin/adminhome', { check, orderData })
     }
     catch (error) {
         console.error('error in loading');
@@ -158,6 +158,57 @@ const addproductpost = async (req, res) => {
     }
 }
 
+const editproduct = async (req, res) => {
+    const productId = req.params.productId
+    // console.log(productId);
+    const productData = await productModel.findById(productId)
+    // console.log('admin product',productData);
+    res.render('admin/editproduct', { productData })
+}
+
+const editproductpost = async (req, res) => {
+    try {
+        const productId = req.params.productId
+        // console.log(productId);
+        const body = req.body
+        console.log(body);
+        const productData = await productModel.findById(productId)
+        // console.log(productData);
+        productData.Name = req.body.Name || productData.Name
+        productData.Description = req.body.Description || productData.Description
+        productData.Price = req.body.Price || productData.Price
+        productData.Image = req.body.Image || productData.Image
+        productData.Discount = req.body.Discount || productData.Discount
+        productData.Brand = req.body.Brand || productData.Brand
+        productData.Category = req.body.Category || productData.Category
+        productData.Size = req.body.Size || productData.Size
+        productData.Quantity = req.body.Quantity || productData.Quantity
+
+        await productData.save()
+
+        res.redirect('/productmanagement')
+    }
+    catch (error) {
+        console.error(error);
+    }
+}
+
+const deleteproduct = async (req, res) => {
+    try {
+        const productId = req.params.productId;
+        console.log(productId);
+        const productData = await productModel.findByIdAndDelete(productId);
+        if (productData) {
+            console.log('Document deleted successfully:', productData);
+        } else {
+            console.log('Document not found or not deleted');
+        }
+        res.redirect('/productmanagement');
+    } catch (error) {
+        console.error(error);
+    }
+}
+
 
 
 const categorymanagement = async (req, res) => {
@@ -252,6 +303,6 @@ const orderstatusupdate = async (req, res) => {
 }
 module.exports = {
     adminlogin, adminloginpost, adminhome, productmanagement, addproduct, addproductpost, categorymanagement, addcategory, addcategorypost, usersearch,
-    userblock, userUnblock, ordermanagement, orderstatusupdate
+    userblock, userUnblock, ordermanagement, orderstatusupdate, editproduct, editproductpost, deleteproduct,
 }
 

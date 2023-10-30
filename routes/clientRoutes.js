@@ -37,6 +37,8 @@ router.get('/orderdetail',orderController.orderdetail)
 router.post('/updateAddress',clientController.updateAddress)
 router.get('/editaddress/:addressId',clientController.editaddress)
 router.post('/editaddress/:addressId',clientController.editaddresspost)
+router.get('/products',clientController.productsort)
+router.get('/productsearch',clientController.productsearch)
 
 
 module.exports = router 

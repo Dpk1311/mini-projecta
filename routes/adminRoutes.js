@@ -34,6 +34,9 @@ router.get('/userblock/:userId',adminController.userblock)
 router.get('/userUnblock/:userId',adminController.userUnblock)
 router.get('/ordermanagement',adminController.ordermanagement)
 router.get('/orderstatusupdate/:orderid',adminController.orderstatusupdate)
+router.get('/editproduct/:productId',adminController.editproduct)
+router.post('/editproduct/:productId',adminController.editproductpost)
+router.get('/deleteproduct/:productId',adminController.deleteproduct)
 
 
 

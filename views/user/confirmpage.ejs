@@ -378,6 +378,7 @@
 
         // Set the 'total' in 'data' and remove 'vat' from 'translate'
         data.total = total;
+        
 
         easyinvoice.createInvoice(data, function (result) {
             //The response will contain a base64 encoded PDF file

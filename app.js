@@ -12,8 +12,10 @@ app.use(express.urlencoded({ extended: true }));
 app.use(nocache())
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static('public'));
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 app.set('view engine', 'ejs')
 app.set('views', path.join(__dirname, 'views'));
+
 const clientrouter = require('./routes/clientRoutes')
 const adminrouter = require('./routes/adminRoutes')
 

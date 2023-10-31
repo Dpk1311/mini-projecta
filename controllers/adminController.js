@@ -4,6 +4,7 @@ const { productModel } = require('../model/admin/productSchema')
 const { CategoryModel } = require('../model/admin/categorySchema')
 const OrderModel = require('../model/user/orderSchema')
 
+
 const adminlogin = (req, res) => {
     res.render('admin/login')
 }
@@ -170,14 +171,22 @@ const editproductpost = async (req, res) => {
     try {
         const productId = req.params.productId
         // console.log(productId);
-        const body = req.body
-        console.log(body);
+        const imagePaths = req.files.map(file => {
+            let imagePath = file.path;
+
+            if (imagePath.includes('public\\')) {
+                imagePath = imagePath.replace('public\\', '');
+            } else if (imagePath.includes('public/')) {
+                imagePath = imagePath.replace('public/', '');
+            }
+            return imagePath;
+        });
         const productData = await productModel.findById(productId)
         // console.log(productData);
         productData.Name = req.body.Name || productData.Name
         productData.Description = req.body.Description || productData.Description
         productData.Price = req.body.Price || productData.Price
-        productData.Image = req.body.Image || productData.Image
+        productData.Image = imagePaths || productData.Image
         productData.Discount = req.body.Discount || productData.Discount
         productData.Brand = req.body.Brand || productData.Brand
         productData.Category = req.body.Category || productData.Category
@@ -185,7 +194,7 @@ const editproductpost = async (req, res) => {
         productData.Quantity = req.body.Quantity || productData.Quantity
 
         await productData.save()
-
+console.log('product updated');
         res.redirect('/productmanagement')
     }
     catch (error) {

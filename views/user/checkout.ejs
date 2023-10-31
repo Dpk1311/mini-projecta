@@ -142,30 +142,24 @@
 
                         <!-- Modal -->
 
-                        <div id="addressModal" class="hidden fixed z-10 inset-0 overflow-y-auto">
-                            <div
-                                class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
-                                <div
-                                    class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
-                                    <form id="addressForm">
-                                        <!-- For each saved address, add a radio input and a label like this: -->
-                                        <% user.address.forEach((element)=> {%>
-                                            <% console.log('modaladddress',element); %>
-                                                <div>
-                                                    <input type="radio" id="<%= element.id %>" name="address"
-                                                        value="<%= element.street %>, <%= element.city %>, <%= element.state %>, <%= element.pincode %>, <%= element.country %>">
-                                                    <label for="<%= element.id %>">
-                                                        <%= element.street %>, <%= element.city %>, <%= element.state %>
-                                                                    ,
-                                                                    <%= element.pincode %>, <%= element.country %>
-                                                    </label>
-                                                </div>
-                                                <% }) %>
-                                                    <button type="submit">Update Address</button>
-                                    </form>
-                                </div>
+                        <div id="addressModal" class="hidden fixed z-10 inset-0 overflow-y-auto flex items-center justify-center">
+                            <div class="bg-white rounded-lg shadow-xl transform transition-all sm:w-3/4 md:w-1/2 lg:w-1/3">
+                                <form id="addressForm" class="p-6">
+                                    <!-- For each saved address, add a radio input and a label like this: -->
+                                    <% user.address.forEach((element)=> {%>
+                                        <% console.log('modaladddress',element); %>
+                                           <div class="flex items-center mb-4">
+                                               <input type="radio" id="<%= element.id %>" name="address" value="<%= element.street %>, <%= element.city %>, <%= element.state %>, <%= element.pincode %>, <%= element.country %>" class="mr-2">
+                                               <label for="<%= element.id %>" class="text-gray-700">
+                                                   <%= element.street %>, <%= element.city %>, <%= element.state %>, <%= element.pincode %>, <%= element.country %>
+                                               </label>
+                                           </div>
+                                    <% }) %>
+                                    <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Update Address</button>
+                                </form>
                             </div>
-                        </div>
+                         </div>
+                         
                     </div>
                     <div class="rounded-md">
                         <section>

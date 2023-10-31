@@ -29,9 +29,7 @@ const login = (req, res) => {
     if (req.session.invalid) {
         req.session.invalid = false
         return res.render('user/login', { msg: req.session.errormsg || '' })
-    } else if (req.session.user) {
-        res.render('user/home', { msg: '' })
-    }
+    } 
     else {
         res.render('user/login', { msg: '' })
     }

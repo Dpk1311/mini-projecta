@@ -96,6 +96,8 @@ const orderhistory = async (req, res) => {
                 model: 'address', // Replace with your address model name
             });
 
+            console.log('orderdata is',orderData);
+
         // Check if the cancel button is clicked
         if (req.query.cancelOrderId) {
             const orderId = req.query.cancelOrderId;

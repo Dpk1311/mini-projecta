@@ -297,19 +297,24 @@
                     <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
                     <script>
 
-
-                        const totalamount1 = document.getElementById('Total').textContent;
-                        const totalamount = totalamount1.replace(/₹/g, '');
-
                         document.getElementById('rzp-button1').onclick = async function (e) {
                             e.preventDefault();
 
                             let paymentMethod = document.querySelector('input[name="paymentMethod"]:checked').value;
 
                             let totalPriceToPay = document.getElementById('Total').textContent.replace(/₹/g, '')
+                            let totalPrice = parseFloat(totalPriceToPay)
+
+
 
                             if (paymentMethod === "paypal") {
-                                let response = await fetch(`/payment/${totalPriceToPay}`);
+                                let response = await fetch(`/payment/${totalPrice}`, {
+                                    method: 'POST',
+                                    headers: {
+                                        'Content-Type': 'application/json'
+                                    },
+                                    body: JSON.stringify({ discountedPrice: totalPrice })
+                                });
                                 let orderData = await response.json();
 
                                 var options = {
@@ -318,14 +323,14 @@
                                     currency: "INR",
                                     order_id: orderData.id,
                                     handler: function (response) {
-                                        window.location.href = '/orders';
+                                        window.location.href = `/orders?discountedPrice=${orderData.order.amount/100}`;
                                     },
                                 };
 
                                 var rzp1 = new Razorpay(options);
                                 rzp1.open();
                             } else {
-                                window.location.href = '/orders';
+                                window.location.href =  `/orders?discountedPrice=${totalPrice}`;
                             }
                         };
 

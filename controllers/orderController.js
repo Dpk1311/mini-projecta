@@ -1,8 +1,6 @@
 const OrderModel = require('../model/user/orderSchema')
 const { UserModel } = require('../model/user/userSchema')
 const cartModel = require('../model/user/cartSchema');
-const { assign } = require('nodemailer/lib/shared');
-
 
 
 const orders = async (req, res) => {
@@ -22,17 +20,20 @@ const orders = async (req, res) => {
         for (const item of cartData.products) {
             subtotal += item.product.Price * item.quantity
         }
-        // const addressId = req.session.user.selectedAddress
-        // console.log('address is', req.session.user.selectedAddress);
+
+
+        let discountedPrice = req.query.discountedPrice;
+        totalfinal = discountedPrice
 
         const orderData = {
             user: user._id, // Store user's ID
             products: cartData.products,
-            totalAmount: subtotal + 4.99,
+            totalAmount: totalfinal,
             shippingAddress: user.selectedAddress[0], // Use the selected address
             paymentMethod: 'Cash on Delivery', // Example payment method
         };
 
+        // console.log('database orderdata',orderData);
         // Create a new order document and save it to the database
         const newOrder = new OrderModel(orderData);
         await newOrder.save();
@@ -54,11 +55,12 @@ const confirmpage = async (req, res) => {
         const user = await UserModel.findById(userid)
             .populate('selectedAddress')
 
-        const cartData = await cartModel.findOne({ user: userid })
+        const cartData = await OrderModel.findOne({ user: userid })
             .populate({
                 path: 'products.product',
                 model: 'Product', // Replace with your product model name
             })
+            .sort({ orderDate: -1 })
 
 
         let subtotal = 0
@@ -69,7 +71,9 @@ const confirmpage = async (req, res) => {
         const data = {
             user: user.name, // Include the user's name
             products: cartData.products, // Include the cart products
-            selectedAddress: user.selectedAddress, // Include the selected address
+            selectedAddress: user.selectedAddress,// Include the selected address
+            total: cartData.totalAmount
+
         }
         res.render('user/confirmpage', { user, data, subtotal })
     }
@@ -96,7 +100,7 @@ const orderhistory = async (req, res) => {
                 model: 'address', // Replace with your address model name
             });
 
-            console.log('orderdata is',orderData);
+        console.log('orderdata is', orderData);
 
         // Check if the cancel button is clicked
         if (req.query.cancelOrderId) {
@@ -110,7 +114,7 @@ const orderhistory = async (req, res) => {
                 order.Status = 'Order Cancelled';
                 await order.save();
                 console.log('order cancelled');
-            } 
+            }
         }
 
         // console.log('order data', orderData);

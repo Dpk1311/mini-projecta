@@ -3,6 +3,7 @@ const { productModel } = require('../model/admin/productSchema');
 const { UserModel } = require('../model/user/userSchema')
 const { addressModel } = require('../model/user/addressSchema')
 const Razorpay = require('razorpay')
+const orderModel = require('../model/user/orderSchema')
 
 
 const cart = async (req, res) => {
@@ -17,7 +18,7 @@ const cart = async (req, res) => {
           path: 'products.product',
           model: 'Product', // Replace with your product model name
         });
-        console.log(cartData);
+      console.log(cartData);
 
       let subtotal = 0;
       for (const item of cartData.products) {
@@ -45,7 +46,7 @@ const cart = async (req, res) => {
         // Render EJS (HTML) response
         res.render('user/cart', { data, subtotal, user });
       }
-      
+
     } else {
       if (req.accepts('application/json')) {
         // Send JSON response
@@ -91,7 +92,7 @@ const addToCart = async (req, res) => {
       // Check if the product is already in the user's cart
       const existingProduct = userCart.products.find((item) =>
         item.product.equals(productId)
-      ); 
+      );
 
       if (existingProduct) {
         // If the product is already in the cart, increase the quantity
@@ -235,36 +236,36 @@ const checkout = async (req, res) => {
 }
 
 
+
 const payment = async (req, res) => {
   try {
-    let { amount } = req.params
-    const amount1 = parseFloat(amount)
-    // console.log('amount is', amount1)
+    let { discountedPrice } = req.body;
+    const amount = parseFloat(discountedPrice)
+    // console.log('discount price',amount);
 
     var instance = new Razorpay({ key_id: 'rzp_test_46W9ONQBaPn6A8', key_secret: 'uKnujHxXw6cmPrUdFabchtEe' });
 
     // Create a Razorpay order
     let order = await instance.orders.create({
-      amount: amount1 * 100,
+      amount: amount * 100, // Convert to paisa
       currency: "INR",
       receipt: "receipt#1",
-    })
+    });
 
-    // console.log('order is',order);
-
-
+    // console.log('orderdata is',order);
 
     res.status(201).json({
       success: true,
       order,
       amount
-    })
+    });
 
   }
   catch (error) {
     console.error(error);
   }
-}
+};
+
 
 
 

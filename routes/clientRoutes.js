@@ -4,6 +4,7 @@ const clientController = require('../controllers/clientController')
 const cartController = require('../controllers/cartController')
 const orderController = require('../controllers/orderController')
 const authMiddleware = require('../middlewares/Authmiddleware')
+const couponController = require('../controllers/couponController')
 
 router.get('/',clientController.home)
 router.get('/login',clientController.login)
@@ -39,6 +40,7 @@ router.get('/editaddress/:addressId',clientController.editaddress)
 router.post('/editaddress/:addressId',clientController.editaddresspost)
 router.get('/products',clientController.productsort)
 router.get('/productsearch',clientController.productsearch)
+router.post('/applycoupon',couponController.applycoupon)
 
 
 module.exports = router 

@@ -142,24 +142,31 @@
 
                         <!-- Modal -->
 
-                        <div id="addressModal" class="hidden fixed z-10 inset-0 overflow-y-auto flex items-center justify-center">
-                            <div class="bg-white rounded-lg shadow-xl transform transition-all sm:w-3/4 md:w-1/2 lg:w-1/3">
+                        <div id="addressModal"
+                            class="hidden fixed z-10 inset-0 overflow-y-auto flex items-center justify-center">
+                            <div
+                                class="bg-white rounded-lg shadow-xl transform transition-all sm:w-3/4 md:w-1/2 lg:w-1/3">
                                 <form id="addressForm" class="p-6">
                                     <!-- For each saved address, add a radio input and a label like this: -->
                                     <% user.address.forEach((element)=> {%>
                                         <% console.log('modaladddress',element); %>
-                                           <div class="flex items-center mb-4">
-                                               <input type="radio" id="<%= element.id %>" name="address" value="<%= element.street %>, <%= element.city %>, <%= element.state %>, <%= element.pincode %>, <%= element.country %>" class="mr-2">
-                                               <label for="<%= element.id %>" class="text-gray-700">
-                                                   <%= element.street %>, <%= element.city %>, <%= element.state %>, <%= element.pincode %>, <%= element.country %>
-                                               </label>
-                                           </div>
-                                    <% }) %>
-                                    <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Update Address</button>
+                                            <div class="flex items-center mb-4">
+                                                <input type="radio" id="<%= element.id %>" name="address"
+                                                    value="<%= element.street %>, <%= element.city %>, <%= element.state %>, <%= element.pincode %>, <%= element.country %>"
+                                                    class="mr-2">
+                                                <label for="<%= element.id %>" class="text-gray-700">
+                                                    <%= element.street %>, <%= element.city %>, <%= element.state %>,
+                                                                <%= element.pincode %>, <%= element.country %>
+                                                </label>
+                                            </div>
+                                            <% }) %>
+                                                <button type="submit"
+                                                    class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Update
+                                                    Address</button>
                                 </form>
                             </div>
-                         </div>
-                         
+                        </div>
+
                     </div>
                     <div class="rounded-md">
                         <section>
@@ -184,7 +191,7 @@
                     <form>
                         <button id="rzp-button1"
                             class="submit-button px-4 py-3 rounded-full bg-pink-400 text-white focus:ring focus:outline-none w-full text-xl font-semibold transition-colors">
-                            Pay₹<%= (subtotal + 4.99) %>
+                            <span id="RazorpayTotal">Pay₹<%= (subtotal + 4.99) %></span>
                         </button>
                     </form>
                 </div>
@@ -219,6 +226,12 @@
                                     <span class="font-semibold text-pink-500">₹<%= subtotal %></span>
                                 </div>
                                 <div class="flex justify-between py-4 text-gray-600">
+                                    <span>Coupon</span>
+                                    <input type="text" id="couponCodeInput"
+                                        class="font-bold text-black bg-pink-300 rounded">
+                                    <button id="Couponapply">Apply</button>
+                                </div>
+                                <div class="flex justify-between py-4 text-gray-600">
                                     <span>Shipping</span>
                                     <span class="font-semibold text-pink-500">₹4.99</span>
                                 </div>
@@ -232,6 +245,52 @@
             <% } else { %> <!-- Handle the case where data is null or undefined -->
                 <p>Product not found.</p>
                 <% } %>
+
+                    <script>
+
+                        document.getElementById('Couponapply').addEventListener('click', function () {
+                            const couponCode = document.getElementById('couponCodeInput').value;
+                            console.log('copoun code is', couponCode);
+                            const totalprice = document.getElementById('Total').textContent.replace(/₹/g, '')
+                            console.log('totalprice', totalprice);
+                            let body = {};
+                            if (couponCode) {
+                                body = { couponCode, totalprice };
+                            } else {
+                                body = { totalprice };
+                            }
+                            fetch('/applycoupon', {
+                                method: 'POST',
+                                headers: {
+                                    'Content-Type': 'application/json'
+                                },
+                                body: JSON.stringify({ couponCode, totalprice })
+                            })
+                                .then(response => response.json())
+                                .then(data => {
+                                    if (data.error) {
+                                        alert(data.error);
+                                    } else {
+                                        const discountedPrice = data.discountedPrice || totalprice
+                                        console.log('Discounted price is', discountedPrice);
+                                        alert('Coupon applied successfully');
+
+                                        // Replace the total price with the discounted price
+                                        document.getElementById('Total').textContent = '₹' + discountedPrice.toFixed(2)
+                                        document.getElementById('RazorpayTotal').textContent = '₹' + discountedPrice.toFixed(2)
+
+                                        options.amount = discountedPrice * 100;
+                                    }
+                                })
+                                .catch(error => console.error('Error:', error));
+                        });
+
+
+
+                    </script>
+
+
+
 
 
 
@@ -247,8 +306,10 @@
 
                             let paymentMethod = document.querySelector('input[name="paymentMethod"]:checked').value;
 
+                            let totalPriceToPay = document.getElementById('Total').textContent.replace(/₹/g, '')
+
                             if (paymentMethod === "paypal") {
-                                let response = await fetch(`/payment/${totalamount}`);
+                                let response = await fetch(`/payment/${totalPriceToPay}`);
                                 let orderData = await response.json();
 
                                 var options = {

@@ -1,6 +1,7 @@
 const express = require('express')
 const router = express.Router()
 const adminController = require('../controllers/adminController')
+const couponController = require('../controllers/couponController')
 const multer = require('multer')
 
 
@@ -37,6 +38,9 @@ router.get('/orderstatusupdate/:orderid',adminController.orderstatusupdate)
 router.get('/editproduct/:productId',adminController.editproduct)
 router.post('/editproduct/:productId', upload.array('Image'),adminController.editproductpost)
 router.get('/deleteproduct/:productId',adminController.deleteproduct)
+router.get('/coupon',couponController.coupon)
+router.get('/addcoupon',couponController.addcoupon)
+router.post('/addcoupon',couponController.addcouponpost)
 
 
 

@@ -8,7 +8,7 @@ const nocache = require('nocache')
 const dotenv = require('dotenv');;
 dotenv.config();
 app.use(express.urlencoded({ extended: true }));
-
+app.use(express.json())
 app.use(nocache())
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static('public'));

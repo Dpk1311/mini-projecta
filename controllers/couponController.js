@@ -37,8 +37,8 @@ const addcouponpost = async (req, res) => {
 const applycoupon = async (req, res) => {
     let { couponCode, totalprice } = req.body;
 
-    console.log('code is', couponCode)
-    console.log('total is', totalprice);
+    // console.log('code is', couponCode)
+    // console.log('total is', totalprice);
     totalprice = totalprice.replace(/₹/g, ''); // remove ₹ 
     totalprice = parseFloat(totalprice); // convert to number
     const coupon = await couponSchema.findOne({ code: couponCode });

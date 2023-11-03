@@ -45,7 +45,11 @@ const UserSchema = new Schema({
     selectedAddress: [{
         type: Schema.Types.ObjectId,
         ref: 'address'
-    }] 
+    }],
+    wallet:{
+        type:Schema.Types.ObjectId,
+        ref: 'wallet'
+    }
 });
 
 const UserModel = new mongoose.model("User", UserSchema);

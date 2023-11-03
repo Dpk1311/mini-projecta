@@ -41,6 +41,7 @@ router.get('/deleteproduct/:productId',adminController.deleteproduct)
 router.get('/coupon',couponController.coupon)
 router.get('/addcoupon',couponController.addcoupon)
 router.post('/addcoupon',couponController.addcouponpost)
+// router.get('/stockmanagement',adminController)
 
 
 

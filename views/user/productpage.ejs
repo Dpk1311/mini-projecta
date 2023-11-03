@@ -36,49 +36,67 @@
     <body class="antialiased">
         <%- include('partials/navbar.ejs',user) %>
             <% if(productdisplay) { %>
-<% console.log('product ejs',productdisplay); %>
-
                 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-6">
                     <div class="flex flex-col md:flex-row -mx-4">
                         <div class="md:flex-1 px-4 img-magnifier-container">
                             <div x-data="{ image: 1 }" x-cloak>
-                                <div class="h-64 md:h-80 rounded-lg bg-gray-100 mb-4">
+                                <div class="h-auto  rounded-lg bg-gray-100 mb-4">
                                     <div x-show="image === 1"
-                                        class="h-64 md:h-80 rounded-lg bg-gray-100 mb-4 flex items-center justify-center">
+                                        class="h-2/3  rounded-lg bg-gray-100 mb-4 flex items-center justify-center">
                                         <img id="myimage" src="<%= productdisplay.Image[0] %>" alt="Image Alt Text"
-                                            class="w-full h-full object-cover" />
+                                            class="w-full h-full object-fill" />
                                     </div>
 
                                     <div x-show="image === 2"
-                                        class="h-64 md:h-80 rounded-lg bg-gray-100 mb-4 flex items-center justify-center">
-                                        <span class="text-5xl">    <img id="myimage" src="<%= productdisplay.Image[1] %>" alt="Image Alt Text"
-                                            class="w-full h-full object-cover" /></span>
+                                        class="h-2/3 rounded-lg bg-gray-100 mb-4 flex items-center justify-center">
+                                           <img id="myimage1" src="<%= productdisplay.Image[1] %>" alt="Image Alt Text"
+                                            class="w-full h-full object-fill" />
                                     </div>
 
                                     <div x-show="image === 3"
-                                        class="h-64 md:h-80 rounded-lg bg-gray-100 mb-4 flex items-center justify-center">
-                                        <span class="text-5xl">    <img id="myimage" src="" alt="Image Alt Text"
-                                            class="w-full h-full object-cover" /></span>
+                                        class="h-2/3 rounded-lg bg-gray-100 mb-4 flex items-center justify-center">
+                                           <img id="myimage2" src="<%= productdisplay.Image[2] %>" alt="Image Alt Text"
+                                            class="w-full h-full object-fill" />
                                     </div>
 
-                                    <div x-show="image === 4"<%= productdisplay.Image[2] %>
-                                        class="h-64 md:h-80 rounded-lg bg-gray-100 mb-4 flex items-center justify-center">
-                                        <span class="text-5xl">    <img id="myimage" src="<%= productdisplay.Image[3] %>" alt="Image Alt Text"
-                                            class="w-full h-full object-cover" /></span>
+                                    <div x-show="image === 4"
+                                        class="h-2/3 rounded-lg bg-gray-100 mb-4 flex items-center justify-center">
+                                          <img id="myimage3" src="<%= productdisplay.Image[3] %>" alt="Image Alt Text"
+                                            class="w-full h-full object-fill" />
                                     </div>
                                 </div>
 
                                 <div class="flex -mx-2 mb-4">
-                                    <template x-for="i in 4">
-                                        <div class="flex-1 px-2">
-                                            <button x-on:click="image = i"
-                                                :class="{ 'ring-2 ring-indigo-300 ring-inset': image === i }"
-                                                class="focus:outline-none w-full rounded-lg h-24 md:h-32 flex items-center justify-center" >
-                                                <span x-text="i" class="text-2xl"></span>
-                                            </button>
-                                        </div>
-                                    </template>
+                                    <div class="flex-1 px-2">
+                                        <button x-on:click="image = 1"
+                                            :class="{ 'ring-2 ring-indigo-300 ring-inset': image === 1 }"
+                                            class="focus:outline-none  rounded-lg  md:h-32 flex items-center justify-center bg-image h-32 w-32 ">
+                                            <img src="<%= productdisplay.Image[0] %>" class="object-fill h-32 w-32">
+                                        </button>
+                                    </div>
+                                    <div class="flex-1 px-2">
+                                        <button x-on:click="image = 2"
+                                            :class="{ 'ring-2 ring-indigo-300 ring-inset': image === 2 }"
+                                            class="focus:outline-none w-32 rounded-lg h-24 md:h-32 flex items-center justify-center bg-image">
+                                            <img src="<%= productdisplay.Image[1] %>" class="object-fill h-32 w-32">
+                                        </button>
+                                    </div>
+                                    <div class="flex-1 px-2">
+                                        <button x-on:click="image = 3"
+                                            :class="{ 'ring-2 ring-indigo-300 ring-inset': image === 3 }"
+                                            class="focus:outline-none w-32 rounded-lg h-24 md:h-32 flex items-center justify-center bg-image">
+                                            <img src="<%= productdisplay.Image[2] %>" class="object-fill h-32 w-32">
+                                        </button>
+                                    </div>
+                                    <div class="flex-1 px-2">
+                                        <button x-on:click="image = 4"
+                                            :class="{ 'ring-2 ring-indigo-300 ring-inset': image === 4 }"
+                                            class="focus:outline-none w-32 rounded-lg h-24 md:h-32 flex items-center justify-center bg-image">
+                                            <img src="<%= productdisplay.Image[3] %>" class="object-fill h-32 w-32">
+                                        </button>
+                                    </div>
                                 </div>
+                                
                             </div>
                         </div>
                         <div class="md:flex-1 px-4">
@@ -150,7 +168,10 @@
 </script>
 <script>
     /* Execute the magnify function */
-    magnify("myimage", 3);
+    magnify("myimage", 2);
+    magnify("myimage1", 2);
+    magnify("myimage2", 2);
+    magnify("myimage3", 2);
 
     function magnify(imgID, zoom) {
         let img, glass, w, h, bw;

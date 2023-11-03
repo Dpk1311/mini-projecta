@@ -7,6 +7,26 @@
     <link rel="stylesheet" href="dist/output.css">
     <script src="https://cdn.tailwindcss.com"></script>
     <title>OrderDetail</title>
+    <style>
+        .btn {
+            background-color: #4CAF50;
+            /* Green */
+            border: none;
+            color: white;
+            padding: 15px 32px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin: 4px 2px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .btn:hover {
+            background-color: #45a049;
+        }
+    </style>
 </head>
 
 <body>
@@ -17,106 +37,145 @@
                 <h1 class="text-3xl dark:text-white lg:text-4xl font-semibold leading-7 lg:leading-9 text-black">
                     Order Details</h1>
             </div>
-           
-                                    <div
-                                        class="flex flex-col justify-start items-start dark:bg-gray-800 bg-gray-50 px-4 py-4 md:py-6 md:p-6 xl:p-8 w-full">
-                                        <p
-                                            class="text-lg md:text-xl dark:text-white font-semibold leading-6 xl:leading-5 text-gray-800">
-                                            Order Histroy</p>
-                                            <% orderData.products.forEach((element)=> {%>
-                                                <%# console.log('prfoductejs',element); %>
-                                                       
-                                                            
-                                        <div
-                                            class="mt-4 md:mt-6 flex flex-col md:flex-row justify-start items-start md:items-center md:space-x-6 xl:space-x-8 w-full">
-                                            <div class="pb-4 md:pb-8 w-full md:w-40">
-                                                <img class="w-full hidden md:block" src="<%=element.product.Image %>" alt="orders" />
-                                                <img class="w-full md:hidden" src="<%=element.product.Image %>" alt="orders" />
-                                            </div>
-                                            <div 
-                                                class="border-b border-gray-200 md:flex-row flex-col flex justify-between items-start w-full pb-8 space-y-4 md:space-y-0">
-                                                <div class="w-full flex flex-col justify-start items-start space-y-8">
-                                                    <h3
-                                                        class="text-xl dark:text-white xl:text-2xl font-semibold leading-6 text-gray-800">
 
-                                                    </h3>
-                                                    <div class="flex justify-start items-start flex-col space-y-2">
-                                                        <p class="text-sm dark:text-white leading-none text-gray-800">
-                                                            <span class="dark:text-black text-black">Name:<%=element.product.Name %>
-                                                                
-                                                            </span>
+            <div
+                class="flex flex-col justify-start items-start dark:bg-gray-800 bg-gray-50 px-4 py-4 md:py-6 md:p-6 xl:p-8 w-full">
+                <div class="flex relative w-full mb-4">
+                    <p class="text-lg md:text-xl dark:text-white font-semibold leading-6 xl:leading-5 text-gray-800">
+                        Order Histroy</p>
+                    <% orderData.products.forEach((element)=> {%>
+                        <%# console.log('prfoductejs',element); %>
+                            <%# console.log('orferejs',orderData); %>
 
-                                                        </p>
-                                                        <p class="text-sm dark:text-white leading-none text-gray-800">
-                                                            <span class="dark:text-black text-black">Size: <%=element.product.Size %>
-                                                            </span>
-                                                        </p>
-                                                        <p class="text-sm dark:text-white leading-none text-gray-800">
-                                                            <span class="dark:text-black text-black">Brand:<%=element.product.Brand %> </span>
 
-                                                        </p>
-                                                    </div>
-                                                </div>
-                                                <div class="flex justify-between space-x-8 items-start w-full">
-                                                    <p class="text-base dark:text-white xl:text-lg leading-6">₹<%=element.product.Price %>
-                                                    </p>
-                                                    <p
-                                                        class="text-base dark:text-white xl:text-lg leading-6 text-gray-800">
-                                                        <%=element.quantity %>
-                                                    </p>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <% }) %>
-                                    </div>
+                </div>
 
-                                    <div
-                                        class="flex justify-center flex-col md:flex-row flex-col items-stretch w-full space-y-4 md:space-y-0 md:space-x-6 xl:space-x-8">
-                                        <div
-                                            class="flex flex-col px-4 py-6 md:p-6 xl:p-8 w-full bg-gray-50 dark:bg-gray-800 space-y-6">
-                                            <h3 class="text-xl dark:text-white font-semibold leading-5 text-gray-800">
-                                                Summary</h3>
-                                            <div
-                                                class="flex justify-center items-center w-full space-y-4 flex-col border-gray-200 border-b pb-4">
-                                                <div class="flex justify-between w-full">
-                                                    <p class="text-base dark:text-white leading-4 text-gray-800">
-                                                        Order Status</p>
-                                                    <p class="text-base dark:text-gray-300 leading-4 text-gray-600"><%=orderData.Status %>
-                                                    </p>
-                                                </div>
-                                                <div class="flex justify-between w-full">
-                                                    <p class="text-base dark:text-white leading-4 text-gray-800">
-                                                        Mode of Payment</p>
-                                                    <p class="text-base dark:text-gray-300 leading-4 text-gray-600"><%= orderData.paymentMethod%>
-                                                    </p>
-                                                </div>
-                                                
+                <div
+                    class="mt-4 md:mt-6 flex flex-col md:flex-row justify-start items-start md:items-center md:space-x-6 xl:space-x-8 w-full">
+                    <div class="pb-4 md:pb-8 w-full md:w-40">
+                        <img class="w-full hidden md:block" src="<%=element.product.Image[0] %>" alt="orders" />
+                        <img class="w-full md:hidden" src="<%=element.product.Image[0] %>" alt="orders" />
+                    </div>
+                    <div
+                        class="border-b border-gray-200 md:flex-row flex-col flex justify-between items-start w-full pb-8 space-y-4 md:space-y-0">
+                        <div class="w-full flex flex-col justify-start items-start space-y-8">
+                            <h3 class="text-xl dark:text-white xl:text-2xl font-semibold leading-6 text-gray-800">
 
-                                                <div class="flex justify-between items-center w-full">
-                                                    <p class="text-base dark:text-white leading-4 text-gray-800">
-                                                        Shipping Address</p>
-                                                    <p class="text-base dark:text-gray-300 leading-4 text-gray-600">
-                                                        <%= orderData.shippingAddress.street%>
-                                                        <br>
-                                                        <%= orderData.shippingAddress.city%>
-                                                        <br>
-                                                        <%= orderData.shippingAddress.state%>
-                                                        <br>
-                                                        <%= orderData.shippingAddress.pincode%>
-                                                    </p>
-                                                </div>
-                                            </div>
-                                            <div class="flex justify-between items-center w-full">
-                                                <p
-                                                    class="text-base dark:text-white font-semibold leading-4 text-gray-800">
-                                                    Total</p>
-                                                <p
-                                                    class="text-base dark:text-gray-300 font-semibold leading-4 text-gray-600">
-                                                    ₹<%= orderData.totalAmount %>
-                                                </p>
-                                            </div>
-                                        </div>
-                                    </div>
+                            </h3>
+                            <div class="flex justify-start items-start flex-col space-y-2">
+                                <p class="text-sm dark:text-white leading-none text-gray-800">
+                                    <span class="dark:text-black text-black">Name:<%=element.product.Name %>
+
+                                    </span>
+
+                                </p>
+                                <p class="text-sm dark:text-white leading-none text-gray-800">
+                                    <span class="dark:text-black text-black">Size: <%=element.product.Size %>
+                                    </span>
+                                </p>
+                                <p class="text-sm dark:text-white leading-none text-gray-800">
+                                    <span class="dark:text-black text-black">Brand:<%=element.product.Brand %> </span>
+
+                                </p>
+                            </div>
+                        </div>
+                        <div class="flex justify-between space-x-8 items-start w-full">
+                            <p class="text-base dark:text-white xl:text-lg leading-6">₹
+                                <%=element.product.Price %>
+                            </p>
+                            <p class="text-base dark:text-white xl:text-lg leading-6 text-gray-800">
+                                <%=element.quantity %>
+                            </p>
+                        </div>
+                    </div>
+                    <% }) %>
+
+                </div>
+                <span id="status">
+                    <% if( orderData.Status==="Order Delivered" ){%>
+                        <button id="rebtn" class="btn absolute right-20 font-bold rounded">Return</button>
+                        <%} else if(orderData.Status === "Order Returned") {%>
+                            <button class="btn absolute right-20 font-bold rounded bg-orange-500 hover:bg-orange-400">Returned</button>
+                            <% }else { %>
+                                <button class="btn absolute right-20 font-bold rounded hidden">Return</button>
+                           <% } %>
+                </span>
+
+
+            </div>
+
+            <div
+                class="flex justify-center flex-col md:flex-row items-stretch w-full space-y-4 md:space-y-0 md:space-x-6 xl:space-x-8">
+                <div class="flex flex-col px-4 py-6 md:p-6 xl:p-8 w-full bg-gray-50 dark:bg-gray-800 space-y-6">
+                    <h3 class="text-xl dark:text-white font-semibold leading-5 text-gray-800">
+                        Summary</h3>
+                    <div
+                        class="flex justify-center items-center w-full space-y-4 flex-col border-gray-200 border-b pb-4">
+                        <div class="flex justify-between w-full">
+                            <p class="text-base dark:text-white leading-4 text-gray-800">
+                                Order Status</p>
+                            <p class="text-base dark:text-gray-300 leading-4 text-gray-600">
+                                <%=orderData.Status %>
+                            </p>
+                        </div>
+                        <div class="flex justify-between w-full">
+                            <p class="text-base dark:text-white leading-4 text-gray-800">
+                                Mode of Payment</p>
+                            <p class="text-base dark:text-gray-300 leading-4 text-gray-600">
+                                <%= orderData.paymentMethod%>
+                            </p>
+                        </div>
+
+
+                        <div class="flex justify-between items-center w-full">
+                            <p class="text-base dark:text-white leading-4 text-gray-800">
+                                Shipping Address</p>
+                            <p class="text-base dark:text-gray-300 leading-4 text-gray-600">
+                                <%= orderData.shippingAddress.street%>
+                                    <br>
+                                    <%= orderData.shippingAddress.city%>
+                                        <br>
+                                        <%= orderData.shippingAddress.state%>
+                                            <br>
+                                            <%= orderData.shippingAddress.pincode%>
+                            </p>
+                        </div>
+                    </div>
+                    <div class="flex justify-between items-center w-full">
+                        <p class="text-base dark:text-white font-semibold leading-4 text-gray-800">
+                            Total</p>
+                        <p id="totalAmount" class="text-base dark:text-gray-300 font-semibold leading-4 text-gray-600">
+                            ₹<%= orderData.totalAmount %>
+                        </p>
+                    </div>
+                </div>
+            </div>
 </body>
+
+
+<script>
+    const button = document.getElementById('rebtn');
+    const totalAmount = document.getElementById('totalAmount').textContent.replace(/₹/g, '')
+    console.log('totalAmount', totalAmount);
+    button.addEventListener('click', function () {
+        fetch(`/walletadd/${totalAmount}`, {
+            method: 'get',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        })
+            .then(response => response.json())
+            .then(data => {
+                console.log(data);
+                button.innerHTML = "Returned"
+                button.style.backgroundColor = "rgb(223,33,33)"
+
+            })
+            .catch(error => console.log('Error:', error));
+    });
+
+
+
+</script>
 
 </html>

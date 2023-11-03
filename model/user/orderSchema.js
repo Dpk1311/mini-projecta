@@ -41,8 +41,8 @@ const orderSchema = new Schema({
         default: Date.now
     },
     Status:{
+        type: String,
         default: 'OrderPending',
-        type: String
     }
 });
 

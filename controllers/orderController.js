@@ -98,7 +98,7 @@ const orderhistory = async (req, res) => {
             .populate({
                 path: 'shippingAddress',
                 model: 'address', // Replace with your address model name
-            });
+            }); 
 
         console.log('orderdata is', orderData);
 

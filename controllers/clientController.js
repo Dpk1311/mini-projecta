@@ -4,7 +4,7 @@ const { CategoryModel } = require('../model/admin/categorySchema')
 const { productModel } = require('../model/admin/productSchema')
 const { addressModel } = require('../model/user/addressSchema')
 const bcrypt = require('bcrypt')
-
+const walletModel = require('../model/user/walletSchema')
 
 //  to generate a random OTP
 function generateOTP() {
@@ -16,9 +16,26 @@ const home = async (req, res) => {
 
         const user = req.session.user
         // console.log('user home',user);
-        const categorycollection = await CategoryModel.find()
-        // console.log(categorycollection);
-        res.render('user/home', { categorycollection, user });
+        if (user) {
+            const userId = req.session.user._id
+            const categorycollection = await CategoryModel.find()
+            // console.log(categorycollection);
+
+            const Wallet = await walletModel.findOne({ userId: userId })
+
+            if (!Wallet) {
+                const newwallet = new walletModel({ userId: userId, balance: 0 })
+                await newwallet.save()
+            }
+            console.log('new wallet created');
+
+            res.render('user/home', { categorycollection, user });
+        }
+        else {
+            const categorycollection = await CategoryModel.find()
+            const user = req.session.invalid
+            res.render('user/home', { categorycollection, user })
+        }
     } catch (error) {
         console.error(error);
         res.status(500).send('Internal Server Error');
@@ -29,7 +46,7 @@ const login = (req, res) => {
     if (req.session.invalid) {
         req.session.invalid = false
         return res.render('user/login', { msg: req.session.errormsg || '' })
-    } 
+    }
     else {
         res.render('user/login', { msg: '' })
     }
@@ -44,7 +61,7 @@ const loginpost = async (req, res) => {
             req.session.invalid = true;
             req.session.errormsg = "Incorrect Email";
             return res.redirect('/login');
-        } else if (user.block) { 
+        } else if (user.block) {
             req.session.invalid = true;
             req.session.errormsg = "User is Blocked";
             return res.redirect('/login');
@@ -315,7 +332,7 @@ const editpost = async (req, res) => {
         const userId = req.session.user._id
         console.log('userid', userId);
         const user = await UserModel.findById(userId)
-        console.log('user is', user);
+        // console.log('user is', user);
 
         user.name = req.body.name || user.name
         user.email = req.body.email || user.email
@@ -355,7 +372,7 @@ const editaddresspost = async (req, res) => {
         const userId = req.session.user._id;
         console.log('userid', userId);
         const user = await UserModel.findById(userId).populate('address');
-        console.log('user is', user);
+        // console.log('user is', user);
 
         const addressId = req.params.addressId;
         console.log('addressid is', addressId);
@@ -454,7 +471,7 @@ const addaddresspost = async (req, res) => {
 }
 
 const productpage = async (req, res) => {
-    const itemid = req.query.product_Id 
+    const itemid = req.query.product_Id
     const user = req.session.user
     const productdisplay = await productModel.findById(itemid)
     res.render('user/productpage', { productdisplay, user })
@@ -483,7 +500,7 @@ const productsort = async (req, res) => {
 
     productModel.find().sort({ [sortBy]: order })
         .then(products => {
-            console.log('products are',products);
+            console.log('products are', products);
             res.json(products);
         })
         .catch(err => {
@@ -492,22 +509,24 @@ const productsort = async (req, res) => {
         });
 }
 
-const productsearch = async (req,res)=>{
+const productsearch = async (req, res) => {
     const { searchQuery } = req.query;
     const user = req.session.user
-    console.log('search',searchQuery);
-    try{
+    console.log('search', searchQuery);
+    try {
         if (!searchQuery) {
             res.redirect('/product_shirts');
             return;
         }
-        const  productcollection = await productModel.find({ Name: { $regex: searchQuery, $options: 'i' } });
-        res.render('user/product_shirts', { productcollection,user })
+        const productcollection = await productModel.find({ Name: { $regex: searchQuery, $options: 'i' } });
+        res.render('user/product_shirts', { productcollection, user })
     }
-    catch(error){
+    catch (error) {
         console.error(error);
     }
 }
+
+
 
 
 

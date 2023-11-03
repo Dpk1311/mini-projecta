@@ -69,7 +69,7 @@
 															<div class="flex items-center">
 																<div class="flex-shrink-0 w-10 h-10">
 																	<img class="w-full h-full rounded-full"
-																		src="<%= item.product.Image %>"
+																		src="<%= item.product.Image[0] %>"
 																		alt="photos of products" />
 																</div>
 																<div class="ml-3">
@@ -116,59 +116,72 @@
 																	</svg>
 																</a>
 																<%# console.log('productssssssss',product.Status); %>
-																<% if(product.Status === 'OrderPending'){ %>
-																<a href="/orderhistory?cancelOrderId=<%= product._id %>"
-																	class="box-border relative inline-flex items-center justify-center w-auto px-8 py-3 overflow-hidden font-bold text-white transition-all duration-300 bg-indigo-600 rounded-md cursor-pointer group ring-offset-2 ring-1 ring-indigo-300 ring-offset-indigo-200 hover:ring-offset-indigo-500 ease focus:outline-none ml-4"
-																	onclick="">
-																	<span
-																		class="absolute bottom-0 right-0 w-8 h-20 -mb-8 -mr-5 transition-all duration-300 ease-out transform rotate-45 translate-x-1 bg-white opacity-10 group-hover:translate-x-0"></span>
-																	<span
-																		class="absolute top-0 left-0 w-20 h-8 -mt-1 -ml-12 transition-all duration-300 ease-out transform -rotate-45 -translate-x-1 bg-white opacity-10 group-hover:translate-x-0"></span>
-																	<span
-																		class="relative z-20 flex items-center text-sm">
-																		Cancel Order
-																	</span>
-																</a>
-																<% }else if(product.Status === 'Order Shipped'){%>
-																	<a
-																		class="box-border relative inline-flex items-center justify-center w-auto px-8 py-3 overflow-hidden font-bold text-white transition-all duration-300 bg-indigo-600 rounded-md cursor-pointer group ring-offset-2 ring-1 ring-indigo-300 ring-offset-indigo-200 hover:ring-offset-indigo-500 ease focus:outline-none ml-4"
-																		onclick="">
-																		<span
-																			class="absolute bottom-0 right-0 w-8 h-20 -mb-8 -mr-5 transition-all duration-300 ease-out transform rotate-45 translate-x-1 bg-white opacity-10 group-hover:translate-x-0"></span>
-																		<span
-																			class="absolute top-0 left-0 w-20 h-8 -mt-1 -ml-12 transition-all duration-300 ease-out transform -rotate-45 -translate-x-1 bg-white opacity-10 group-hover:translate-x-0"></span>
-																		<span
-																			class="relative z-20 flex items-center text-sm">
-																			 Order Shipped
-																		</span>
-																	</a>
-																	<%} else if(product.Status === 'Order Delivered'){ %>
-																		<a
-																		class="box-border relative inline-flex items-center justify-center w-auto px-8 py-3 overflow-hidden font-bold text-white transition-all duration-300 bg-indigo-600 rounded-md cursor-pointer group ring-offset-2 ring-1 ring-indigo-300 ring-offset-indigo-200 hover:ring-offset-indigo-500 ease focus:outline-none ml-4"
-																		onclick="">
-																		<span
-																			class="absolute bottom-0 right-0 w-8 h-20 -mb-8 -mr-5 transition-all duration-300 ease-out transform rotate-45 translate-x-1 bg-white opacity-10 group-hover:translate-x-0"></span>
-																		<span
-																			class="absolute top-0 left-0 w-20 h-8 -mt-1 -ml-12 transition-all duration-300 ease-out transform -rotate-45 -translate-x-1 bg-white opacity-10 group-hover:translate-x-0"></span>
-																		<span
-																			class="relative z-20 flex items-center text-sm">
-																			 Order Delivered
-																		</span>
-																	</a>
-																<% }else{ %>
-																	<a href="#"
-																		class="box-border relative inline-flex items-center justify-center w-auto px-8 py-3 overflow-hidden font-bold text-white transition-all duration-300 bg-indigo-600 rounded-md cursor-pointer group ring-offset-2 ring-1 ring-indigo-300 ring-offset-indigo-200 hover:ring-offset-indigo-500 ease focus:outline-none ml-4"
-																		>
-																		<span
-																			class="absolute bottom-0 right-0 w-8 h-20 -mb-8 -mr-5 transition-all duration-300 ease-out transform rotate-45 translate-x-1 bg-white opacity-10 group-hover:translate-x-0"></span>
-																		<span
-																			class="absolute top-0 left-0 w-20 h-8 -mt-1 -ml-12 transition-all duration-300 ease-out transform -rotate-45 -translate-x-1 bg-white opacity-10 group-hover:translate-x-0"></span>
-																		<span
-																			class="relative z-20 flex items-center text-sm">
-																			Order Cancelled
-																		</span>
-																	</a>
-																	<% } %>
+																	<% if(product.Status==='OrderPending' ){ %>
+																		<a href="/orderhistory?cancelOrderId=<%= product._id %>"
+																			class="box-border relative inline-flex items-center justify-center w-auto px-8 py-3 overflow-hidden font-bold text-white transition-all duration-300 bg-indigo-600 rounded-md cursor-pointer group ring-offset-2 ring-1 ring-indigo-300 ring-offset-indigo-200 hover:ring-offset-indigo-500 ease focus:outline-none ml-4"
+																			onclick="">
+																			<span
+																				class="absolute bottom-0 right-0 w-8 h-20 -mb-8 -mr-5 transition-all duration-300 ease-out transform rotate-45 translate-x-1 bg-white opacity-10 group-hover:translate-x-0"></span>
+																			<span
+																				class="absolute top-0 left-0 w-20 h-8 -mt-1 -ml-12 transition-all duration-300 ease-out transform -rotate-45 -translate-x-1 bg-white opacity-10 group-hover:translate-x-0"></span>
+																			<span
+																				class="relative z-20 flex items-center text-sm">
+																				Cancel Order
+																			</span>
+																		</a>
+																		<% }else if(product.Status==='Order Shipped'
+																			){%>
+																			<a class="box-border relative inline-flex items-center justify-center w-auto px-8 py-3 overflow-hidden font-bold text-white transition-all duration-300 bg-indigo-600 rounded-md cursor-pointer group ring-offset-2 ring-1 ring-indigo-300 ring-offset-indigo-200 hover:ring-offset-indigo-500 ease focus:outline-none ml-4"
+																				onclick="">
+																				<span
+																					class="absolute bottom-0 right-0 w-8 h-20 -mb-8 -mr-5 transition-all duration-300 ease-out transform rotate-45 translate-x-1 bg-white opacity-10 group-hover:translate-x-0"></span>
+																				<span
+																					class="absolute top-0 left-0 w-20 h-8 -mt-1 -ml-12 transition-all duration-300 ease-out transform -rotate-45 -translate-x-1 bg-white opacity-10 group-hover:translate-x-0"></span>
+																				<span
+																					class="relative z-20 flex items-center text-sm">
+																					Order Shipped
+																				</span>
+																			</a>
+																			<%} else
+																				if(product.Status==='Order Delivered' ){
+																				%>
+																				<a class="box-border relative inline-flex items-center justify-center w-auto px-8 py-3 overflow-hidden font-bold text-white transition-all duration-300 bg-green-800 rounded-md cursor-pointer group ring-offset-2 ring-1 ring-indigo-300 ring-offset-indigo-200 hover:ring-offset-indigo-500 ease focus:outline-none ml-4"
+																					onclick="">
+																					<span
+																						class="absolute bottom-0 right-0 w-8 h-20 -mb-8 -mr-5 transition-all duration-300 ease-out transform rotate-45 translate-x-1 bg-white opacity-10 group-hover:translate-x-0"></span>
+																					<span
+																						class="absolute top-0 left-0 w-20 h-8 -mt-1 -ml-12 transition-all duration-300 ease-out transform -rotate-45 -translate-x-1 bg-white opacity-10 group-hover:translate-x-0"></span>
+																					<span
+																						class="relative z-20 flex items-center text-sm">
+																						Order Delivered
+																					</span>
+																				</a>
+
+																				<% }else if(product.Status==='Order Returned' ){ %>
+																					<a class="box-border relative inline-flex items-center justify-center w-auto px-8 py-3 overflow-hidden font-bold text-white transition-all duration-300 bg-red-700 rounded-md cursor-pointer group ring-offset-2 ring-1 ring-indigo-300 ring-offset-indigo-200 hover:ring-offset-indigo-500 ease focus:outline-none ml-4">
+																						<span
+																							class="absolute bottom-0 right-0 w-8 h-20 -mb-8 -mr-5 transition-all duration-300 ease-out transform rotate-45 translate-x-1 bg-white opacity-10 group-hover:translate-x-0"></span>
+																						<span
+																							class="absolute top-0 left-0 w-20 h-8 -mt-1 -ml-12 transition-all duration-300 ease-out transform -rotate-45 -translate-x-1 bg-white opacity-10 group-hover:translate-x-0"></span>
+																						<span
+																							class="relative z-20 flex items-center text-sm">
+																							Order Returned
+																						</span>
+																					</a>
+																					<% }else{ %>
+																						<a href="#"
+																						class="box-border relative inline-flex items-center justify-center w-auto px-8 py-3 overflow-hidden font-bold text-white transition-all duration-300 bg-red-700 rounded-md cursor-pointer group ring-offset-2 ring-1 ring-indigo-300 ring-offset-indigo-200 hover:ring-offset-indigo-500 ease focus:outline-none ml-4">
+																						<span
+																							class="absolute bottom-0 right-0 w-8 h-20 -mb-8 -mr-5 transition-all duration-300 ease-out transform rotate-45 translate-x-1 bg-white opacity-10 group-hover:translate-x-0"></span>
+																						<span
+																							class="absolute top-0 left-0 w-20 h-8 -mt-1 -ml-12 transition-all duration-300 ease-out transform -rotate-45 -translate-x-1 bg-white opacity-10 group-hover:translate-x-0"></span>
+																						<span
+																							class="relative z-20 flex items-center text-sm">
+																							Order Cancelled
+																						</span>
+																					</a>
+
+																						<% } %>
 															</div>
 														</td>
 													</tr>

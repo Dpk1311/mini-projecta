@@ -10,112 +10,106 @@
     <script src="https://cdn.tailwindcss.com"></script>
 
     <title>Document</title>
+    <style>
+        .container {
+            position: relative;
+        }
+
+        .section-heading {
+            font-size: 2em;
+            color: #333;
+            text-align: center;
+            text-transform: uppercase;
+            font-weight: bold;
+            letter-spacing: 2px;
+        }
+
+        .btn {
+            background-color: #4CAF50;
+            /* Green */
+            border: none;
+            color: white;
+            padding: 15px 32px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin: 4px 2px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .btn:hover {
+            background-color: #45a049;
+        }
+    </style>
 </head>
 
 <body>
     <%- include('adminpartials/navbar') %>
-
-
-
-        <section class="relative py-16 bg-blueGray-50">
-            <div class="w-full mb-12 px-4">
-                <div
-                    class="relative flex flex-col min-w-0 break-words w-full mb-6 shadow-lg rounded bg-pink-900 text-white">
-                    <div class="rounded-t mb-0 px-4 py-3 border-0">
-                        <div class="flex flex-wrap items-center">
-                            <div class="relative w-full px-4 max-w-full flex-grow flex-1 ">
-                                <h3 class="font-semibold text-lg text-white">Category Management</h3>
-                            </div>
-                            <div class="relative w-full px-4 max-w-full flex-grow flex-1 text-right">
-                                <!-- Button goes here -->
-                                <button
-                                    class="middle none center rounded-lg bg-blue-500 py-3 px-6 font-sans text-xs font-bold uppercase text-white shadow-md shadow-blue-500/20 transition-all hover:shadow-lg hover:shadow-blue-500/40 focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
-                                    data-ripple-light="true">
-                                    <a href="/addcategory">Add Category</a>
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="block w-full overflow-x-auto">
-                        <table class="items-center w-full bg-transparent border-collapse">
-                            <thead>
-                                <tr>
-                                    <th
-                                        class="px-6 align-middle border border-solid py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left bg-pink-800 text-pink-300 border-pink-700">
-                                        Name</th>
-                                    <th
-                                        class="px-6 align-middle border border-solid py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left bg-pink-800 text-pink-300 border-pink-700">
-                                        Description</th>
-                                    <th
-                                        class="px-6 align-middle border border-solid py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left bg-pink-800 text-pink-300 border-pink-700">
-                                        gender</th>
-                                    <th
-                                        class="px-6 align-middle border border-solid py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left bg-pink-800 text-pink-300 border-pink-700">
-                                        image</th>
-                                    <th
-                                        class="px-6 align-middle border border-solid py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left bg-pink-800 text-pink-300 border-pink-700">
-                                        status</th>
-                                    <th
-                                        class="px-6 align-middle border border-solid py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left bg-pink-800 text-pink-300 border-pink-700">
-                                        created at</th>
-                                </tr>
-                            </thead>
-
-                            <tbody>
-                                <% category.forEach((item)=> {%>
-                                    <tr>
-
-                                        <th
-                                            class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-left flex items-center">
-                                            <span class="ml-3 font-bold text-white">
-                                                <%= item.Name %>
-                                            </span>
-                                        </th>
-                                        <td
-                                            class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
-                                            <span class="ml-3 font-bold text-white">
-                                                <%= item.Description %>
-                                            </span>
-                                        </td>
-                                        <td
-                                            class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
-                                            <span class="ml-3 font-bold text-white">
-                                                <%= item.gender %>
-                                            </span>
-
-                                        </td>
-                                        <td
-                                            class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
-                                            <div class="flex">
-                                                <img class="w-20 rounded-full h-20 object-fill" src="<%= item.image %>">
-                                            </div>
-                                        </td>
-                                        <td
-                                            class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
-                                            <div class="flex items-center">
-                                                <span class="ml-3 font-bold text-white">
-                                                    <%= item.status %>
-                                                </span>
-
-                                            </div>
-                                        </td>
-                                        <th
-                                            class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-left flex items-center">
-                                            <span class="ml-3 font-bold text-white">
-                                                <%= item.created_at %>
-                                            </span>
-                                        </th>
-
-
-                                    </tr>
-                                    <% }) %>
-                            </tbody>
-
-                        </table>
-                    </div>
-                </div>
+        <section class="container mx-auto p-6 font-mono">
+            <div class="flex justify-between items-center mb-4">
+                <h1 class="section-heading">Category Management</h1>
+                <button class="btn"><a href="/addcategory">Add Category</a></button>
             </div>
+            <% category.forEach((item)=> {%>
+                <div class="w-full mb-8 overflow-hidden rounded-lg shadow-md">
+                    <div class="w-full overflow-x-auto">
+                      <div class="flex flex-wrap">
+                        <div class="w-full">
+                          <div class="flex items-center text-sm">
+                            <div class="relative w-32 h-48 mr-3 md:block">
+                              <img class="object-cover w-full h-full " src="<%= item.image %>" alt="" loading="lazy" />
+                              <div class="absolute inset-0 rounded-full shadow-inner" aria-hidden="true"></div>
+                            </div>
+                            <div>
+                              <p class="font-semibold text-black mb-2">Name: <%= item.Name %></p>
+                              <p class="text-xs text-gray-600 mb-2">
+                                <%= item.Description %>
+                              </p>
+                            </div>
+                          </div>
+                          <div class="flex justify-between px-4 py-3">
+                            <div>
+                              <p class="text-sm mb-2">Gender</p>
+                              <p class="text-ms font-semibold mb-2">
+                                <%= item.gender %>
+                              </p>
+                            </div>
+                            <div>
+                              <p class="text-sm mb-2">Status</p>
+                              <p class="text-xs mb-2">
+                                <span class="px-2 py-1 font-semibold leading-tight text-green-700 bg-green-100 rounded-sm">
+                                  <%= item.status %>
+                                </span>
+                              </p>
+                            </div>
+                            <div>
+                              <p class="text-sm mb-2">Created Date</p>
+                              <p class="text-sm mb-2">
+                                <% let date=new Date(item.created_at); let formattedDate=date.getDate() + '-' + (date.getMonth() + 1) + '-' + date.getFullYear(); %>
+                                <%= formattedDate %>
+                              </p>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  
+                <%}); %>
         </section>
+
+
+
+
+
+
+
+
+
+
+
 </body>
 
 </html>

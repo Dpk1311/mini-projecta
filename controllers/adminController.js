@@ -226,8 +226,9 @@ const categorymanagement = async (req, res) => {
 }
 
 
-const addcategory = (req, res) => {
-    res.render('admin/addcategory')
+const addcategory = async (req, res) => {
+    const category = await CategoryModel.find();
+    res.render('admin/addcategory', { category })
 }
 
 

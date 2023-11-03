@@ -28,7 +28,8 @@ const productSchema = new Schema({
         required: true
     },
     Category: {
-        type: String,
+        type: Schema.Types.ObjectId,
+        ref: 'Category',
         required: true
     },
     Size: {
@@ -36,9 +37,13 @@ const productSchema = new Schema({
         required: true
     },
     Quantity: {
-        type: String,
+        type: Number,
         required: true
-    }
+    },
+    Instock:{
+        type: Boolean,
+        default: true
+    },
 
 })
 

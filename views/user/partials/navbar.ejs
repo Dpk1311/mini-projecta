@@ -38,19 +38,26 @@
     <div id="userDropdown" class="hidden absolute right-0 mt-2 w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none">
       <!-- Dropdown content here -->
       <a href="/userprofile" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900">Profile</a>
-      <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900">Settings</a>
+      <a href="/wallet" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900">Wallet</a>
       <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900">Sign out</a>
     </div>
   </div>
+  <button class="bg-cyan-400 text-white font-[Poppins] duration-500 px-6 py-2 mx-4 hover:bg-cyan-500 rounded hidden ">
+    <a href="/login">LOGIN</a>
+  </button>
+  <button class="bg-cyan-400 text-white font-[Poppins] duration-500 px-6 py-2 mx-4 hover:bg-cyan-500 rounded">
+    <a href="/logout">LOGOUT</a>
+  </button>
 <%  }else{ %>
   <button class="bg-cyan-400 text-white font-[Poppins] duration-500 px-6 py-2 mx-4 hover:bg-cyan-500 rounded ">
     <a href="/login">LOGIN</a>
   </button>
-  <% } %>
+  <button class="bg-cyan-400 text-white font-[Poppins] duration-500 px-6 py-2 mx-4 hover:bg-cyan-500 rounded hidden">
+    <a href="/logout">LOGOUT</a>
+  </button>
+  <% } %>  
     
-    <button class="bg-cyan-400 text-white font-[Poppins] duration-500 px-6 py-2 mx-4 hover:bg-cyan-500 rounded ">
-      <a href="/logout">LOGOUT</a>
-    </button>
+    
   </ul>
 </nav>
 

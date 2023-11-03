@@ -2,36 +2,40 @@
 <html>
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="dist/output.css">
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@splidejs/splide@3.0.9/dist/js/splide.min.js"></script>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.css" />
-    <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
-    <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="dist/output.css">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@splidejs/splide@3.0.9/dist/js/splide.min.js"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.css" />
+  <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
+  <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
 </head>
 <style>
-    .carousel-wrapper {
-        transition: transform 0.3s ease;
-    }
+  .carousel-wrapper {
+    transition: transform 0.3s ease;
+  }
 
-    .carousel-item {
-        min-width: 100%;
-    }
+  .carousel-item {
+    min-width: 100%;
+  }
 
-    .carousel-container {
-        max-width: 100%;
-        overflow: hidden;
-    }
+  .carousel-container {
+    max-width: 100%;
+    overflow: hidden;
+  }
 </style>
 
 
 <body class="bg-white">
-    <%- include('partials/navbar.ejs',{ user: user }) %>
-    <%- include('partials/banner.ejs') %>
-    <%- include('partials/cards.ejs',{categorycollection}) %>
-    
+  <% if(!user){%>
+
+    <%- include('partials/navbar.ejs') %>
+      <%}else { %>
+        <%- include('partials/navbar.ejs',{ user: user }) %>
+          <% } %>
+            <%- include('partials/banner.ejs') %>
+              <%- include('partials/cards.ejs',{categorycollection}) %>
 
 
 
@@ -41,24 +45,25 @@
 
 
 
-        
-    <script src="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.js"></script>
-
-    <!-- Initialize Swiper -->
-    <script>
-    var swiper = new Swiper(".mySwiper", {
-      pagination: {
-        el: ".swiper-pagination",
-        type: "progressbar",
-      },
-      navigation: {
-        nextEl: ".swiper-button-next",
-        prevEl: ".swiper-button-prev",
-      },
-    });
 
 
-  </script>
+                <script src="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.js"></script>
+
+                <!-- Initialize Swiper -->
+                <script>
+                  var swiper = new Swiper(".mySwiper", {
+                    pagination: {
+                      el: ".swiper-pagination",
+                      type: "progressbar",
+                    },
+                    navigation: {
+                      nextEl: ".swiper-button-next",
+                      prevEl: ".swiper-button-prev",
+                    },
+                  });
+
+
+                </script>
 </body>
 
 </html>

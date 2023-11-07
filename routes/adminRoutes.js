@@ -42,6 +42,7 @@ router.get('/coupon',couponController.coupon)
 router.get('/addcoupon',couponController.addcoupon)
 router.post('/addcoupon',couponController.addcouponpost)
 // router.get('/stockmanagement',adminController)
+router.get('/usermanagement',adminController.usermanagement)
 
 
 

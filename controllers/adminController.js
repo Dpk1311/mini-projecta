@@ -31,18 +31,118 @@ const adminloginpost = async (req, res) => {
 
 const adminhome = async (req, res) => {
     try {
+        let currentDate = new Date();
 
-        console.log('1');
-        const check = await UserModel.find();
-        // console.log('check is',check);
-        const orderData = await OrderModel.find()
-        console.log('product is', orderData);
-        res.render('admin/adminhome', { check, orderData })
-    }
-    catch (error) {
-        console.error('error in loading');
-    }
+        // Get the last seven days
+        let lastSevenDays = [];
+        for (let i = 0; i < 7; i++) {
+            let day = new Date();
+            day.setDate(currentDate.getDate() - i);
+            lastSevenDays.push(day.toISOString().split('T')[0]);
+        }
 
+        let monthly = []
+        for (let i = 0; i < 31; i++) {
+            let day = new Date();
+            day.setDate(currentDate.getDate() - i);
+            monthly.push(day.toISOString().split('T')[0]);
+        }
+
+        // console.log(lastSevenDays);
+        const ordersPerDay = await OrderModel.aggregate([
+            {
+                $group: {
+                    _id: {
+                        year: { $year: "$orderDate" },
+                        month: { $month: "$orderDate" },
+                        day: { $dayOfMonth: "$orderDate" },
+                        hour: { $hour: "$orderDate" }
+                    },
+                    count: { $sum: 1 }
+                }
+            },
+            {
+                $project: {
+                    _id: 0,
+                    date: {
+                        $dateFromParts: {
+                            year: "$_id.year",
+                            month: "$_id.month",
+                            day: "$_id.day",
+                            hour: "$_id.hour"
+                        }
+                    },
+                    count: 1
+                }
+            },
+            {
+                $sort: { date: 1 }
+            }
+        ]);
+
+        console.log('ordersPerDay',ordersPerDay);
+
+        const dates = ordersPerDay.map((entry) => entry.date.toISOString().split('T')[0]);
+        const alldates = lastSevenDays.concat(dates);
+        const orderCounts = [];
+
+        alldates.forEach((element) => {
+            orderCounts.push(0); // Initialize counts for all dates to 0
+        });
+
+        ordersPerDay.forEach((entry) => {
+            const date = entry.date.toISOString().split('T')[0];
+            const index = alldates.indexOf(date);
+            if (index !== -1) {
+                // Update the count at the corresponding index
+                orderCounts[index] = entry.count;
+            }
+        });
+
+        console.log('orderCounts', orderCounts);
+
+        const totalOrdersandSales = [
+            {
+                $group: {
+                    _id: null,
+                    totalOrders: { $sum: 1 },
+                    totalSales: { $sum: "$totalAmount" },
+                },
+            },
+        ];
+
+        const user = await UserModel.find()
+        const totaluser = user.length
+
+        const order = await OrderModel.find()
+        
+
+        console.log('totaluser',totaluser);
+        const result = await OrderModel.aggregate(totalOrdersandSales)
+
+        if (result.length > 0) {
+            const { totalOrders, totalSales, totalUser } = result[0];
+            console.log(`Total number of orders: ${totalOrders}`);
+            console.log(`Total sales amount: ${totalSales}`);
+            res.render('admin/adminhome', { totalOrders, totalSales, lastSevenDays, monthly, orderCounts,totaluser,order });
+        } else {
+            console.log('No orders found.');
+            res.render('admin/adminhome', { totalOrders: 0, totalSales: 0 });
+        }
+    } catch (error) {
+        console.error('Error in loading:', error);
+        res.status(500).send('Internal Server Error');
+    }
+}
+
+
+
+
+
+const usermanagement = async (req, res) => {
+    const check = await UserModel.find();
+    // console.log('check is',check);
+    res.render('admin/Usermanagement', { check })
 }
 
 
@@ -52,7 +152,7 @@ const usersearch = async (req, res) => {
 
     try {
         if (!searchQuery) {
-            res.redirect('/adminhome');
+            res.redirect('/usermanagement');
             return;
         }
         const check = await UserModel.find({
@@ -62,7 +162,7 @@ const usersearch = async (req, res) => {
             ]
         });
         console.log(check);
-        res.render('admin/adminhome', { check });
+        res.render('admin/usermanagement', { check });
 
     } catch (error) {
         console.error(error);
@@ -194,7 +294,7 @@ const editproductpost = async (req, res) => {
         productData.Quantity = req.body.Quantity || productData.Quantity
 
         await productData.save()
-console.log('product updated');
+        console.log('product updated');
         res.redirect('/productmanagement')
     }
     catch (error) {
@@ -311,8 +411,12 @@ const orderstatusupdate = async (req, res) => {
         res.json({ success: false });
     }
 }
+
+
+
+
 module.exports = {
     adminlogin, adminloginpost, adminhome, productmanagement, addproduct, addproductpost, categorymanagement, addcategory, addcategorypost, usersearch,
-    userblock, userUnblock, ordermanagement, orderstatusupdate, editproduct, editproductpost, deleteproduct,
+    userblock, userUnblock, ordermanagement, orderstatusupdate, editproduct, editproductpost, deleteproduct, usermanagement
 }
 

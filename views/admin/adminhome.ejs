@@ -11,232 +11,235 @@
 
 <body class="bg-gray-100">
     <%- include('adminpartials/navbar') %>
-    <%# include('adminpartials/sidebar')  %>
+        <%# include('adminpartials/sidebar') %>
 
-        <div class="flex items-center justify-center">
-            <div class="w-full mx-auto py-16">
-                <!-- Buttons -->
-                <div class="bg-white px-6 py-4 my-3 w-11/12 mx-auto shadow-md rounded-md flex items-center">
-                    <div class="w-full text-center mx-auto">
-                        <button type="button"
-                            class="border border-gray-200 bg-gray-200 text-gray-700 rounded-md px-4 py-2 m-2 transition duration-500 ease select-none hover:bg-green-600 focus:outline-none focus:shadow-outline">
-                            <a href="/categorymanagement">Category Management</a>
-                        </button>
-                        <button type="button"
-                            class="border border-gray-200 bg-gray-200 text-gray-700 rounded-md px-4 py-2 m-2 transition duration-500 ease select-none hover:bg-green-600 focus:outline-none focus:shadow-outline">
-                            <a href="/productmanagement">Product Management</a>
-                        </button>
-                        <button type="button"
-                            class="border border-gray-200 bg-gray-200 text-gray-700 rounded-md px-4 py-2 m-2 transition duration-500 ease select-none hover:bg-red-600 focus:outline-none focus:shadow-outline">
-                            <a href="/ordermanagement">Order Management</a>
-                        </button>
-                        <button type="button"
-                            class="border border-gray-200 bg-gray-200 text-gray-700 rounded-md px-4 py-2 m-2 transition duration-500 ease select-none hover:bg-red-600 focus:outline-none focus:shadow-outline">
-                            <a href="/coupon">Coupon Management</a>
-                        </button>
-                        <button type="button"
-                            class="border border-gray-200 bg-gray-200 text-gray-700 rounded-md px-4 py-2 m-2 transition duration-500 ease select-none hover:bg-red-600 focus:outline-none focus:shadow-outline">
-                            <a href="/stockmanagement">Stock Management</a>
-                        </button>
-                        <button type="button"
-                            class="border border-gray-200 bg-gray-200 text-gray-700 rounded-md px-4 py-2 m-2 transition duration-500 ease select-none hover:bg-red-600 focus:outline-none focus:shadow-outline">
-                            <a href="/usermanagement">User Management</a>
-                        </button>
+            <div class="flex items-center justify-center">
+                <div class="w-full mx-auto py-16">
+                    <!-- Buttons -->
+                    <div class="bg-white px-6 py-4 my-3 w-11/12 mx-auto shadow-md rounded-md flex items-center">
+                        <div class="w-full text-center mx-auto">
+                            <button type="button"
+                                class="border border-gray-200 bg-gray-200 text-gray-700 rounded-md px-4 py-2 m-2 transition duration-500 ease select-none hover:bg-green-600 focus:outline-none focus:shadow-outline">
+                                <a href="/categorymanagement">Category Management</a>
+                            </button>
+                            <button type="button"
+                                class="border border-gray-200 bg-gray-200 text-gray-700 rounded-md px-4 py-2 m-2 transition duration-500 ease select-none hover:bg-green-600 focus:outline-none focus:shadow-outline">
+                                <a href="/productmanagement">Product Management</a>
+                            </button>
+                            <button type="button"
+                                class="border border-gray-200 bg-gray-200 text-gray-700 rounded-md px-4 py-2 m-2 transition duration-500 ease select-none hover:bg-red-600 focus:outline-none focus:shadow-outline">
+                                <a href="/ordermanagement">Order Management</a>
+                            </button>
+                            <button type="button"
+                                class="border border-gray-200 bg-gray-200 text-gray-700 rounded-md px-4 py-2 m-2 transition duration-500 ease select-none hover:bg-red-600 focus:outline-none focus:shadow-outline">
+                                <a href="/coupon">Coupon Management</a>
+                            </button>
+                            <button type="button"
+                                class="border border-gray-200 bg-gray-200 text-gray-700 rounded-md px-4 py-2 m-2 transition duration-500 ease select-none hover:bg-red-600 focus:outline-none focus:shadow-outline">
+                                <a href="/stockmanagement">Stock Management</a>
+                            </button>
+                            <button type="button"
+                                class="border border-gray-200 bg-gray-200 text-gray-700 rounded-md px-4 py-2 m-2 transition duration-500 ease select-none hover:bg-red-600 focus:outline-none focus:shadow-outline">
+                                <a href="/usermanagement">User Management</a>
+                            </button>
+                        </div>
                     </div>
+                    <!-- component -->
+                    <div class="flex">
+                        <div class="w-1/2 py-4 px-8 bg-white shadow-lg rounded-lg my-20 mx-7">
+                            <div>
+                                <h2 class="text-gray-800 text-3xl font-bold text-center">Total Orders</h2>
+                                <p class="mt-2 text-gray-600 text-lg font-semibold text-center">
+                                    <%= totalOrders %>
+                                </p>
+                            </div>
+
+                        </div>
+                        <div class="w-1/2 py-4 px-8 bg-white shadow-lg rounded-lg my-20 mx-7">
+                            <div>
+                                <h2 class="text-gray-800 text-3xl font-bold text-center">Total Sales</h2>
+                                <p class="mt-2 text-gray-600 text-lg font-semibold text-center">
+                                    ₹ <%= totalSales %>
+                                </p>
+                            </div>
+
+                        </div>
+                        <div class="w-1/2 py-4 px-8 bg-white shadow-lg rounded-lg my-20 mx-7">
+                            <div>
+                                <h2 class="text-gray-800 text-3xl font-bold text-center">Total Users</h2>
+                                <p class="mt-2 text-gray-600 text-lg font-semibold text-center">
+                                    <%= totaluser %>
+                                </p>
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <span id="orderCounts" hidden><%- orderCounts %></span>
+                    <span id="dates" hidden><%- lastSevenDays %></span>
+                    <span id="monthly" hidden><%- monthly %></span>
+
+                    <span id="Status" hidden> <%- order %></span>
+                    <% console.log(order.Status) %>
+
+                        <!-- Chart container -->
+                        <div class="bg-white p-3 shadow-sm rounded-sm mx-10">
+                            <div class="flex flex-row justify-between">
+                                <!-- First Chart -->
+                                <div class=" p-4  mx-auto w-2/4 shadow-md rounded-lg">
+                                    <p class="font-bold">Last 7 days order</p>
+                                    <canvas id="myChart1" class="w-full h-auto"></canvas>
+                                </div>
+
+                                <!-- Second Chart -->
+                                <div class=" p-4  mx-auto w-2/4 shadow-md rounded-lg">
+                                    <p class="font-bold">Last 30 days order</p>
+                                    <canvas id="myChart2" class="w-full h-auto"></canvas>
+                                </div>
+                                <!-- Third Chart -->
+                                <div class=" p-4   shadow-md rounded-lg">
+                                    <p class="font-bold">Order Chart 3</p>
+                                    <canvas id="myChart3"></canvas>
+                                </div>
+                            </div>
+                        </div>
+
+
                 </div>
-                <!-- component -->
-                <div class="flex">
-                    <div class="w-1/2 py-4 px-8 bg-white shadow-lg rounded-lg my-20 mx-7">
-                        <div>
-                            <h2 class="text-gray-800 text-3xl font-bold text-center">Total Orders</h2>
-                            <p class="mt-2 text-gray-600 text-lg font-semibold text-center">
-                                <%= totalOrders %>
-                            </p>
-                        </div>
-
-                    </div>
-                    <div class="w-1/2 py-4 px-8 bg-white shadow-lg rounded-lg my-20 mx-7">
-                        <div>
-                            <h2 class="text-gray-800 text-3xl font-bold text-center">Total Sales</h2>
-                            <p class="mt-2 text-gray-600 text-lg font-semibold text-center">
-                                ₹ <%= totalSales %>
-                            </p>
-                        </div>
-
-                    </div>
-                    <div class="w-1/2 py-4 px-8 bg-white shadow-lg rounded-lg my-20 mx-7">
-                        <div>
-                            <h2 class="text-gray-800 text-3xl font-bold text-center">Total Users</h2>
-                            <p class="mt-2 text-gray-600 text-lg font-semibold text-center">
-                                <%= totaluser %>
-                            </p>
-                        </div>
-
-                    </div>
-                </div>
-
-                <span id="orderCounts" hidden><%- orderCounts %></span>
-                <span id="dates" hidden><%- lastSevenDays %></span>
-                <span id="monthly" hidden><%- monthly %></span>
-
-                <span id="Status" hidden> <%- order %></span>
-                <% console.log(order.Status) %>
-
-                <!-- Chart container -->
-                <div class="bg-white p-3 shadow-sm rounded-sm mx-10">
-                    <div class="flex flex-row justify-between">
-                        <!-- First Chart -->
-                        <div class=" p-4  mx-auto w-2/4 shadow-md rounded-lg">
-                            <p class="font-bold">Last 7 days order</p>
-                            <canvas id="myChart1" class="w-full h-auto"></canvas>
-                        </div>
-
-                        <!-- Second Chart -->
-                        <div class=" p-4  mx-auto w-2/4 shadow-md rounded-lg">
-                            <p class="font-bold">Last 30 days order</p>
-                            <canvas id="myChart2" class="w-full h-auto"></canvas>
-                        </div>
-                        <!-- Third Chart -->
-                        <div class=" p-4   shadow-md rounded-lg">
-                            <p class="font-bold">Order Chart 3</p>
-                            <canvas id="myChart3"></canvas>
-                        </div>
-                    </div>
-                </div>
-
-
             </div>
-        </div>
 
-        <script>
-            const orderCounts = document.getElementById('orderCounts').textContent.split(',')
-            console.log(orderCounts);
-            let dates = document.getElementById('dates').textContent.split(',');
-            // console.log(dates);
-const Status = document.getElementById('Status').textContent
-console.log('Status',Status);
-
+            <script>
+                const orderCounts = document.getElementById('orderCounts').textContent.split(',')
+                console.log(orderCounts);
+                let dates = document.getElementById('dates').textContent.split(',');
+                // console.log(dates);
+                const Status = document.getElementById('Status').textContent
+                console.log('Status', Status);
 
 
-            const ctx = document.getElementById('myChart1');
-            const data = {
-                labels: dates,
-                datasets: [{
-                    label: 'Number of Orders',
-                    data: orderCounts,
-                    backgroundColor: [
-                        'rgba(255, 99, 132, 0.2)',
-                        'rgba(255, 159, 64, 0.2)',
-                        'rgba(255, 205, 86, 0.2)',
-                        'rgba(75, 192, 192, 0.2)',
-                        'rgba(54, 162, 235, 0.2)',
-                        'rgba(153, 102, 255, 0.2)',
-                        'rgba(201, 203, 207, 0.2)'
-                    ],
-                    borderColor: [
-                        'rgb(255, 99, 132)',
-                        'rgb(255, 159, 64)',
-                        'rgb(255, 205, 86)',
-                        'rgb(75, 192, 192)',
-                        'rgb(54, 162, 235)',
-                        'rgb(153, 102, 255)',
-                        'rgb(201, 203, 207)'
-                    ],
-                    borderWidth: 1
-                }]
-            };
 
-            const config = {
-                type: 'bar',
-                data: data,
-                options: {
-                    scales: {
-                        y: {
-                            beginAtZero: true,
+                const ctx = document.getElementById('myChart1');
+                const data = {
+                    labels: dates,
+                    datasets: [{
+                        label: 'Number of Orders',
+                        data: orderCounts,
+                        backgroundColor: [
+                            'rgba(255, 99, 132, 0.2)',
+                            'rgba(255, 159, 64, 0.2)',
+                            'rgba(255, 205, 86, 0.2)',
+                            'rgba(75, 192, 192, 0.2)',
+                            'rgba(54, 162, 235, 0.2)',
+                            'rgba(153, 102, 255, 0.2)',
+                            'rgba(201, 203, 207, 0.2)'
+                        ],
+                        borderColor: [
+                            'rgb(255, 99, 132)',
+                            'rgb(255, 159, 64)',
+                            'rgb(255, 205, 86)',
+                            'rgb(75, 192, 192)',
+                            'rgb(54, 162, 235)',
+                            'rgb(153, 102, 255)',
+                            'rgb(201, 203, 207)'
+                        ],
+                        borderWidth: 1
+                    }]
+                };
 
+                const config = {
+                    type: 'bar',
+                    data: data,
+                    options: {
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                ticks: {
+                                    max: Math.max(...orderCounts) // Set the max property to the maximum value in orderCounts
+                                }
+
+                            }
                         }
                     }
-                }
-            };
+                };
 
-            new Chart(ctx, config); // Create the chart
+                new Chart(ctx, config); // Create the chart
 
 
-            const monthly = document.getElementById('monthly').textContent.split(',')
-            console.log('monthly', monthly);
+                const monthly = document.getElementById('monthly').textContent.split(',')
+                console.log('monthly', monthly);
 
-            const chart2 = document.getElementById('myChart2');
-            const data1 = {
-                labels: monthly,
-                datasets: [{
-                    label: 'Number of Orders',
-                    data: orderCounts,
-                    backgroundColor: [
-                        'rgba(255, 99, 132, 0.2)',
-                        'rgba(255, 159, 64, 0.2)',
-                        'rgba(255, 205, 86, 0.2)',
-                        'rgba(75, 192, 192, 0.2)',
-                        'rgba(54, 162, 235, 0.2)',
-                        'rgba(153, 102, 255, 0.2)',
-                        'rgba(201, 203, 207, 0.2)'
-                    ],
-                    borderColor: [
-                        'rgb(255, 99, 132)',
-                        'rgb(255, 159, 64)',
-                        'rgb(255, 205, 86)',
-                        'rgb(75, 192, 192)',
-                        'rgb(54, 162, 235)',
-                        'rgb(153, 102, 255)',
-                        'rgb(201, 203, 207)'
-                    ],
-                    borderWidth: 2
-                }]
-            };
+                const chart2 = document.getElementById('myChart2');
+                const data1 = {
+                    labels: monthly,
+                    datasets: [{
+                        label: 'Number of Orders',
+                        data: orderCounts,
+                        backgroundColor: [
+                            'rgba(255, 99, 132, 0.2)',
+                            'rgba(255, 159, 64, 0.2)',
+                            'rgba(255, 205, 86, 0.2)',
+                            'rgba(75, 192, 192, 0.2)',
+                            'rgba(54, 162, 235, 0.2)',
+                            'rgba(153, 102, 255, 0.2)',
+                            'rgba(201, 203, 207, 0.2)'
+                        ],
+                        borderColor: [
+                            'rgb(255, 99, 132)',
+                            'rgb(255, 159, 64)',
+                            'rgb(255, 205, 86)',
+                            'rgb(75, 192, 192)',
+                            'rgb(54, 162, 235)',
+                            'rgb(153, 102, 255)',
+                            'rgb(201, 203, 207)'
+                        ],
+                        borderWidth: 2
+                    }]
+                };
 
-            const config1 = {
-                type: 'bar',
-                data: data1,
-                options: {
-                    scales: {
-                        y: {
-                            beginAtZero: true,
+                const config1 = {
+                    type: 'bar',
+                    data: data1,
+                    options: {
+                        scales: {
+                            y: {
+                                beginAtZero: true,
 
-                        },
+                            },
+                        }
                     }
-                }
-            };
+                };
 
-            new Chart(chart2, config1);
+                new Chart(chart2, config1);
 
-            const myChart3 = document.getElementById('myChart3')
-            const data3 = {
-                labels: [
-                    'Delivered',
-                    'Pending',
-                    'Cancelled',
-                    'Returned'
-                ],
-                datasets: [{
-                    label: 'My First Dataset',
-                    data: [300, 50, 100, 20],
-                    backgroundColor: [
-                        'rgb(0, 255, 0)',
-                        'rgb(54, 162, 235)',
-                        'rgb(255, 0, 0)',
-                        'rgb(255, 205, 86)',
-
+                const myChart3 = document.getElementById('myChart3')
+                const data3 = {
+                    labels: [
+                        'Delivered',
+                        'Pending',
+                        'Cancelled',
+                        'Returned'
                     ],
-                    hoverOffset: 4
-                }]
-            };
+                    datasets: [{
+                        label: 'My First Dataset',
+                        data: [300, 50, 100, 20],
+                        backgroundColor: [
+                            'rgb(0, 255, 0)',
+                            'rgb(54, 162, 235)',
+                            'rgb(255, 0, 0)',
+                            'rgb(255, 205, 86)',
 
-            const config3 = {
-                type: 'doughnut',
-                data: data3,
-            };
+                        ],
+                        hoverOffset: 4
+                    }]
+                };
 
-            new Chart(myChart3, config3)
-        </script>
+                const config3 = {
+                    type: 'doughnut',
+                    data: data3,
+                };
+
+                new Chart(myChart3, config3)
+            </script>
 </body>
 
 </html>

@@ -219,13 +219,15 @@ const checkout = async (req, res) => {
       subtotal += item.product.Price * item.quantity;
     }
 
+    let total = (subtotal+4.99).toFixed(2)
+
     const data = {
       user: user.name, // Include the user's name
       products: cartData.products, // Include the cart products
       selectedAddress: user.selectedAddress, // Include the selected address
     }
 
-    res.render('user/checkout', { user, data, subtotal })
+    res.render('user/checkout', { user, data, subtotal,total })
 
 
   }

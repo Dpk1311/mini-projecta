@@ -1,7 +1,68 @@
 const OrderModel = require('../model/user/orderSchema')
 const { UserModel } = require('../model/user/userSchema')
 const cartModel = require('../model/user/cartSchema');
+const PDFDocument = require('pdfkit')
+const fs = require('fs')
 
+
+
+const generateInvoiceWithPdfKit = (cartData,data) => {
+   
+    console.log('order.amount', cartData.totalAmount);
+
+    console.log('generateInvoiceWithPdfKit');
+    const doc = new PDFDocument();
+    const currentDate = new Date();
+    const formattedDate = currentDate.toISOString().split('T')[0];
+
+    const outputFilename = `invoice_${cartData._id}.pdf`;
+    const outputFilePath = `./public/invoices/${outputFilename}`;
+    const writeStream = fs.createWriteStream(outputFilePath);
+    doc.pipe(writeStream);
+
+    doc.info.Title = `Invoice ${cartData._id}`;
+    doc.info.Author = 'V A S T R A';
+
+    // const logoPath = 'public/uploads/VASTRA.png'; 
+    // doc.image(logoPath, 100, -30, { width: 350,height : 200 });
+
+    doc.fontSize(20).text('V A S T R A', { align: 'center' }).moveDown(0.5);
+    doc.fontSize(12).text(`Invoice Number: INV-${cartData._id}`).moveDown(0.5);
+    doc.fontSize(12).text(`Invoice Date: ${formattedDate}`).moveDown(0.5);
+    doc.fontSize(12).text(`Customer: ${data.user}`).moveDown(1);
+
+    doc.font('Helvetica-Bold');
+    doc.text('Name', 100, 200, { width: 200 });
+    doc.text('Quantity', 300, 200, { width: 100 });
+    doc.text('Unit Price', 350, 200, { width: 100 });
+    doc.text('Amount', 450, 200, { width: 100 });
+
+    const productsData = data.products;
+    let y = 240;
+
+    doc.font('Helvetica');
+    productsData.forEach((product) => {
+        doc.text(product.product.Name, 100, y, { width: 200 });
+        doc.text(product.quantity.toString(), 300, y, { width: 50 });
+        doc.text(product.product.Price, 350, y, { width: 100 });
+        doc.text((product.quantity * product.product.Price).toFixed(2), 450, y, { width: 100 });
+        y += 20;
+    });
+
+    doc.moveTo(100, y).lineTo(550, y).stroke();
+
+    const totalAmount = productsData.reduce(
+        (total, product) => total + product.quantity * product.price,
+        0
+    );
+
+    doc.fontSize(14).text(`Total: ${cartData.totalAmount.toFixed(2)}`, 350, y + 10, { width: 100 });
+
+    doc.end();
+
+    console.log(`Invoice saved as ${outputFilename}`);
+    return outputFilename;
+};
 
 const orders = async (req, res) => {
     try {
@@ -61,7 +122,8 @@ const confirmpage = async (req, res) => {
                 model: 'Product', // Replace with your product model name
             })
             .sort({ orderDate: -1 })
-
+           
+            console.log('cartData is',cartData);
 
         let subtotal = 0
         for (const item of cartData.products) {
@@ -75,7 +137,11 @@ const confirmpage = async (req, res) => {
             total: cartData.totalAmount
 
         }
-        res.render('user/confirmpage', { user, data, subtotal })
+
+        console.log('data is',data);
+        const pdflink = generateInvoiceWithPdfKit(cartData,data)
+        console.log('pdflink',pdflink);
+        res.render('user/confirmpage', { user, data, subtotal,pdflink})
     }
     catch (error) {
         console.error(error);

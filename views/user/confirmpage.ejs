@@ -32,53 +32,55 @@
                                 Customer’s Cart</p>
                             <% data.products.forEach(element=> {%>
                                 <%# console.log('product is',element);%>
-                                <div
-                                    class="mt-4 md:mt-6 flex flex-col md:flex-row justify-start items-start md:items-center md:space-x-6 xl:space-x-8 w-full">
-                                    <div class="pb-4 md:pb-8 w-full md:w-40">
-                                        <img class="w-full hidden md:block" src="<%= element.product.Image %>"
-                                            alt="dress" />
-                                        <img class="w-full md:hidden" src="<%= element.product.Image %>" alt="dress" />
-                                    </div>
                                     <div
-                                        class="border-b border-gray-200 md:flex-row flex-col flex justify-between items-start w-full pb-8 space-y-4 md:space-y-0">
-                                        <div class="w-full flex flex-col justify-start items-start space-y-8">
-                                            <h3
-                                                class="text-xl dark:text-white xl:text-2xl font-semibold leading-6 text-gray-800">
-                                                <span>
-                                                    <input class="productname" type="hidden"
-                                                        value="<%- element.product.Name%>">
-                                                    <%= element.product.Name %>
-                                                </span>
-                                            </h3>
-                                            <div class="flex justify-start items-start flex-col space-y-2">
-                                                <p class="text-sm dark:text-white leading-none text-gray-800"><span
-                                                        class="dark:text-black text-black">Style: </span>
-                                                    <%= element.product.Description%>
+                                        class="mt-4 md:mt-6 flex flex-col md:flex-row justify-start items-start md:items-center md:space-x-6 xl:space-x-8 w-full">
+                                        <div class="pb-4 md:pb-8 w-full md:w-40">
+                                            <img class="w-full hidden md:block" src="<%= element.product.Image[0] %>"
+                                                alt="dress" />
+                                            <img class="w-full md:hidden" src="<%= element.product.Image[0] %>"
+                                                alt="dress" />
+                                        </div>
+                                        <div
+                                            class="border-b border-gray-200 md:flex-row flex-col flex justify-between items-start w-full pb-8 space-y-4 md:space-y-0">
+                                            <div class="w-full flex flex-col justify-start items-start space-y-8">
+                                                <h3
+                                                    class="text-xl dark:text-white xl:text-2xl font-semibold leading-6 text-gray-800">
+                                                    <span>
+                                                        <input class="productname" type="hidden"
+                                                            value="<%- element.product.Name%>">
+                                                        <%= element.product.Name %>
+                                                    </span>
+                                                </h3>
+                                                <div class="flex justify-start items-start flex-col space-y-2">
+                                                    <p class="text-sm dark:text-white leading-none text-gray-800"><span
+                                                            class="dark:text-black text-black">Style: </span>
+                                                        <%= element.product.Description%>
+                                                    </p>
+                                                    <p class="text-sm dark:text-white leading-none text-gray-800"><span
+                                                            class="dark:text-black text-black">Size: </span>
+                                                        <%= element.product.Size%>
+                                                    </p>
+                                                    <p class="text-sm dark:text-white leading-none text-gray-800"><span
+                                                            class="dark:text-black text-black">Brand: </span>
+                                                        <%= element.product.Brand%>
+                                                    </p>
+                                                </div>
+                                            </div>
+                                            <div class="flex justify-between space-x-8 items-start w-full">
+                                                <p class="text-base dark:text-white xl:text-lg leading-6">
+                                                    <input class="productprice" type="hidden"
+                                                        value="<%- element.product.Price %>"> ₹
+                                                    <%=element.product.Price%>
                                                 </p>
-                                                <p class="text-sm dark:text-white leading-none text-gray-800"><span
-                                                        class="dark:text-black text-black">Size: </span>
-                                                    <%= element.product.Size%>
-                                                </p>
-                                                <p class="text-sm dark:text-white leading-none text-gray-800"><span
-                                                        class="dark:text-black text-black">Brand: </span>
-                                                    <%= element.product.Brand%>
+                                                <p class="text-base dark:text-white xl:text-lg leading-6 text-gray-800">
+                                                    <input class="productquantity" type="hidden"
+                                                        value="<%- element.quantity %>">
+                                                    <%= element.quantity %>
                                                 </p>
                                             </div>
                                         </div>
-                                        <div class="flex justify-between space-x-8 items-start w-full">
-                                            <p class="text-base dark:text-white xl:text-lg leading-6">
-                                                <input class="productprice" type="hidden"
-                                                    value="<%- element.product.Price %>"> ₹<%=element.product.Price%>
-                                            </p>
-                                            <p class="text-base dark:text-white xl:text-lg leading-6 text-gray-800">
-                                                <input class="productquantity" type="hidden"
-                                                    value="<%- element.quantity %>">
-                                                <%= element.quantity %>
-                                            </p>
-                                        </div>
                                     </div>
-                                </div>
-                                <% }) %>
+                                    <% }) %>
                         </div>
                         <div
                             class="flex justify-center flex-col md:flex-row flex-col items-stretch w-full space-y-4 md:space-y-0 md:space-x-6 xl:space-x-8">
@@ -90,7 +92,7 @@
                                     <div class="flex justify-between w-full">
                                         <p class="text-base dark:text-white leading-4 text-gray-800">Subtotal</p>
                                         <p class="text-base dark:text-gray-300 leading-4 text-gray-600">₹<%= subtotal %>
-                                            
+
                                         </p>
                                     </div>
 
@@ -114,7 +116,7 @@
                             <div class="flex justify-between items-center w-full">
                                 <p class="text-base dark:text-white font-semibold leading-4 text-gray-800">Total</p>
                                 <p class="text-base dark:text-gray-300 font-semibold leading-4 text-gray-600">₹<%=
-                                        data.total  %>
+                                        data.total %>
                                 </p>
                             </div>
                         </div>
@@ -135,12 +137,17 @@
                                 </div>
                             </div>
                             <div class="w-full flex justify-center items-center">
-                                <button onclick="downloadInvoice()"
-                                    class="hover:bg-black dark:bg-white dark:text-gray-800 dark:hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-800 py-5 w-96 md:w-full bg-gray-800 text-base font-medium leading-4 text-white">View
-                                    Invoice</button>
+                                <% console.log('pdflinkis',pdflink); %>
+                                    <a href="/invoices/<%= pdflink %>" download>
+                                        <button
+                                            class="hover:bg-black dark:bg-white dark:text-gray-800 dark:hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-800 py-5 w-96 md:w-full bg-gray-800 text-base font-medium leading-4 text-white">
+                                            Download Invoice
+                                        </button>
+                                    </a>
+
                             </div>
                         </div>
-                    </div>
+                    </div>                   
                 </div>
                 <div
                     class="bg-gray-50 dark:bg-gray-800 w-full xl:w-96 flex justify-between items-center md:items-start px-4 py-6 md:p-6 xl:p-8 flex-col">
@@ -234,7 +241,7 @@
                 <p>Product not found.</p>
                 <% } %>
 </body>
-<script>
+<!-- <script>
 
 
     const name = document.getElementById('nameinvoice').textContent
@@ -318,6 +325,7 @@
             // Settings to customize your invoice
             "settings": {
                 "currency": "INR", // See documentation 'Locales and Currency' for more info. Leave empty for no currency.
+                "vat": 0
                 // "locale": "nl-NL", // Defaults to en-US, used for number formatting (See documentation 'Locales and Currency')        
                 // "margin-top": 25, // Defaults to '25'
                 // "margin-right": 25, // Defaults to '25'
@@ -340,7 +348,7 @@
                 // "price": "Prijs", // Defaults to 'Price'
                 // "product-total": "Totaal", // Defaults to 'Total'
                 // "total": "Totaal", // Defaults to 'Total'
-                // "vat": "btw" // Defaults to 'vat'
+                // "vat": "shipping charges" // Defaults to 'vat'
             },
         };
 
@@ -389,6 +397,6 @@
     }
 
 
-</script>
+</script> -->
 
-</html> 
+</html>

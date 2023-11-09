@@ -43,7 +43,7 @@ router.get('/products',clientController.productsort)
 router.get('/productsearch',clientController.productsearch)
 router.post('/applycoupon',couponController.applycoupon)
 router.get('/wallet',walletController.wallet)
-router.get('/walletadd/:totalAmount', walletController.walletadd);
+router.get('/walletadd/:totalAmount/:orderid', walletController.walletadd);
 
 
 module.exports = router 

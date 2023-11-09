@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.15/dist/tailwind.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/easyinvoice/dist/easyinvoice.min.js"></script>
     <title>Admin Dashboard</title>
 </head>
 
@@ -80,41 +81,73 @@
                     <span id="monthly" hidden><%- monthly %></span>
 
                     <span id="Status" hidden> <%- order %></span>
-                    <% console.log(order.Status) %>
 
-                        <!-- Chart container -->
-                        <div class="bg-white p-3 shadow-sm rounded-sm mx-10">
-                            <div class="flex flex-row justify-between">
-                                <!-- First Chart -->
-                                <div class=" p-4  mx-auto w-2/4 shadow-md rounded-lg">
-                                    <p class="font-bold">Last 7 days order</p>
-                                    <canvas id="myChart1" class="w-full h-auto"></canvas>
-                                </div>
 
-                                <!-- Second Chart -->
-                                <div class=" p-4  mx-auto w-2/4 shadow-md rounded-lg">
-                                    <p class="font-bold">Last 30 days order</p>
-                                    <canvas id="myChart2" class="w-full h-auto"></canvas>
-                                </div>
-                                <!-- Third Chart -->
-                                <div class=" p-4   shadow-md rounded-lg">
-                                    <p class="font-bold">Order Chart 3</p>
-                                    <canvas id="myChart3"></canvas>
-                                </div>
+
+
+
+                    </span>
+
+                    <!-- Chart container -->
+                    <div class="bg-white p-3 shadow-sm rounded-sm mx-10">
+                        <div class="flex flex-row justify-between">
+                            <!-- First Chart -->
+                            <div class=" p-4  mx-auto w-2/4 shadow-md rounded-lg">
+                                <p class="font-bold">Last 7 days order</p>
+                                <canvas id="myChart1" class="w-full h-auto"></canvas>
+                            </div>
+
+                            <!-- Second Chart -->
+                            <div class=" p-4  mx-auto w-2/4 shadow-md rounded-lg">
+                                <p class="font-bold">Last 30 days order</p>
+                                <canvas id="myChart2" class="w-full h-auto"></canvas>
+                            </div>
+                            <!-- Third Chart -->
+                            <div class=" p-4   shadow-md rounded-lg">
+                                <p class="font-bold">Order Chart 3</p>
+                                <canvas id="myChart3"></canvas>
                             </div>
                         </div>
-
+                    </div>
+                    <%# console.log(pdflink); %>
+                        <a href="/salesreportpdf/<%= pdflink %>" download>click me</a>
+                        <button id="downloadButton">excel report</button>
 
                 </div>
             </div>
+            <script>
+
+                document.getElementById('downloadButton').addEventListener('click', function () {
+                    fetch('/downloadExcel')
+                        .then(response => response.blob())
+                        
+                        .then(blob => {
+                            console.log(blob);
+                            const url = window.URL.createObjectURL(blob);
+                            const a = document.createElement('a');
+                            a.href = url;
+                            a.download = 'OrdersData.xlsx';
+                            a.click();
+                        });
+                });
+
+
+
+
+            </script>
+
+
+
+
+
 
             <script>
                 const orderCounts = document.getElementById('orderCounts').textContent.split(',')
-                console.log(orderCounts);
+                // console.log(orderCounts);
                 let dates = document.getElementById('dates').textContent.split(',');
                 // console.log(dates);
-                const Status = document.getElementById('Status').textContent
-                console.log('Status', Status);
+                // const Status = document.getElementById('Status').textContent
+                // console.log('Status', Status);
 
 
 
@@ -166,7 +199,7 @@
 
 
                 const monthly = document.getElementById('monthly').textContent.split(',')
-                console.log('monthly', monthly);
+                // console.log('monthly', monthly);
 
                 const chart2 = document.getElementById('myChart2');
                 const data1 = {
@@ -240,6 +273,10 @@
 
                 new Chart(myChart3, config3)
             </script>
+
+
+
+
 </body>
 
 </html>

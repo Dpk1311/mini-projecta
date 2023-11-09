@@ -43,6 +43,7 @@ router.get('/addcoupon',couponController.addcoupon)
 router.post('/addcoupon',couponController.addcouponpost)
 // router.get('/stockmanagement',adminController)
 router.get('/usermanagement',adminController.usermanagement)
+router.get('/downloadExcel',adminController.generateExcelSalesReport)
 
 
 

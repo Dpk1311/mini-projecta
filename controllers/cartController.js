@@ -4,6 +4,7 @@ const { UserModel } = require('../model/user/userSchema')
 const { addressModel } = require('../model/user/addressSchema')
 const Razorpay = require('razorpay')
 const orderModel = require('../model/user/orderSchema')
+const WishlistModel = require('../model/user/wishlistSchema')
 
 
 const cart = async (req, res) => {
@@ -18,7 +19,7 @@ const cart = async (req, res) => {
           path: 'products.product',
           model: 'Product', // Replace with your product model name
         });
-      console.log(cartData);
+      // console.log(cartData);
 
       let subtotal = 0;
       for (const item of cartData.products) {
@@ -35,7 +36,7 @@ const cart = async (req, res) => {
         user: user.name, // Include the user's name
         products: cartData.products, // Include the cart products
       };
-
+      console.log(data);
       // Check the request's 'Accept' header to determine the response type
       const acceptHeader = req.get('Accept');
 
@@ -111,6 +112,19 @@ const addToCart = async (req, res) => {
 
       // Save the updated cart
       await userCart.save();
+
+      const userWishlist = await WishlistModel.findOne({ user: userId })
+      console.log('user wishlist',userWishlist);
+
+      await WishlistModel.updateOne(
+        { user: userId },
+        { $pull: { products: productId } }
+      )
+
+     
+
+
+
       // console.log('cart saved');
 
       // Redirect or respond with a success message
@@ -219,7 +233,7 @@ const checkout = async (req, res) => {
       subtotal += item.product.Price * item.quantity;
     }
 
-    let total = (subtotal+4.99).toFixed(2)
+    let total = (subtotal + 4.99).toFixed(2)
 
     const data = {
       user: user.name, // Include the user's name
@@ -227,7 +241,7 @@ const checkout = async (req, res) => {
       selectedAddress: user.selectedAddress, // Include the selected address
     }
 
-    res.render('user/checkout', { user, data, subtotal,total })
+    res.render('user/checkout', { user, data, subtotal, total })
 
 
   }
@@ -268,7 +282,36 @@ const payment = async (req, res) => {
   }
 };
 
+const wishlist = async (req, res) => {
+  const user = req.session.user
+  const userid = req.session.user._id
+  const wishlistdata = await WishlistModel.findOne({ user: userid }).populate('products')
+  console.log('wishlist', wishlistdata);
+  
+    res.render('user/wishlist', { user, wishlistdata })
 
+  
+}
+
+
+const wishlistadd = async (req, res) => {
+  const productId = req.params.productId;
+  const userId = req.session.user._id;
+
+  let userWishlist = await WishlistModel.findOne({ user: userId });
+
+  if (!userWishlist) {
+    userWishlist = new WishlistModel({
+      user: userId,
+      products: [productId]
+    });
+  } else {
+    userWishlist.products.push(productId);
+  }
+
+  await userWishlist.save();
+  res.json('product added to wishlist')
+}
 
 
 module.exports = {
@@ -277,5 +320,7 @@ module.exports = {
   removefromcart,
   checkout,
   deleteFromCart,
-  payment
+  payment,
+  wishlist,
+  wishlistadd
 };

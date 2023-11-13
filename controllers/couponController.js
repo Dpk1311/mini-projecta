@@ -42,6 +42,17 @@ const applycoupon = async (req, res) => {
     totalprice = totalprice.replace(/₹/g, ''); // remove ₹ 
     totalprice = parseFloat(totalprice); // convert to number
     const coupon = await couponSchema.findOne({ code: couponCode });
+    console.log('coupon',coupon.expiryDate) 
+
+    const expiryDate = coupon.expiryDate
+    const currentdate = new Date();
+    const isoString = currentdate.toISOString();
+    console.log(isoString);
+
+    if(expiryDate<currentdate){
+        return res.json({ error: "Coupon has expired"})
+    }
+    
 
     if (!coupon) {
         return res.json({ error: 'Invalid coupon code' });

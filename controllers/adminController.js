@@ -294,9 +294,11 @@ const userblock = async (req, res) => {
     const userid = req.params.userId
     console.log('userid block', userid);
     try {
-        const check = await UserModel.findById(userid);
-        check.block = true
-        await check.save()
+        const user = await UserModel.findById(userid);
+        user.block = true
+        req.session.user = user
+
+        await user.save()
 
     } catch (error) {
         console.error(error);
@@ -311,9 +313,10 @@ const userUnblock = async (req, res) => {
     const userid = req.params.userId
     console.log('userid unblock', userid);
     try {
-        const check = await UserModel.findById(userid);
-        check.block = false
-        await check.save()
+        const user = await UserModel.findById(userid);
+        user.block = false
+        req.session.user = user
+        await user.save()
 
     } catch (error) {
         console.error(error);

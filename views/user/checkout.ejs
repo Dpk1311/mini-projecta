@@ -247,8 +247,8 @@
                 <% } %>
 
                     <script>
-
                         document.getElementById('Couponapply').addEventListener('click', function () {
+                            this.disabled = true
                             const couponCode = document.getElementById('couponCodeInput').value;
                             console.log('copoun code is', couponCode);
                             const totalprice = document.getElementById('Total').textContent.replace(/₹/g, '')
@@ -280,6 +280,7 @@
                                         document.getElementById('RazorpayTotal').textContent = '₹' + discountedPrice.toFixed(2)
 
                                         options.amount = discountedPrice * 100;
+
                                     }
                                 })
                                 .catch(error => console.error('Error:', error));
@@ -323,14 +324,14 @@
                                     currency: "INR",
                                     order_id: orderData.id,
                                     handler: function (response) {
-                                        window.location.href = `/orders?discountedPrice=${orderData.order.amount/100}`;
+                                        window.location.href = `/orders?discountedPrice=${orderData.order.amount / 100}`;
                                     },
                                 };
 
                                 var rzp1 = new Razorpay(options);
                                 rzp1.open();
                             } else {
-                                window.location.href =  `/orders?discountedPrice=${totalPrice}`;
+                                window.location.href = `/orders?discountedPrice=${totalPrice}`;
                             }
                         };
 

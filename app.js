@@ -39,7 +39,11 @@ mongoose.connect("mongodb://0.0.0.0/Mini-project")
 
 app.use('/',clientrouter)
 app.use('/',adminrouter)
-
+app.use('*', (req, res) => {
+    res.status(404).send('Error: Page not found');
+  });
+  
+ 
 
 app.listen(PORT,()=>{
     console.log('Server is at port 4000');

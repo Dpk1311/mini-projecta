@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="dist/output.css">
+
     <title>Signup</title>
 </head>
 <body>
@@ -16,27 +17,44 @@
                 </div>
                 <form action="/signup" method="post">
                     <div class="mb-4 text-lg">
-                        <input class="rounded-3xl border-none bg-yellow-400 bg-opacity-50 px-6 py-2 text-center text-inherit placeholder-slate-200 shadow-lg outline-none backdrop-blur-md" type="text" name="name" placeholder="name" />
+                        <input class="rounded-3xl border-none bg-yellow-400 bg-opacity-50 px-6 py-2 text-center text-inherit placeholder-slate-200 shadow-lg outline-none backdrop-blur-md placeholder-opacity-70" type="text" name="name" placeholder="name" />
                     </div>
                     <div class="mb-4 text-lg">
-                        <input class="rounded-3xl border-none bg-yellow-400 bg-opacity-50 px-6 py-2 text-center text-inherit placeholder-slate-200 shadow-lg outline-none backdrop-blur-md" type="text" name="email" placeholder="Email" />
+                        <input class="rounded-3xl border-none bg-yellow-400 bg-opacity-50 px-6 py-2 text-center text-inherit placeholder-slate-200 shadow-lg outline-none backdrop-blur-md placeholder-opacity-70" type="text" name="email" placeholder="Email" />
                     </div>
                     <div class="mb-4 text-lg">
-                        <input class="rounded-3xl border-none bg-yellow-400 bg-opacity-50 px-6 py-2 text-center text-inherit placeholder-slate-200 shadow-lg outline-none backdrop-blur-md" type="password" name="password" placeholder="Password" />
+                        <input class="rounded-3xl border-none bg-yellow-400 bg-opacity-50 px-6 py-2 text-center text-inherit placeholder-slate-200 shadow-lg outline-none backdrop-blur-md placeholder-opacity-70" type="password" name="password" placeholder="Password" />
                     </div>
                     <div class="mb-4 text-lg">
-                        <input class="rounded-3xl border-none bg-yellow-400 bg-opacity-50 px-6 py-2 text-center text-inherit placeholder-slate-200 shadow-lg outline-none backdrop-blur-md" type="password" name="confirm_password" placeholder="Confirm Password" />
+                        <input class="rounded-3xl border-none bg-yellow-400 bg-opacity-50 px-6 py-2 text-center text-inherit placeholder-slate-200 shadow-lg outline-none backdrop-blur-md placeholder-opacity-70" type="password" name="confirm_password" placeholder="Confirm Password" />
                     </div>
                     <div class="mb-4 text-lg">
-                        <input class="rounded-3xl border-none bg-yellow-400 bg-opacity-50 px-6 py-2 text-center text-inherit placeholder-slate-200 shadow-lg outline-none backdrop-blur-md" type="text" name="phoneNumber" placeholder="Phone Number" />
+                        <input class="rounded-3xl border-none bg-yellow-400 bg-opacity-50 px-6 py-2 text-center text-inherit placeholder-slate-200 shadow-lg outline-none backdrop-blur-md placeholder-opacity-70" type="text" name="phoneNumber" placeholder=" Phone Number" />
                     </div>
+                    <span class="ml-12 font-bold"><%= message %></span>
                     <div class="mt-8 flex justify-center text-lg text-black">
-                        <button type="submit" class="rounded-3xl bg-yellow-400 bg-opacity-50 px-10 py-2 text-white shadow-xl backdrop-blur-md transition-colors duration-300 hover:bg-yellow-600">Sign Up</button>
+                        <button type="submit" class="rounded-3xl bg-slate-700 bg-opacity-50 px-10 py-2 text-white shadow-xl backdrop-blur-md transition-colors duration-300 hover:bg-yellow-600">Sign Up</button>
+                    </div>
+        
+
                     </div>
                 </form>
                 <p class="mt-4 text-lg text-gray-400">Already have an account? <a href="/login" class="text-blue-400 hover:underline"><a href="/login">Log In</a></a></p>
             </div>
         </div>
     </div>
+    <div id="lottie" class="w-auto h-auto"  ></div>
 </body>
+
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bodymovin/5.7.5/lottie.min.js"></script>
+<script>
+  bodymovin.loadAnimation({
+    container: document.getElementById('lottie'),
+    path:'json/sucess.json',
+  });
+</script>
+
+
 </html>

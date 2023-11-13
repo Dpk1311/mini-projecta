@@ -1,5 +1,11 @@
+
+
+
+
 const authMiddleware = (req, res, next) => {
-    if (req.session.user) {
+    // console.log(req.session.user);
+
+    if (req.session.user || req.url === '/') {
         next();
     } else {
         res.redirect('/login')
@@ -7,4 +13,4 @@ const authMiddleware = (req, res, next) => {
 };
 
 
-module.exports = authMiddleware
+module.exports = authMiddleware 

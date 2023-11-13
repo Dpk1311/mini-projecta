@@ -165,29 +165,39 @@ const orderhistory = async (req, res) => {
                 path: 'shippingAddress',
                 model: 'address', // Replace with your address model name
             }); 
+        orderData.sort((a, b) => new Date(b.orderDate) - new Date(a.orderDate))
 
-        console.log('orderdata is', orderData);
-
+        // console.log('orderdata is', orderData);
+            // const order = orderData.sort(1)
+            // console.log('sorted');
         // Check if the cancel button is clicked
-        if (req.query.cancelOrderId) {
-            const orderId = req.query.cancelOrderId;
-            console.log(orderId);
-            const order = await OrderModel.findById(orderId);
-            console.log(order);
+       
+         
 
-            // Check if the order status is "Order Pending"
-            if (order.Status === 'OrderPending') {
-                order.Status = 'Order Cancelled';
-                await order.save();
-                console.log('order cancelled');
-            }
-        }
 
         // console.log('order data', orderData);
         res.render('user/orderhistory', { user, orderData });
     }
     catch (error) {
         console.error(error)
+    }
+} 
+
+
+const ordercancel = async (req,res) =>{
+    if (req.params.orderid) {
+        const orderid = req.params.orderid;
+        console.log('orderId',orderid);
+        const order = await OrderModel.findById(orderid);
+        // console.log(order)
+
+        // Check if the order status is "Order Pending"
+        if (order.Status === 'OrderPending') {
+            order.Status = 'Order Cancelled';
+            await order.save();
+            console.log('order cancelled');
+        }
+        res.json('order cancelled')
     }
 }
 
@@ -230,5 +240,5 @@ const orderdetail = async (req, res) => {
 
 
 module.exports = {
-    orders, confirmpage, orderhistory, orderdetail,
+    orders, confirmpage, orderhistory, orderdetail,ordercancel,
 }

@@ -1,7 +1,7 @@
 <nav class="p-5 bg-black shadow md:flex md:items-center md:justify-between">
   <div class="flex justify-between items-center ">
     <span class=" text-white text-2xl font-[Poppins] cursor-pointer">
-      V A S T R A
+      <a href="/">V A S T R A</a>
     </span>
 
     <span class=" text-white text-3xl cursor-pointer mx-2 md:hidden block">
@@ -9,7 +9,9 @@
     </span>
   </div>
 
-  <ul class="md:flex md:items-center z-[-1] md:z-auto md:static absolute bg-black w-full left-0 md:w-auto md:py-0 py-4 md:pl-0 pl-7 md:opacity-100 opacity-0 top-[-400px] transition-all ease-in duration-500" style="z-index: 9;">
+  <ul
+    class="md:flex md:items-center z-[-1] md:z-auto md:static absolute bg-black w-full left-0 md:w-auto md:py-0 py-4 md:pl-0 pl-7 md:opacity-100 opacity-0 top-[-400px] transition-all ease-in duration-500"
+    style="z-index: 9;">
     <li class="mx-4 my-6 md:my-0">
       <a href="/" class="text-white text-xl hover:text-cyan-500 duration-500">HOME</a>
     </li>
@@ -18,54 +20,138 @@
     </li>
     <li class="mx-4 my-6 md:my-0">
       <a href="#" class="text-white text-xl hover:text-cyan-500 duration-500">ABOUT</a>
-    </li> 
+    </li>
     <li class="mx-4 my-6 md:my-0">
-      <a href="#" class="text-white text-xl hover:text-cyan-500 duration-500">CONTACT</a>
+      <a href="/wishlist" class="text-white text-xl hover:text-cyan-500 duration-500">WISHLIST</a>
     </li>
     <li class="mx-4 my-6 md:my-0">
       <a href="/cart" class="text-white text-xl hover:text-cyan-500 duration-500">CART</a>
     </li>
-    
-<% if(user){ %>
-  <div class="relative inline-block text-left">
-    <button class="bg-cyan-400 text-white font-[Poppins] duration-500 px-6 py-2 mx-4 hover:bg-cyan-500 rounded" onclick="toggleDropdown()">
-      <%= user.name %>
-      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"
-           class="inline-block w-4 h-4 ml-2 -mt-1">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
-      </svg>
-    </button>
-    <div id="userDropdown" class="hidden absolute right-0 mt-2 w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none">
-      <!-- Dropdown content here -->
-      <a href="/userprofile" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900">Profile</a>
-      <a href="/wallet" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900">Wallet</a>
-      <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900">Sign out</a>
-    </div>
-  </div>
-  <button class="bg-cyan-400 text-white font-[Poppins] duration-500 px-6 py-2 mx-4 hover:bg-cyan-500 rounded hidden ">
-    <a href="/login">LOGIN</a>
-  </button>
-  <button class="bg-cyan-400 text-white font-[Poppins] duration-500 px-6 py-2 mx-4 hover:bg-cyan-500 rounded">
-    <a href="/logout">LOGOUT</a>
-  </button>
-<%  }else{ %>
-  <button class="bg-cyan-400 text-white font-[Poppins] duration-500 px-6 py-2 mx-4 hover:bg-cyan-500 rounded ">
-    <a href="/login">LOGIN</a>
-  </button>
-  <button class="bg-cyan-400 text-white font-[Poppins] duration-500 px-6 py-2 mx-4 hover:bg-cyan-500 rounded hidden">
-    <a href="/logout">LOGOUT</a>
-  </button>
-  <% } %>  
-    
-    
+
+    <% if(user){ %>
+      <div class="relative inline-block text-left">
+        <button class="bg-transparent text-white font-[Poppins] duration-500 px-6 py-2 mx-4 hover:bg-cyan-500 rounded"
+          onclick="toggleDropdown()">
+          <%= user.name %>
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"
+              class="inline-block w-4 h-4 ml-2 -mt-1">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+            </svg>
+        </button>
+        <div id="userDropdown"
+          class="hidden absolute right-0 mt-2 w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none">
+          <!-- Dropdown content here -->
+          <a href="/userprofile"
+            class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900">Profile</a>
+          <a href="/wallet"
+            class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900">Wallet</a>
+          <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
+            onclick="document.querySelector('.fixed').style.display='block'">Change Password</a>
+
+
+        </div>
+      </div>
+      <button
+        class="bg-transparent text-white font-[Poppins] duration-500 px-6 py-2 mx-4 hover:bg-cyan-500 rounded hidden ">
+        <a href="/login">LOGIN</a>
+      </button>
+      <button class="bg-transparent text-white font-[Poppins] duration-500 px-6 py-2 mx-4 hover:bg-cyan-500 rounded">
+        <a href="/logout">LOGOUT</a>
+      </button>
+      <% }else{ %>
+        <button class="bg-transparent text-white font-[Poppins] duration-500 px-6 py-2 mx-4 hover:bg-cyan-500 rounded ">
+          <a href="/login">LOGIN</a>
+        </button>
+        <button
+          class="bg-transparent text-white font-[Poppins] duration-500 px-6 py-2 mx-4 hover:bg-cyan-500 rounded hidden">
+          <a href="/logout">LOGOUT</a>
+        </button>
+        <% } %>
+
+
   </ul>
 </nav>
 
+<div class="fixed z-10 inset-0 overflow-y-auto" aria-labelledby="modal-title" role="dialog" aria-modal="true"
+  style="display: none;">
+  <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+    <div class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" aria-hidden="true"></div>
+
+    <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
+
+    <div
+      class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
+      <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+        <h3 class="text-lg leading-6 font-medium text-gray-900" id="modal-title">
+          Change Password
+        </h3>
+        <div class="mt-2">
+          <div class="text-lg mt-4">
+            <input id="oldpassword"
+              class="rounded-3xl border-none bg-yellow-400 bg-opacity-70 px-6 py-2 text-center text-inherit placeholder-white shadow-lg outline-none backdrop-blur-md"
+              type="password" name="password" placeholder="Enter Old password" />
+          </div>
+          <div class="text-lg mt-4">
+            <input id="newpassword"
+              class="rounded-3xl border-none bg-yellow-400 bg-opacity-70 px-6 py-2 text-center text-inherit placeholder-white shadow-lg outline-none backdrop-blur-md"
+              type="password" name="password" placeholder="Enter New password" />
+          </div>
+        </div>
+      </div>
+      <div class="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
+        <button type="button" id="passwordbutton"
+          class="mt-3 w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-blue-600 text-base font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm">
+          Change Password
+        </button>
+        <button type="button"
+          class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:w-auto sm:text-sm"
+          onclick="document.querySelector('.fixed').style.display='none'">
+          Cancel
+        </button>
+
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+  const passwordbutton = document.getElementById('passwordbutton').addEventListener('click', function () {
+    const oldpassword = document.getElementById('oldpassword').value
+    const newpassword = document.getElementById('newpassword').value
+    // console.log('oldpassword,newpassword',oldpassword,newpassword);
+    fetch(`/updatepassword/${oldpassword}/${newpassword}`, {
+      method: 'POST', // Change the request method to POST
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ oldpassword, newpassword }) // Include the data in the body of the request
+    })
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error('Failed to update password');
+      }
+      return response.json(); // Return the response data
+    })
+    .then((data) => {
+      // Handle the response data
+      console.log(data)
+      window.location.href = '/login'
+    })
+    .catch((error) => {
+      console.error('Failed:', error);
+    });
+
+  });
+
+
+
+
+</script>
+
 
 <script>
-  function Menu(e){
+  function Menu(e) {
     let list = document.querySelector('ul');
-    e.name === 'menu' ? (e.name = "close",list.classList.add('top-[80px]') , list.classList.add('opacity-100')) :( e.name = "menu" ,list.classList.remove('top-[80px]'),list.classList.remove('opacity-100'))
+    e.name === 'menu' ? (e.name = "close", list.classList.add('top-[80px]'), list.classList.add('opacity-100')) : (e.name = "menu", list.classList.remove('top-[80px]'), list.classList.remove('opacity-100'))
   }
 
   function toggleDropdown() {

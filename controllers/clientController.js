@@ -4,7 +4,8 @@ const { CategoryModel } = require('../model/admin/categorySchema')
 const { productModel } = require('../model/admin/productSchema')
 const { addressModel } = require('../model/user/addressSchema')
 const bcrypt = require('bcrypt')
-const walletModel = require('../model/user/walletSchema')
+const walletModel = require('../model/user/walletSchema');
+const OrderModel = require('../model/user/orderSchema');
 
 //  to generate a random OTP
 function generateOTP() {
@@ -46,6 +47,8 @@ const login = (req, res) => {
     if (req.session.invalid) {
         req.session.invalid = false
         return res.render('user/login', { msg: req.session.errormsg || '' })
+    } else if (req.session.user) {
+        res.redirect('/')
     }
     else {
         res.render('user/login', { msg: '' })
@@ -64,8 +67,12 @@ const loginpost = async (req, res) => {
         } else if (user.block) {
             req.session.invalid = true;
             req.session.errormsg = "User is Blocked";
-            return res.redirect('/login');
-        } else {
+            return res.redirect('/login')
+        } else if (user.isOtpVerified === false) {
+            req.session.invalid = true;
+            req.session.errormsg = "Invalid User";
+            return res.redirect('/login')
+        } else { 
             // Compare hashed passwords
             const passwordMatch = await bcrypt.compare(password, user.password);
 
@@ -80,10 +87,13 @@ const loginpost = async (req, res) => {
             }
         }
     } catch (error) {
-        console.error(error);
-        return res.status(500).send('Internal Server Error');
+        console.error("Login error:", error);
+        req.session.invalid = true;
+        req.session.errormsg = "Internal Server Error";
+        return res.redirect('/login');
     }
 };
+
 
 
 const logout = (req, res) => {
@@ -157,20 +167,101 @@ const forgotpasswordpost = async (req, res) => {
 
 
 
+const updatepassword = async (req, res) => {
+
+    const oldpassword = req.params.oldpassword
+    const newpassword = req.params.newpassword
+   
+    const userid = req.session.user._id
+    const user = await UserModel.findOne({ _id: userid})
+    console.log(user)
+    const passwordMatch = await bcrypt.compare(oldpassword, user.password)
+    if (!passwordMatch) {
+        res.json('oldpassword not match')
+    }if(newpassword.length < 7 ){
+        res.json('password too short')
+    } 
+    else {
+        const hashedPassword = await bcrypt.hash(newpassword, 10)
+        user.password = hashedPassword
+        await user.save();
+        req.session.destroy()        
+        res.json('Password updated successfully');
+    } 
+
+   
+}
+
+
+
 const signup = (req, res) => {
-    res.render('user/signup');
+    if (req.session.issue) {
+        req.session.issue = false
+        return res.status(400).render('user/signup', { message: req.session.errmsg || "" });
+    } else {
+        res.render('user/signup', { message: "" });
+    }
+
+
 };
+function validateEmail(email) {
+    const regex = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    return regex.test(String(email).toLowerCase());
+}
+
+
 
 
 const signuppost = async (req, res) => {
     try {
         // Get user input from the signup form
-        const { name, email, password, phoneNumber } = req.body;
+        let { name, email, password, confirm_password, phoneNumber } = req.body;
         console.log('Received signup request:', name, email, phoneNumber);
+        name = name.trim();
+        email = email.trim();
+        password = password.trim();
+        confirm_password = confirm_password.trim()
+        phoneNumber = phoneNumber.trim();
+
+        if (!name || !email || !password || !phoneNumber) {
+            req.session.issue = true
+            req.session.errmsg = "All Fields are necessary"
+            return res.redirect('/signup');
+
+        }
+        let uemail = await UserModel.findOne({ email: email })
+        console.log("uemail", uemail);
+        if (uemail && email === uemail.email) {
+            req.session.issue = true
+            req.session.errmsg = "Use another Email"
+            return res.redirect('/signup')
+        }
+        if (password.length < 7) {
+            req.session.issue = true
+            req.session.errmsg = "Password must be 8 letters"
+            return res.redirect('/signup');
+        }
+        if (!validateEmail(email)) {
+            req.session.issue = true;
+            req.session.errmsg = "Invalid email address";
+            return res.redirect('/signup');
+        }
+        if (password !== confirm_password) {
+            req.session.issue = true;
+            req.session.errmsg = "passwords don't match";
+            return res.redirect('/signup');
+        }
+        if (phoneNumber.length < 10 || phoneNumber.length > 10) {
+            req.session.issue = true;
+            req.session.errmsg = "Enter a valid number";
+            return res.redirect('/signup')
+        }
+
+
 
         // Generate an OTP
         const otp = generateOTP();
-        console.log('Generated OTP:', otp);
+        console.log('Generated OTP:', otp)
 
 
         // Hash the user's password
@@ -186,6 +277,7 @@ const signuppost = async (req, res) => {
 
         // Save the new user to the database
         await newUser.save();
+        req.session.newuser = newUser
         console.log('User saved to database');
 
         // Send the OTP via email
@@ -230,37 +322,86 @@ const signuppost = async (req, res) => {
 };
 
 
-const otp = (req, res) => {
-    res.render('user/otp');
+const otp = async (req, res) => {
+    if (req.session.invalid) {
+        req.session.invalid = false
+        res.render('user/otp', { message: req.session.errmsg || '' });
+    } else {
+        res.render('user/otp', { message: '' })
+    }
+
 };
 
 const otppost = async (req, res) => {
     try {
-        const { otp } = req.body
-        const user = await UserModel.findOne({ otp })
+        const { otp } = req.body;
+        const user = await UserModel.findOne({ otp: otp });
+
         if (!user) {
-            res.redirect('/otp')
+            req.session.invalid = true;
+            req.session.errmsg = "Invalid OTP";
+            return res.redirect('/otp');
         }
 
-        else if (user) {
+        user.otp = null;
+        user.isOtpVerified = true;
+        await user.save()
 
-            user.otp = null;
-            await user.save();
 
-
-            res.redirect('/');
-            user.isOtpVerified = true
-            await user.save();
-
-        } else {
-
-            res.redirect('/otp');
-        }
-
+        res.redirect('/login')
     } catch (error) {
         console.error(error);
     }
 }
+
+const otpresend = async (req, res) => {
+    const usern = req.session.newuser
+    const email = usern.email
+    const user = await UserModel.findOne({ email: email })
+    console.log('user iss', user);
+    if (user) {
+        const otp = generateOTP()
+        console.log('Generated OTP:', otp)
+        const transporter = nodemailer.createTransport({
+            service: 'Gmail',
+            auth: {
+                user: 'j29589289@gmail.com',
+                pass: 'potl opgm ojjr cbfn',
+            },
+            tls: {
+                rejectUnauthorized: false
+            }
+        });
+
+        const mailOptions = {
+            from: 'j29589289@gmail.com',
+            to: email,
+            subject: 'OTP Verification',
+            text: `Your OTP for verification is: ${otp}`,
+        };
+
+        transporter.sendMail(mailOptions, async (error, info) => {
+            if (error) {
+                console.error(error);
+                res.status(500).send('Error sending OTP via email');
+            } else {
+                console.log('Email sent: ' + info.response);
+
+                // Set OTP expiration time (5 minutes)
+                user.otp = otp;
+                user.otpExpiration = Date.now() + 5 * 60 * 1000;
+                await user.save();
+
+                // Redirect to the OTP verification page
+                res.redirect('/otp');
+            }
+        });
+
+    }
+
+
+}
+
 
 const userprofile = async (req, res) => {
     try {
@@ -300,26 +441,19 @@ const saveaddress = async (req, res) => {
     }
 }
 
-const addaddress = (req, res) => {
-    try {
-        if (req.session.user) {
-            res.render('user/addaddress')
-        }
-        res.redirect('/userprofile')
-    }
 
-    catch (error) {
-        console.error(error);
-    }
-}
 
 const edituser = async (req, res) => {
     try {
         const userId = req.session.user._id
         const user = await UserModel.findById(userId)
-        console.log('user:', user);
+        // console.log('user:', user);
+        if (req.session.invalid) {
+            req.session.invalid = false
+            res.render('user/edituser', { message: req.session.errmsg || "", user })
+        }
         if (user) {
-            res.render('user/edituser', { user })
+            res.render('user/edituser', { user, message: "" })
         }
     }
     catch (error) {
@@ -330,13 +464,39 @@ const edituser = async (req, res) => {
 const editpost = async (req, res) => {
     try {
         const userId = req.session.user._id
-        console.log('userid', userId);
+        // console.log('userid', userId);
+        let { name, email, phoneNumber } = req.body
         const user = await UserModel.findById(userId)
         // console.log('user is', user);
 
-        user.name = req.body.name || user.name
-        user.email = req.body.email || user.email
-        user.phoneNumber = req.body.phoneNumber || user.phoneNumber
+        name = name.trim()
+        phoneNumber = phoneNumber.trim()
+        email = email.trim()
+
+        if (!name || !phoneNumber || !email) {
+            req.session.invalid = true
+            req.session.errmsg = "Enter all Fields"
+            return res.redirect('/edituser')
+        }
+        if (!validateEmail(email)) {
+            req.session.invalid = true
+            req.session.errmsg = "Enter a valid Email"
+            return res.redirect('/edituser')
+        }
+        if (phoneNumber.length !== 10) {
+            req.session.invalid = true
+            req.session.errmsg = "Enter a valid Number"
+            return res.redirect('/edituser')
+        }
+        if (name.length > 15) {
+            req.session.invalid = true
+            req.session.errmsg = "Name is too Long"
+            return res.redirect('/edituser')
+        }
+
+        user.name = name
+        user.email = email
+        user.phoneNumber = phoneNumber
 
         await user.save()
         const user1 = req.session.user
@@ -355,12 +515,15 @@ const editaddress = async (req, res) => {
         const userId = req.session.user._id;
         const user = await UserModel.findById(userId).populate('selectedAddress');
         console.log('user:', user);
+        const selectedAddresses = user.selectedAddress
+        console.log('selectedAddresses', selectedAddresses);
+        if (req.session.invalid) {
+            req.session.invalid = false
+            res.render('user/editaddress', { user, selectedAddresses, message: req.session.errmsg || '' })
+        }
         if (user) {
             // Filter the user's selected addresses based on the addressIds
-            const selectedAddresses = user.selectedAddress.filter((address) =>
-                addressIds.includes(address._id.toString())
-            );
-            res.render('user/editaddress', { user, selectedAddresses });
+            res.render('user/editaddress', { user, selectedAddresses, message: '' })
         }
     } catch (error) {
         console.error(error);
@@ -382,13 +545,30 @@ const editaddresspost = async (req, res) => {
         // Find the selected address in the user's address array
         const selectedAddress = user.address.find(address => address._id.toString() === addressId);
         console.log('selectedAddress', selectedAddress);
+
+        let { street, city, state, pincode, country } = req.body
+        // console.log('items received',street, city, state, pincode, country);
+
+        street = street.trim()
+        city = city.trim()
+        state = state.trim()
+        pincode = pincode.trim()
+        country = country.trim()
+
+        if (!street || !city || !state || !pincode || !country) {
+            req.session.invalid = true
+            req.session.errmsg = "Enter all the Fields"
+            return res.redirect('/editaddress/:addressId')
+        }
+
+
         // Update the address fields if provided
         if (selectedAddress) {
-            selectedAddress.street = req.body.street0 || selectedAddress.street
-            selectedAddress.city = req.body.city0 || selectedAddress.city
-            selectedAddress.state = req.body.state0 || selectedAddress.state
-            selectedAddress.pincode = req.body.pincode0 || selectedAddress.pincode
-            selectedAddress.country = req.body.country0 || selectedAddress.country
+            selectedAddress.street = street || selectedAddress.street
+            selectedAddress.city = city || selectedAddress.city
+            selectedAddress.state = state || selectedAddress.state
+            selectedAddress.pincode = pincode || selectedAddress.pincode
+            selectedAddress.country = country || selectedAddress.country
 
             await selectedAddress.save();
             console.log(' req.body.street ', req.body);
@@ -441,33 +621,73 @@ const updateAddress = async (req, res) => {
 };
 
 
+const addaddress = (req, res) => {
+    try {
+        if (req.session.invalid) {
+            req.session.invalid = false;
+            res.render('user/addaddress', { message: req.session.errmsg || '' });
+        } else if (req.session.user) {
+            res.render('user/addaddress', { message: '' });
+        } else {
+            res.redirect('/userprofile');
+        }
+    } catch (error) {
+        console.error(error);
+    }
+}
+
 
 const addaddresspost = async (req, res) => {
     try {
-        const usermail = req.session.useremail
-        const { street, city, state, pincode, country } = req.body
-        const verifymail = await UserModel.findOne({ email: usermail })
-        if (!verifymail) {
-            res.redirect('/')
+        const usermail = req.session.useremail;
+        const user = await UserModel.findOne({ email: usermail }).populate('address');
+        console.log(user);
+
+        let { street, city, state, pincode, country } = req.body;
+        street = street.trim();
+        city = city.trim();
+        pincode = pincode.trim();
+        country = country.trim();
+
+        if (!street || !city || !pincode || !country) {
+            req.session.invalid = true;
+            req.session.errmsg = "All Fields are necessary";
+            return res.redirect('/addaddress');
         }
+
         const newAddress = new addressModel({
             street,
             city,
             state,
             pincode,
             country
-        })
-        await newAddress.save()
+        });
+        await newAddress.save();
 
-        verifymail.address.push(newAddress)
-        await verifymail.save()
+        user.address.push(newAddress);
+        await user.save();
         console.log('newaddress saved to database');
-        res.redirect('/userprofile')
+        res.redirect('/userprofile');
 
-    }
-    catch (error) {
+    } catch (error) {
         console.error(error);
     }
+}
+
+
+const deleteaddress = async (req, res) => {
+    const addressid = req.params.addressid
+    const userid = req.session.user._id
+    console.log(userid);
+
+    const user = await UserModel.findOneAndUpdate(
+        { _id: userid },
+        { $pull: { address: addressid } },
+        { new: true }
+    )
+    // console.log('user', user);
+    // console.log('addressid', addressid); 
+    res.redirect('/userprofile')
 }
 
 const productpage = async (req, res) => {
@@ -542,8 +762,10 @@ module.exports = {
     product_shirts,
     productpage,
     otppost,
+    otpresend,
     forgotpassword,
     forgotpasswordpost,
+    updatepassword,
     userprofile,
     addaddress,
     addaddresspost,
@@ -555,5 +777,7 @@ module.exports = {
     editaddresspost,
     productsort,
     productsearch,
+    deleteaddress,
+
 
 };

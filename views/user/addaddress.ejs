@@ -42,61 +42,21 @@
                     <label class="text-black" for="pincode">Pin Code</label>
                     <input placeholder="Your ZIP code"
                         class="w-full bg-white rounded-md border-gray-300 text-black px-2 py-1" id="pincode"
-                        name="pincode" type="text">
+                        name="pincode" type="number">
                 </div>
 
                 <div class="flex-1">
                     <label class="text-black" for="country">Country</label>
-                    <select class="w-full bg-white rounded-md border-gray-300 text-black px-2 py-1" id="country"
-                        name="country">
-                        <option value="">Select a country</option>
-
-                        <optgroup label="Africa">
-                            <option value="AF">Afghanistan</option>
-                            <option value="DZ">Algeria</option>
-                            <option value="AO">Angola</option>
-                            ...
-                            <option value="ZW">Zimbabwe</option>
-                        </optgroup>
-
-                        <optgroup label="Asia">
-                            <option value="AM">Armenia</option>
-                            <option value="AZ">Azerbaijan</option>
-                            <option value="BH">Bahrain</option>
-                            <option value="BH">India</option>
-                            <option value="BH">Nepal</option>
-                            <option value="BH">Srilanka</option>
-                            ...
-                            <option value="YE">Yemen</option>
-                        </optgroup>
-
-                        <optgroup label="South America">
-                            <option value="AR">Argentina</option>
-                            <option value="BO">Bolivia</option>
-                            <option value="BR">Brazil</option>
-                            ...
-                            <option value="VE">Venezuela</option>
-                        </optgroup>
-
-
-                    </select>
+                    <input placeholder="Your Country" class="w-full bg-white rounded-md border-gray-300 text-black px-2 py-1" id="country"
+                        name="country" type="text">
                 </div>
             </div>
 
-            <!-- <div class="flex items-center pl-4 border border-gray-200 rounded dark:border-gray-700">
-                <input id="bordered-radio-1" type="radio" value="currentaddress" name="currentaddress"
-                    class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
-                <label for="bordered-radio-1"
-                    class="w-full py-4 ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">Address</label>
-            </div> -->
-            <!-- <div class="flex items-center pl-4 border border-gray-200 rounded dark:border-gray-700">
-                <input checked id="bordered-radio-2" type="radio" value="permanantaddress" name="permanantaddress"
-                    class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
-                <label for="bordered-radio-2"
-                    class="w-full py-4 ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">Permanant Address</label>
-            </div> -->
+            
 
-
+            <span class="ml-12 mt-5 font-bold">
+                <%= message %>
+            </span>
             <div class="mt-4 flex justify-end">
                 <button class="bg-white text-black rounded-md px-4 py-1 hover:bg-gray-200 hover:text-gray-900"
                     type="submit">Submit</button>

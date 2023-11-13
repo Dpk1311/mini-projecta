@@ -114,14 +114,14 @@ const addToCart = async (req, res) => {
       await userCart.save();
 
       const userWishlist = await WishlistModel.findOne({ user: userId })
-      console.log('user wishlist',userWishlist);
+      console.log('user wishlist', userWishlist);
 
       await WishlistModel.updateOne(
         { user: userId },
         { $pull: { products: productId } }
       )
 
-     
+
 
 
 
@@ -286,11 +286,11 @@ const wishlist = async (req, res) => {
   const user = req.session.user
   const userid = req.session.user._id
   const wishlistdata = await WishlistModel.findOne({ user: userid }).populate('products')
-  console.log('wishlist', wishlistdata);
-  
-    res.render('user/wishlist', { user, wishlistdata })
+  // console.log('wishlist', wishlistdata);
 
-  
+  res.render('user/wishlist', { user, wishlistdata })
+
+
 }
 
 
@@ -314,6 +314,23 @@ const wishlistadd = async (req, res) => {
 }
 
 
+const wishlistremove = async (req, res) => {
+  const userId = req.session.user._id
+  const productId = req.params.productId
+  // console.log('delete id',productId);  
+
+  const userWishlist = await WishlistModel.findOne({ user: userId })
+  console.log('user wishlist', userWishlist);
+
+  await WishlistModel.updateOne(
+    { user: userId },
+    { $pull: { products: productId } }
+  )
+
+  res.redirect('/wishlist')
+}
+
+
 module.exports = {
   addToCart,
   cart,
@@ -322,5 +339,6 @@ module.exports = {
   deleteFromCart,
   payment,
   wishlist,
-  wishlistadd
+  wishlistadd,
+  wishlistremove
 };

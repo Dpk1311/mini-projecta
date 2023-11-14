@@ -114,7 +114,7 @@ const addToCart = async (req, res) => {
       await userCart.save();
 
       const userWishlist = await WishlistModel.findOne({ user: userId })
-      console.log('user wishlist', userWishlist);
+      // console.log('user wishlist', userWishlist);
 
       await WishlistModel.updateOne(
         { user: userId },
@@ -320,7 +320,7 @@ const wishlistremove = async (req, res) => {
   // console.log('delete id',productId);  
 
   const userWishlist = await WishlistModel.findOne({ user: userId })
-  console.log('user wishlist', userWishlist);
+  // console.log('user wishlist', userWishlist);
 
   await WishlistModel.updateOne(
     { user: userId },

@@ -82,9 +82,10 @@ const generateExcelSalesReport = async (req, res) => {
                 $lte: endOfMonth,
             },
         })
-        .populate('products')
-        .populate('shippingAddress')
-        .exec();
+            .populate('products')
+            .populate('shippingAddress')
+            .exec();
+            console.log(ordersData);
 
         const workbook = new ExcelJS.Workbook();
         const worksheet = workbook.addWorksheet('Orders Data');
@@ -94,9 +95,9 @@ const generateExcelSalesReport = async (req, res) => {
             { header: 'Ordered Address', key: 'shippingAddress.street' },
             { header: 'Ordered City', key: 'shippingAddress.city' },
             { header: 'Ordered State', key: 'shippingAddress.state' },
-            { header: 'Ordered Pincode', key: 'shippingAddress.postalCode' },
+            // { header: 'Ordered Pincode', key: 'shippingAddress.pincode' },
             { header: 'Ordered Country', key: 'shippingAddress.country' },
-            { header: 'Product Names', key: 'products' },
+            // { header: 'Product Names', key: 'products.Name' },
             { header: 'Order Price', key: 'totalAmount' },
         ];
 
@@ -107,7 +108,7 @@ const generateExcelSalesReport = async (req, res) => {
                 'shippingAddress.street': orderData.shippingAddress.street,
                 'shippingAddress.city': orderData.shippingAddress.city,
                 'shippingAddress.state': orderData.shippingAddress.state,
-                'shippingAddress.postalCode': orderData.shippingAddress.postalCode,
+                'shippingAddress.postalCode': orderData.shippingAddress.pincode,
                 'shippingAddress.country': orderData.shippingAddress.country,
                 products: products,
                 totalAmount: orderData.totalAmount,
@@ -329,7 +330,8 @@ const userUnblock = async (req, res) => {
 
 const productmanagement = async (req, res) => {
     try {
-        const check1 = await productModel.find();
+        const check1 = await productModel.find().populate('Category')
+        console.log('category check', check1);
         res.render('admin/productmanagement', { check1 })
     }
     catch (error) {
@@ -342,7 +344,11 @@ const addproduct = async (req, res) => {
     try {
         const displaycategory = await CategoryModel.find()
         console.log("displayproduct:", displaycategory);
-        res.render('admin/addproduct', { displaycategory })
+        if (req.session.invalid) {
+            req.session.invalid = false
+            res.render('admin/addproduct', { displaycategory, message: req.session.errmsg || '' })
+        }
+        res.render('admin/addproduct', { displaycategory, message: '' })
     }
     catch (error) {
         console.error(error);
@@ -352,8 +358,50 @@ const addproduct = async (req, res) => {
 
 const addproductpost = async (req, res) => {
     try {
-        const { Name, Description, Image, Price, Discount, Brand, Category, Size, Quantity } = req.body;
-        console.log('Received signup request:', Name, Description, Image, Price, Discount, Brand, Category, Size, Quantity);
+        let { Name, Description, Image, Price, Discount, Brand, Category, Size, Quantity } = req.body;
+        // console.log('Received signup request:', Name, Description, Image, Price, Discount, Brand, Category, Size, Quantity);
+
+        Name = Name.trim()
+        Description = Description.trim()
+        Price = Price.trim()
+        Discount = Discount.trim()
+        Brand = Brand.trim()
+        Category = Category.trim()
+        Size = Size.trim()
+        Quantity = Quantity.trim()
+
+        if (!Name || !Price || !Discount || !Brand || !Category || !Size || !Quantity) {
+            req.session.invalid = true
+            req.session.errmsg = 'All Fields are necessary'
+            return res.redirect('/addproduct')
+        }
+        if (Price < 0) {
+            req.session.invalid = true
+            req.session.errmsg = 'Invalid Price'
+            return res.redirect('/addproduct')
+        }
+        if (Name.length > 15) {
+            req.session.invalid = true
+            req.session.errmsg = 'Name Should be less than 15 Characters'
+            return res.redirect('/addproduct')
+        }
+        if (Discount < 0 || Discount > 99) {
+            req.session.invalid = true
+            req.session.errmsg = 'Invalid Discount'
+            return res.redirect('/addproduct')
+        }
+        if (Quantity < 0 || Quantity > 50) {
+            req.session.invalid = true
+            req.session.errmsg = 'Invalid Quantity'
+            return res.redirect('/addproduct')
+        }
+        if (Size < 0 || Size > 50) {
+            req.session.invalid = true
+            req.session.errmsg = 'Invalid Size'
+            return res.redirect('/addproduct')
+        }
+
+
 
         const imagePaths = req.files.map(file => {
             let imagePath = file.path;
@@ -384,16 +432,71 @@ const addproductpost = async (req, res) => {
 
 const editproduct = async (req, res) => {
     const productId = req.params.productId
-    // console.log(productId);
-    const productData = await productModel.findById(productId)
-    // console.log('admin product',productData);
-    res.render('admin/editproduct', { productData })
+    const displaycategory = await CategoryModel.find()
+    console.log(productId);
+    const productData = await productModel.findById(productId).populate('Category')
+    // console.log('admin product', productData);
+    if (req.session.invalid) {
+        req.session.invalid = false
+        res.render('admin/editproduct', { productData, displaycategory, message: req.session.errmsg || '' })
+    } else
+        res.render('admin/editproduct', { productData, displaycategory, message: '' })
 }
 
 const editproductpost = async (req, res) => {
     try {
         const productId = req.params.productId
         // console.log(productId);
+
+        let { Name, Description, Image, Price, Discount, Brand, Category, Size, Quantity } = req.body;
+        console.log('Received signup request:', Name, Description, Image, Price, Discount, Brand, Category, Size, Quantity);
+
+        Name = Name.trim()
+        Description = Description.trim()
+        Price = Price.trim()
+        Discount = Discount.trim()
+        Brand = Brand.trim()
+        Category = Category.trim()
+        Size = Size.trim()
+        Quantity = Quantity.trim()
+
+        if (!Name || !Price || !Discount || !Brand || !Category || !Size || !Quantity) {
+            req.session.invalid = true
+            req.session.errmsg = 'All Fields are necessary'
+            return res.redirect(`/editproduct/${productId}`)
+
+        }
+        if (Price < 0) {
+            req.session.invalid = true
+            req.session.errmsg = 'Invalid Price'
+            return res.redirect(`/editproduct/${productId}`)
+
+        }
+        if (Name.length > 15) {
+            req.session.invalid = true
+            req.session.errmsg = 'Name Should be less than 15 Characters'
+            return res.redirect(`/editproduct/${productId}`)
+
+        }
+        if (Discount < 0 || Discount > 99) {
+            req.session.invalid = true
+            req.session.errmsg = 'Invalid Discount'
+            return res.redirect(`/editproduct/${productId}`)
+
+        }
+        if (Quantity < 0 || Quantity > 50) {
+            req.session.invalid = true
+            req.session.errmsg = 'Invalid Quantity'
+            return res.redirect(`/editproduct/${productId}`)
+
+        }
+        if (Size < 0 || Size > 50) {
+            req.session.invalid = true
+            req.session.errmsg = 'Invalid Size'
+            return res.redirect(`/editproduct/${productId}`)
+
+        }
+
         const imagePaths = req.files.map(file => {
             let imagePath = file.path;
 
@@ -406,15 +509,15 @@ const editproductpost = async (req, res) => {
         });
         const productData = await productModel.findById(productId)
         // console.log(productData);
-        productData.Name = req.body.Name || productData.Name
-        productData.Description = req.body.Description || productData.Description
-        productData.Price = req.body.Price || productData.Price
+        productData.Name = Name || productData.Name
+        productData.Description = Description || productData.Description
+        productData.Price = Price || productData.Price
         productData.Image = imagePaths || productData.Image
-        productData.Discount = req.body.Discount || productData.Discount
-        productData.Brand = req.body.Brand || productData.Brand
-        productData.Category = req.body.Category || productData.Category
-        productData.Size = req.body.Size || productData.Size
-        productData.Quantity = req.body.Quantity || productData.Quantity
+        productData.Discount = Discount || productData.Discount
+        productData.Brand = Brand || productData.Brand
+        productData.Category = Category || productData.Category
+        productData.Size = Size || productData.Size
+        productData.Quantity = Quantity || productData.Quantity
 
         await productData.save()
         console.log('product updated');
@@ -449,16 +552,42 @@ const categorymanagement = async (req, res) => {
 }
 
 
-const addcategory = async (req, res) => {
-    const category = await CategoryModel.find();
-    res.render('admin/addcategory', { category })
+const editcategory = async (req, res) => {
+    const productId = req.params.productId
+    console.log(productId)
+    const categoryData = await CategoryModel.findById(productId)
+    // console.log('categorydatais', categoryData);
+    if (req.session.invalid) {
+        req.session.invalid = false
+        res.render('admin/editcategory', { categoryData, message: req.session.errmsg || '' })
+    }
+    res.render('admin/editcategory', { categoryData, message: '' })
 }
 
 
-const addcategorypost = async (req, res) => {
+const editcategorypost = async (req, res) => {
     try {
-        const { Name, Description, gender, image, status } = req.body;
-        console.log('Received signup request:', Name, Description, gender, image, status);
+        const productId = req.params.productId
+        console.log(productId);
+
+        let { Name, Description, gender, status } = req.body
+        // console.log('Received signup request:', Name, Description, gender, status);
+
+        Name = Name.trim()
+        Description = Description.trim()
+        gender = gender.trim()
+        status = status.trim()
+        if (!Name || !status || !gender || !Description) {
+            req.session.invalid = true
+            req.session.errmsg = 'All Fields are necessary'
+            return res.redirect(`/editcategory/${productId}`)
+        }
+        if (Name.length > 15) {
+            req.session.invalid = true
+            req.session.errmsg = 'Name Should be less than 15 Characters'
+            return res.redirect(`/editproduct/${productId}`)
+
+        }
 
         let imagePath = req.file.path;
         if (imagePath.includes('public\\')) {
@@ -469,10 +598,78 @@ const addcategorypost = async (req, res) => {
             imagePath = imagePath.replace('public/', '');
         }
 
+        const categoryData = await CategoryModel.findById(productId)
+        categoryData.Name = Name || categoryData.Name
+        categoryData.Description = Description || categoryData.Description
+        categoryData.gender = gender || categoryData.gender
+        categoryData.Image = imagePath || categoryData.Image
+        categoryData.status = status || categoryData.status
+
+        await categoryData.save()
+        console.log('category updated');
+        res.redirect('/categorymanagement')
+
+    }
+    catch (error) {
+        console.error(error);
+    }
+}
+
+
+
+
+const addcategory = async (req, res) => {
+    const category = await CategoryModel.find();
+    if (req.session.invalid) {
+        req.session.invalid = false
+        res.render('admin/addcategory', { category, message: req.session.errmsg || '' })
+    }
+    res.render('admin/addcategory', { category, message: '' })
+}
+
+
+const addcategorypost = async (req, res) => {
+    try {
+        let { Name, Description, gender, status } = req.body;
+        console.log('Received signup request:', Name, Description, gender, status)
         const existingCategory = await CategoryModel.findOne({ Name: { $regex: new RegExp(`^${Name}$`, 'i') } });
-        if (existingCategory) {
-            throw new Error('Category already exists');
+        Name = Name.trim()
+        Description = Description.trim()
+        gender = gender.trim()
+        status = status.trim()
+        if (!Name || !status || !gender || !Description) {
+            req.session.invalid = true
+            req.session.errmsg = 'All Fields are necessary'
+            return res.redirect('/addcategory')
         }
+        if (Name.length > 15) {
+            req.session.invalid = true
+            req.session.errmsg = 'Name Should be less than 15 Characters'
+            return res.redirect('/addcategory')
+
+        } if (existingCategory) {
+            req.session.invalid = true
+            req.session.errmsg = 'Name already exists'
+            return res.redirect('/addcategory')
+        }
+
+
+
+
+
+        let imagePath = req.file.path;
+        if (imagePath.includes('public\\')) {
+
+            imagePath = imagePath.replace('public\\', '');
+        } else if (imagePath.includes('public/')) {
+
+            imagePath = imagePath.replace('public/', '');
+        }
+
+
+        // if (existingCategory) {
+        //     throw new Error('Category already exists');
+        // }
 
 
         const newCategory = new CategoryModel({
@@ -487,6 +684,23 @@ const addcategorypost = async (req, res) => {
     }
     catch (error) {
         console.error("Internal Server error", error);
+    }
+}
+
+const categorydelete = async (req, res) => {
+    try {
+        const productId = req.params.productId;
+        console.log(productId);
+        const categorydata = await CategoryModel.findByIdAndDelete(productId);
+        if (categorydata) {
+            console.log('Document deleted successfully:', categorydata);
+        } else {
+            console.log('Document not found or not deleted');
+        }
+        res.redirect('/categorymanagement');
+    }
+    catch (error) {
+        console.error(error);
     }
 }
 
@@ -536,10 +750,40 @@ const orderstatusupdate = async (req, res) => {
 }
 
 
+const productunlist = async (req, res) => {
+    const productId = req.params.productId
+    console.log('productId', productId);
+    try {
+        const product = await productModel.findById(productId)
+        product.Instock = false
+
+        await product.save()
+        res.redirect('/productmanagement')
+    }
+    catch (error) {
+        console.error(error);
+    }
+}
+
+const productlist = async (req, res) => {
+    const productId = req.params.productId
+    console.log('productId', productId);
+    try {
+        const product = await productModel.findById(productId)
+        product.Instock = true
+
+        await product.save()
+        res.redirect('/productmanagement')
+    }
+    catch (error) {
+        console.error(error);
+    }
+}
 
 
 module.exports = {
     adminlogin, adminloginpost, adminhome, productmanagement, addproduct, addproductpost, categorymanagement, addcategory, addcategorypost, usersearch,
-    userblock, userUnblock, ordermanagement, orderstatusupdate, editproduct, editproductpost, deleteproduct, usermanagement,generateExcelSalesReport
+    userblock, userUnblock, ordermanagement, orderstatusupdate, editproduct, editproductpost, deleteproduct, usermanagement, generateExcelSalesReport,
+    productunlist, productlist, editcategory, editcategorypost, categorydelete
 }
 

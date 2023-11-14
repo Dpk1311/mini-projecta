@@ -2,103 +2,148 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="dist/output.css">
-    <link rel="stylesheet"
-        href="https://demos.creative-tim.com/notus-js/assets/vendor/@fortawesome/fontawesome-free/css/all.min.css">
-    <script src="https://cdn.tailwindcss.com"></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="dist/output.css">
+  <link rel="stylesheet"
+    href="https://demos.creative-tim.com/notus-js/assets/vendor/@fortawesome/fontawesome-free/css/all.min.css">
+  <script src="https://cdn.tailwindcss.com"></script>
 
-    <title>Document</title>
-    <style>
-        .container {
-            position: relative;
-        }
+  <title>Document</title>
+  <style>
+    .container {
+      position: relative;
+    }
 
-        .section-heading {
-            font-size: 2em;
-            color: #333;
-            text-align: center;
-            text-transform: uppercase;
-            font-weight: bold;
-            letter-spacing: 2px;
-        }
+    .section-heading {
+      font-size: 2em;
+      color: #333;
+      text-align: center;
+      text-transform: uppercase;
+      font-weight: bold;
+      letter-spacing: 2px;
+    }
 
-        .btn {
-            background-color: #4CAF50;
-            /* Green */
-            border: none;
-            color: white;
-            padding: 15px 32px;
-            text-align: center;
-            text-decoration: none;
-            display: inline-block;
-            font-size: 16px;
-            margin: 4px 2px;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-        }
+    .btn {
+      background-color: #4CAF50;
+      /* Green */
+      border: none;
+      color: white;
+      padding: 15px 32px;
+      text-align: center;
+      text-decoration: none;
+      display: inline-block;
+      font-size: 16px;
+      margin: 4px 2px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
 
-        .btn:hover {
-            background-color: #45a049;
-        }
-    </style>
+    .btn1 {
+      background-color: #fd8d04;
+      /* Green */
+      border: none;
+      color: white;
+      padding: 15px 32px;
+      text-align: center;
+      text-decoration: none;
+      display: inline-block;
+      font-size: 16px;
+      margin: 4px 2px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    .btn:hover {
+      background-color: #45a049;
+    }
+
+    .btn1:hover {
+      background-color: #e84813;
+    }
+
+    .btn-position-right {
+      position: absolute;
+      right: 0;
+      margin-right: 20px;
+    }
+  </style>
 </head>
 
 <body>
-    <%- include('adminpartials/navbar') %>
-        <section class="container mx-auto p-6 font-mono">
-            <div class="flex justify-between items-center mb-4">
-                <h1 class="section-heading">Category Management</h1>
-                <button class="btn"><a href="/addcategory">Add Category</a></button>
-            </div>
-            <% category.forEach((item)=> {%>
-                <div class="w-full mb-8 overflow-hidden rounded-lg shadow-md">
-                    <div class="w-full overflow-x-auto">
-                      <div class="flex flex-wrap">
-                        <div class="w-full">
-                          <div class="flex items-center text-sm">
-                            <div class="relative w-32 h-48 mr-3 md:block">
-                              <img class="object-cover w-full h-full " src="<%= item.image %>" alt="" loading="lazy" />
-                              <div class="absolute inset-0 rounded-full shadow-inner" aria-hidden="true"></div>
-                            </div>
-                            <div>
-                              <p class="font-semibold text-black mb-2">Name: <%= item.Name %></p>
-                              <p class="text-xs text-gray-600 mb-2">
-                                <%= item.Description %>
-                              </p>
-                            </div>
-                          </div>
-                          <div class="flex justify-between px-4 py-3">
-                            <div>
-                              <p class="text-sm mb-2">Gender</p>
-                              <p class="text-ms font-semibold mb-2">
-                                <%= item.gender %>
-                              </p>
-                            </div>
-                            <div>
-                              <p class="text-sm mb-2">Status</p>
-                              <p class="text-xs mb-2">
-                                <span class="px-2 py-1 font-semibold leading-tight text-green-700 bg-green-100 rounded-sm">
-                                  <%= item.status %>
-                                </span>
-                              </p>
-                            </div>
-                            <div>
-                              <p class="text-sm mb-2">Created Date</p>
-                              <p class="text-sm mb-2">
-                                <% let date=new Date(item.created_at); let formattedDate=date.getDate() + '-' + (date.getMonth() + 1) + '-' + date.getFullYear(); %>
-                                <%= formattedDate %>
-                              </p>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
+  <%- include('adminpartials/navbar') %>
+    <section class="container mx-auto p-6 font-mono">
+      <h1 class="section-heading">Category Management</h1>
+      <div class="flex justify-end items-center mb-4">
+        <button class="btn"><a href="/addcategory">Add Category</a></button>
+
+      </div>
+      <% category.forEach((item)=> {%>
+        <% console.log(item); %>
+          <div class="w-full mb-8 overflow-hidden rounded-lg shadow-md">
+            <div class="w-full overflow-x-auto">
+              <div class="flex flex-wrap">
+                <div class="w-full">
+                  <div class="flex items-center text-sm">
+                    <div class="relative w-32 h-48 mr-3 md:block">
+                      <img class="object-cover w-full h-full " src="<%= item.image %>" alt="" loading="lazy" />
+                      <div class="absolute inset-0 rounded-full shadow-inner" aria-hidden="true"></div>
+                    </div>
+                    
+                    <div>
+                      <p class="font-semibold text-black mb-2">Name: <%= item.Name %>
+                      </p>
+                      <p class="text-xs text-gray-600 mb-2">
+                        <%= item.Description %>
+                      </p>
+                    </div>
+                    
+                    <button class="btn1 btn-position-right"><a href="/editcategory/<%= item._id %>">Edit
+                        Category</a></button>
+                  </div>
+                  <div class="flex justify-between px-4 py-3">
+                    <div>
+                      <p class="text-sm mb-2">Gender</p>
+                      <p class="text-ms font-semibold mb-2">
+                        <%= item.gender %>
+                      </p>
+                    </div>
+                    <div>
+                      <p class="text-sm mb-2">Status</p>
+                      <p class="text-xs mb-2">
+                        <span class="px-2 py-1 font-semibold leading-tight text-green-700 bg-green-100 rounded-sm">
+                          <%= item.status %>
+                        </span>
+                      </p>
+                    </div>
+                    <div>
+                      <p class="text-sm mb-2">Created Date</p>
+                      <p class="text-sm mb-2">
+                        <% let date=new Date(item.created_at); let formattedDate=date.getDate() + '-' + (date.getMonth()
+                          + 1) + '-' + date.getFullYear(); %>
+                          <%= formattedDate %>
+                      </p>
+                    </div>
+                    <div>
+                      <p class="text-sm mb-2">Remove</p>
+                      <p class="text-xs mb-2">
+                        <span class="px-2 py-1 font-semibold leading-tight text-green-700">
+                          <a href="/categorydelete/<%= item._id %>"><svg id="removeIcon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                          stroke-width="1.5" stroke="currentColor"
+                          class="h-5 w-5 cursor-pointer duration-150 hover:text-red-500">
+                          <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                        </svg></a>
+                        </span>
+                      </p>
                     </div>
                   </div>
-                  
-                <%}); %>
-        </section>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <%}); %>
+    </section>
 
 
 

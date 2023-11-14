@@ -16,29 +16,29 @@
                 <div class="flex justify-center mb-8">
                     <h1 class="w-30 h-20 font-bold">V A S T R A</h1>
                 </div>
-                <h1 class="text-2xl font-semibold text-center text-gray-500 mt-8 mb-6">Add Coupon</h1>
-                <form  action="/addcoupon" method="post" >
+                <h1 class="text-2xl font-semibold text-center text-gray-500 mt-8 mb-6">Edit Coupon</h1>
+                <form  action="/couponedit/<%= coupondata._id %>" method="post" >
                     <div class="mb-4">
                         <label for="Name" class="block mb-2 text-sm text-gray-600">Name</label>
-                        <input type="text" id="Name" name="name"
+                        <input type="text" id="Name" name="name" value="<%= coupondata.name %>"
                             class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500"
                             >
                     </div>
                     <div class="mb-4">
                         <label for="Code" class="block mb-2 text-sm text-gray-600">Code</label>
-                        <input type="text" id="Code" name="code"
+                        <input type="text" id="Code" name="code" value="<%= coupondata.code %>"
                             class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500"
                             >
                     </div>
                     <div class="mb-4">
                         <label for="Discount" class="block mb-2 text-sm text-gray-600">Discount</label>
-                        <input type="number" id="Discount" name="discount"
+                        <input type="number" id="Discount" name="discount" value="<%= coupondata.discount %>"
                             class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500"
                             >
                     </div>
                     <div class="mb-6">
                         <label for="Expiry" class="block mb-2 text-sm text-gray-600">Expiry</label>
-                        <input type="date" id="Expiry" name="expiryDate"
+                        <input type="date" id="Expiry" name="expiryDate" value="<%= coupondata.expiryDate %>"
                             class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500"
                             >
                     </div>

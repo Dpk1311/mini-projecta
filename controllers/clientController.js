@@ -72,7 +72,7 @@ const loginpost = async (req, res) => {
             req.session.invalid = true;
             req.session.errormsg = "Invalid User";
             return res.redirect('/login')
-        } else { 
+        } else {
             // Compare hashed passwords
             const passwordMatch = await bcrypt.compare(password, user.password);
 
@@ -110,13 +110,25 @@ const logout = (req, res) => {
 
 const forgotpassword = (req, res) => {
     const msg = req.query.msg
-    res.render('user/forgotpassword', { msg })
+    if (req.session.invalid) {
+        req.session.invalid = false
+        res.render('user/forgotpassword', { msg: req.session.errmsg || '' })
+    }
+    res.render('user/forgotpassword', { msg: '' })
 }
 
 const forgotpasswordpost = async (req, res) => {
     try {
-        const { email } = req.body;
-        const user = await UserModel.findOne({ email });
+        let { email } = req.body;
+        const user = await UserModel.findOne({ email })
+
+
+
+        if (!user) {
+            req.session.invalid = true
+            req.session.errmsg = "Invalid Email"
+            return res.redirect('/forgotpassword')
+        }
 
         if (user) {
             const otp = generateOTP();
@@ -152,7 +164,7 @@ const forgotpasswordpost = async (req, res) => {
                     // await user.save();
 
                     // Redirect to the OTP verification page
-                    res.redirect('/otp');
+                    res.redirect('/fotp');
                 }
             });
         } else {
@@ -171,25 +183,25 @@ const updatepassword = async (req, res) => {
 
     const oldpassword = req.params.oldpassword
     const newpassword = req.params.newpassword
-   
+
     const userid = req.session.user._id
-    const user = await UserModel.findOne({ _id: userid})
+    const user = await UserModel.findOne({ _id: userid })
     console.log(user)
     const passwordMatch = await bcrypt.compare(oldpassword, user.password)
     if (!passwordMatch) {
         res.json('oldpassword not match')
-    }if(newpassword.length < 7 ){
+    } if (newpassword.length < 7) {
         res.json('password too short')
-    } 
+    }
     else {
         const hashedPassword = await bcrypt.hash(newpassword, 10)
         user.password = hashedPassword
         await user.save();
-        req.session.destroy()        
+        req.session.destroy()
         res.json('Password updated successfully');
-    } 
+    }
 
-   
+
 }
 
 
@@ -334,7 +346,7 @@ const otp = async (req, res) => {
 
 const otppost = async (req, res) => {
     try {
-        const { otp } = req.body;
+        let { otp } = req.body;
         const user = await UserModel.findOne({ otp: otp });
 
         if (!user) {
@@ -400,6 +412,63 @@ const otpresend = async (req, res) => {
     }
 
 
+}
+
+const fotp = async (req, res) => {
+    try {
+        if (req.session.invalid) {
+            req.session.invalid = false
+            res.render('user/fotp', { message: req.session.errmsg || '' });
+        } else {
+            res.render('user/fotp', { message: '' })
+        }
+    }
+    catch (error) {
+        console.error(error);
+    }
+}
+
+const fotppost = async (req, res) => {
+    try {
+        const { otp } = req.body;
+        const user = await UserModel.findOne({ otp: otp });
+
+        if (!user) {
+            req.session.invalid = true;
+            req.session.errmsg = "Invalid OTP";
+            return res.redirect('/fotp');
+        }
+
+        user.otp = null;
+        user.isOtpVerified = true;
+        await user.save()
+
+
+        res.redirect('/newpassword')
+    }
+    catch (error) {
+        console.error(error);
+    }
+}
+
+
+const newpassword = async (req, res) => {
+    try {
+        res.render('user/newpassword')
+    }
+    catch (error) {
+        console.error(error);
+    }
+}
+
+const newpasswordpost = async (req, res) => {
+    try {
+        let { password } = req.body
+        console.log(password);
+    }
+    catch (error) {
+        console.error(error);
+    }
 }
 
 
@@ -759,6 +828,7 @@ module.exports = {
     signup,
     signuppost,
     otp,
+    fotp,
     product_shirts,
     productpage,
     otppost,
@@ -778,6 +848,9 @@ module.exports = {
     productsort,
     productsearch,
     deleteaddress,
+    fotppost,
+    newpassword,
+    newpasswordpost
 
 
 };

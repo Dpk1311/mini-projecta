@@ -103,6 +103,12 @@
                                                     placeholder="98603" value="<%=element.pincode%>">
                                             </label>
                                             <label
+                                                class="xl:w-1/4 xl:inline-flex py-3 items-center flex xl:border-none border-t border-gray-200 py-3">
+                                                <span class="text-right px-2 xl:px-0 xl:text-none">Country</span>
+                                                <input name="country" class="focus:outline-none px-3"
+                                                    placeholder="98603" value="<%=element.country%>">
+                                            </label>
+                                            <!-- <label
                                                 class="flex border-t border-gray-200 h-12 py-3 items-center select relative">
                                                 <span class="text-right px-2">Country</span>
                                                 <div id="country"
@@ -134,7 +140,7 @@
                                                         <option value="US" selected="selected">United States</option>
                                                     </select>
                                                 </div>
-                                            </label>
+                                            </label> -->
                                         </fieldset>
                             </section>
                             <% }) %>
@@ -149,7 +155,7 @@
                                 <form id="addressForm" class="p-6">
                                     <!-- For each saved address, add a radio input and a label like this: -->
                                     <% user.address.forEach((element)=> {%>
-                                        <% console.log('modaladddress',element); %>
+                                        <%# console.log('modaladddress',element); %>
                                             <div class="flex items-center mb-4">
                                                 <input type="radio" id="<%= element.id %>" name="address"
                                                     value="<%= element.street %>, <%= element.city %>, <%= element.state %>, <%= element.pincode %>, <%= element.country %>"
@@ -176,12 +182,16 @@
                                 <label class="flex border-b border-gray-200 h-12 py-3 items-center">
                                     <span class="text-right px-2">Payment Methods</span>
                                     <label class="flex items-center cursor-pointer ml-4">
-                                        <input type="radio" name="paymentMethod" value="paypal" required>
-                                        <span class="ml-2">PayPal</span>
+                                        <input type="radio" name="paymentMethod" value="Razorpay" required>
+                                        <span class="ml-2">Razorpay</span>
                                     </label>
                                     <label class="flex items-center cursor-pointer ml-4">
                                         <input type="radio" name="paymentMethod" value="CashonDelivery" required>
                                         <span class="ml-2">Cash on Delivery</span>
+                                    </label>
+                                    <label class="flex items-center cursor-pointer ml-4">
+                                        <input type="radio" name="paymentMethod" value="Wallet" required>
+                                        <span class="ml-2">Wallet</span>
                                     </label>
                                 </label>
                             </fieldset>
@@ -281,7 +291,7 @@
 
                                         options.amount = discountedPrice * 100;
 
-                                    }
+                                    }  
                                 })
                                 .catch(error => console.error('Error:', error));
                         });
@@ -308,7 +318,7 @@
 
 
 
-                            if (paymentMethod === "paypal") {
+                            if (paymentMethod === "Razorpay") {
                                 let response = await fetch(`/payment/${totalPrice}`, {
                                     method: 'POST',
                                     headers: {
@@ -330,7 +340,27 @@
 
                                 var rzp1 = new Razorpay(options);
                                 rzp1.open();
-                            } else {
+                            }else if(paymentMethod === 'Wallet' ){
+                                let response = await fetch(`/walletpayment/${totalPrice}`,{
+                                    method :'POST',
+                                    headers:{
+                                        'Content-Type':'application/json'
+                                    },
+                                    body: JSON.stringify({ discountedPrice: totalPrice})
+                                })
+                                .then(response => response.json())
+                                .then(data =>{
+                                    if(data.error){
+                                        alert(data.error)
+                                    }else{
+                                        window.location.href = `/orders?discountedPrice=${totalPrice}`
+                                    }
+                                })
+                                .catch(error =>{
+                                    console.log(error)
+                                })
+                            } 
+                            else {
                                 window.location.href = `/orders?discountedPrice=${totalPrice}`;
                             }
                         };
@@ -346,7 +376,7 @@
                             // Prevent the form from being submitted normally
                             event.preventDefault();
                             // Get the selected address
-                            var selectedAddress = this.elements.address.value;
+                            var selectedAddress = this.elements.address.value
                             // Split the address into its components
                             var [street, city, state, pincode, country] = selectedAddress.split(', ');
                             // Update the form fields with the selected address
@@ -354,7 +384,7 @@
                             document.querySelector('input[name="city"]').value = city;
                             document.querySelector('input[name="state"]').value = state;
                             document.querySelector('input[name="postal_code"]').value = pincode;
-                            document.querySelector('select[name="country"]').value = country;
+                            document.querySelector('input[name="country"]').value = country;
                             // Close the modal
                             document.getElementById('addressModal').classList.add('hidden');
 

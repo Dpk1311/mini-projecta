@@ -1,5 +1,5 @@
 <% categorycollection.forEach((element) => { %>
-  
+  <% console.log('element is',element); %>
 
 <div class="px-4 bg-white mb-8 py-8 rounded-3xl mx-auto sm:max-w-xl md:max-w-full lg:max-w-screen-xl md:px-24 lg:px-8 ">
     <div class="flex flex-col items-center justify-between w-full mb-10 lg:flex-row">
@@ -13,11 +13,11 @@
         </div>
         <div className='space-x-4'>
         <button class="text-neutral-800  text-lg font-medium inline-flex items-center">
-        <span> <a href="/product_shirts">get insights →</a></span>
+        <span> <a href="/product_shirts/<%= element._id  %>">get insights →</a></span>
         </button>
         </div>
       </div>
-      <img alt="logo" width="420" height="120" src="<%= element.image %>" />
+      <img alt="logo" width="420" height="120" src="<%= element.image %>" class="object-cover" />
     </div>
   </div>
 <% }); %>

@@ -46,26 +46,26 @@
 						<table class="min-w-full leading-normal">
 							<thead>
 								<tr>
-									<th
+									<!-- <th
 										class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
 										Image
+									</th> -->
+									<th
+										class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+										Order Date
 									</th>
 									<th
 										class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
-										Date
-									</th>
-									<th
-										class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
-										Products
+										Orderid
 									</th>
 									<th
 										class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
 										Customer
 									</th>
-									<th
+									<!-- <th
 										class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
 										Quantity
-									</th>
+									</th> -->
 									<th
 										class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
 										Price
@@ -78,32 +78,36 @@
 										class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
 										Action
 									</th>
+									<th
+										class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+										View
+									</th>
 								</tr>
 							</thead>
 							<% order.forEach((element, index)=> {%>
-								<% console.log('managementejs',element); %>
-									<% element.products.forEach((item, itemIndex)=> { %>
-										<% console.log('productdetailejs',item); %>
+								<%# console.log('managementejs',element); %>
+									
+										<%# console.log('productdetailejs',item); %>
 
 											<tbody>
 												<tr>
 											<tbody class="border-black">
-												<td class="px-5 py-5  border-gray-200 bg-white text-sm">
+												<!-- <td class="px-5 py-5  border-gray-200 bg-white text-sm">
 													<div class="flex items-center">
 														<div class="flex-shrink-0 w-10 h-10">
 															<img class="w-full h-full rounded-full"
-																src="<%= item.product.Image %>"
+																src="<%#= item.product.Image[0] %>"
 																alt="photos of products" />
 														</div>
 													</div>
-												</td>
+												</td> -->
 												<td class="px-5 py-5  border-gray-200 bg-white text-sm">
 													<p class="text-gray-900 whitespace-no-wrap">
-														cc
+														<%= element.orderDate.toLocaleDateString() %>
 													</p>
 												<td class="px-5 py-5  border-gray-200 bg-white text-sm">
 													<p class="text-gray-900 whitespace-no-wrap">
-														<%= item.product.Name %>
+														<%= element._id %>
 												</td>
 												</td>
 												<td class="px-5 py-5  border-gray-200 bg-white text-sm">
@@ -111,23 +115,24 @@
 														<%= element.user.name %>
 													</p>
 												</td>
+												<!-- <td class="px-5 py-5  border-gray-200 bg-white text-sm">
+													<p class="text-gray-900 whitespace-no-wrap">
+														<%#= item.quantity%>
+												</td> -->
 												<td class="px-5 py-5  border-gray-200 bg-white text-sm">
 													<p class="text-gray-900 whitespace-no-wrap">
-														<%= item.quantity%>
+														₹<%= element.totalAmount%>
 												</td>
 												<td class="px-5 py-5  border-gray-200 bg-white text-sm">
 													<p class="text-gray-900 whitespace-no-wrap">
-														₹<%= item.product.Price%>
-												</td>
-												<td class="px-5 py-5  border-gray-200 bg-white text-sm">
-													<p class="text-gray-900 whitespace-no-wrap">
-														<% console.log(element.Status);%>
+														<%# console.log(element.Status);%>
 															<%= element.Status %>
 												</td>
 												<td class="px-5 py-5  border-gray-200 bg-white text-sm">
 													<p class="text-gray-900 whitespace-no-wrap">
+														
 														<select class="select_input"
-															id="dropdown-<%= index %>-<%= itemIndex %>"
+															id="dropdown-<%= index %>-<%#= itemIndex %>"
 															data-id="<%= element._id %>">
 															<% if (element.Status==='OrderPending' ) { %>
 																<option class="change_status" value="Order Delivered">
@@ -158,25 +163,57 @@
 																			Shipped</option>
 																		<option disabled value="Order Cancelled">Order
 																			Cancelled</option>
-																		<% }else{%>
-																			<option value="Order Delivered">Order
+																		<% }else if( element.Status==='Order Returned'
+																			){ %>
+																			<option disabled value="Order Delivered">
+																				Order
 																				Delivered</option>
 																			<option disabled value="Pending">Order
-																				Pending</option>
+																				Pending
+																			</option>
+																			<option disabled value="Order Shipped">Order
+																				Shipped
+																			</option>
+																			<option disabled value="Order Cancelled">Order
+																				Cancelled
+																			</option>
 																			<option selected
 																				class="change_status active"
-																				value="Order Shipped">Order Shipped
+																				value="Order Returned">Order Returned
 																			</option>
-																			<option disabled value="Order Cancelled">
-																				Order Cancelled</option>
-																			<%} %>
+																			<%}else{%>
+																				<option value="Order Delivered">Order
+																					Delivered</option>
+																				<option disabled value="Pending">Order
+																					Pending</option>
+																				<option selected
+																					class="change_status active"
+																					value="Order Shipped">Order Shipped
+																				</option>
+																				<option disabled
+																					value="Order Cancelled">
+																					Order Cancelled</option>
+																				<%} %>
 														</select>
+												</td>
+												<td class="px-5 py-5  border-gray-200 bg-white text-sm">
+													<a href="/adminorderdetail" class="orderanchor"
+														onclick="passOrderId('<%= element._id %>', this)">
+														<svg xmlns="http://www.w3.org/2000/svg" fill="none"
+															viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
+															class="w-6 h-6">
+															<path stroke-linecap="round" stroke-linejoin="round"
+																d="M2.036 12.322a1.012 1.012 0 010-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178z" />
+															<path stroke-linecap="round" stroke-linejoin="round"
+																d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+														</svg>
+													</a>
 												</td>
 											</tbody>
 											</tr>
 											</tbody>
 											<%}); %>
-												<%}); %>
+												
 						</table>
 					</div>
 				</div>
@@ -219,7 +256,11 @@
 			// Add event listener for each dropdown
 
 		</script>
-
+		<script>
+			function passOrderId(orderId, element) {
+				element.href = element.href + '?orderId=' + orderId;
+			}
+		</script>
 
 
 

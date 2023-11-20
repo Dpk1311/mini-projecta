@@ -109,7 +109,7 @@ const logout = (req, res) => {
 };
 
 const forgotpassword = (req, res) => {
-    const msg = req.query.msg
+    // const msg = req.query.msg
     if (req.session.invalid) {
         req.session.invalid = false
         res.render('user/forgotpassword', { msg: req.session.errmsg || '' })
@@ -164,6 +164,9 @@ const forgotpasswordpost = async (req, res) => {
                     // await user.save();
 
                     // Redirect to the OTP verification page
+                    user.otp = otp
+                    await user.save()
+                    req.session.email = user.email
                     res.redirect('/fotp');
                 }
             });
@@ -443,7 +446,7 @@ const fotppost = async (req, res) => {
         user.isOtpVerified = true;
         await user.save()
 
-
+        console.log('here is it ');
         res.redirect('/newpassword')
     }
     catch (error) {
@@ -464,7 +467,17 @@ const newpassword = async (req, res) => {
 const newpasswordpost = async (req, res) => {
     try {
         let { password } = req.body
-        console.log(password);
+        password = password.trim()
+        email = req.session.email
+        console.log('emial is ',email)
+        const user = await UserModel.findOne({ email })
+
+        const hashedPassword = await bcrypt.hash(password, 10)
+        user.password = hashedPassword
+        await user.save()
+        console.log('new password saved');
+        // console.log(password);
+        res.redirect('/login')
     }
     catch (error) {
         console.error(error);
@@ -661,28 +674,33 @@ const updateAddress = async (req, res) => {
     try {
         const { address } = req.body;
         const userId = req.session.user._id;
+        const addressParts = address.split(', ');
 
-        // Update the address field with the new address
-        await UserModel.findOneAndUpdate(
+        const street = addressParts[0];
+        const city = addressParts[1];
+        const state = addressParts[2];
+        const pincode = addressParts[3];
+        const country = addressParts[4];
+
+
+        const newAddress = new addressModel({
+            street: street,
+            city: city,
+            state: state,
+            pincode: pincode,
+            country: country
+        });
+
+        await newAddress.save();
+
+        const newuser = await UserModel.findOneAndUpdate(
             { _id: userId },
-            { $push: { address: address } }
+            { $set: { selectedAddress: newAddress._id } }
         );
+        //    console.log('address chnaged user',newuser);
 
-        // Update the selectedAddress field with the new selected address
-        await UserModel.findOneAndUpdate(
-            { _id: userId },
-            { selectedAddress: address }
-        );
-
-        // Fetch the updated user data
-        const updatedUser = await UserModel.findById(userId);
-        //   updatedUser.selectedAddress = address;
-        //   await updatedUser.save();
-
-
-
-        // Send the updated user data as the response
-        res.json(updatedUser);
+        let data = 'sucess'
+        res.json(data);
     } catch (error) {
         console.error(error);
         res.status(500).json({ error: 'Failed to update address' });
@@ -767,11 +785,25 @@ const productpage = async (req, res) => {
 }
 
 const product_shirts = async (req, res) => {
-    const productcollection = await productModel.find()
     const user = req.session.user
-    // console.log('productcollection', productcollection);
-    res.render('user/product_shirts', { productcollection, user })
+    const categoryid = req.params.categoryid
+    const page = req.query.page || 1
+    // console.log(page);
+    const limit = 6; // Number of items per page
+    const skip = (Number(page) - 1) * limit; // Calculate the number of items to skip
+
+    const productcollection = await productModel.find({ Category: categoryid }).skip(skip).limit(limit);
+    const totalItems = await productModel.countDocuments({ Category: categoryid.toString() });
+    console.log(totalItems);
+    const totalPages = Math.ceil(totalItems / limit);
+
+    res.render('user/product_shirts', { productcollection, totalPages, page, user })
 }
+
+
+
+
+
 
 
 const productsort = async (req, res) => {

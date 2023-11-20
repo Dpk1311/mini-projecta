@@ -80,7 +80,7 @@ const applycoupon = async (req, res) => {
     console.log(isoString);
 
     if (expiryDate < currentdate) {
-        return res.json({ error: "Coupon has expired" })
+        return res.json({ error: "Coupon has expired" }) 
     }
 
 
@@ -95,7 +95,7 @@ const applycoupon = async (req, res) => {
 
     res.json({ message: 'Coupon applied successfully', discountedPrice });
 }
-
+  
 
 const coupondelete = async (req, res) => {
     try {
@@ -169,7 +169,7 @@ const couponeditpost = async (req, res) => {
         await coupondata.save()
         console.log('coupon updated');
         res.redirect('/coupon')
-    }
+    } 
     catch (error) {
         console.error(error)
     }

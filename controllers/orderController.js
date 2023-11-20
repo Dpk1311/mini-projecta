@@ -6,9 +6,9 @@ const fs = require('fs')
 
 
 
-const generateInvoiceWithPdfKit = (cartData,data) => {
-   
-    console.log('order.amount', cartData.totalAmount);
+const generateInvoiceWithPdfKit = (cartData, data) => {
+
+    //console.log('order.amount', cartData)
 
     console.log('generateInvoiceWithPdfKit');
     const doc = new PDFDocument();
@@ -30,11 +30,20 @@ const generateInvoiceWithPdfKit = (cartData,data) => {
     doc.fontSize(12).text(`Invoice Number: INV-${cartData._id}`).moveDown(0.5);
     doc.fontSize(12).text(`Invoice Date: ${formattedDate}`).moveDown(0.5);
     doc.fontSize(12).text(`Customer: ${data.user}`).moveDown(1);
+    doc.text('Shipping Address is:')
+    doc.moveDown()
+    doc.text(`${cartData.shippingAddress.street}`)
+    doc.text(`${cartData.shippingAddress.city}`)
+    doc.text(`${cartData.shippingAddress.state}`)
+    doc.text(`${cartData.shippingAddress.pincode}`)
+    doc.text(`${cartData.shippingAddress.country}`)
+
 
     doc.font('Helvetica-Bold');
     doc.text('Name', 100, 200, { width: 200 });
+    doc.text('Image', 250, 200, { width: 200 });
     doc.text('Quantity', 300, 200, { width: 100 });
-    doc.text('Unit Price', 350, 200, { width: 100 });
+    doc.text('Unit Price', 370, 200, { width: 100 });
     doc.text('Amount', 450, 200, { width: 100 });
 
     const productsData = data.products;
@@ -43,8 +52,9 @@ const generateInvoiceWithPdfKit = (cartData,data) => {
     doc.font('Helvetica');
     productsData.forEach((product) => {
         doc.text(product.product.Name, 100, y, { width: 200 });
+        // doc.image(product.product.Image[1], 250, y, { width: 200 });
         doc.text(product.quantity.toString(), 300, y, { width: 50 });
-        doc.text(product.product.Price, 350, y, { width: 100 });
+        doc.text(product.product.Price, 370, y, { width: 100 });
         doc.text((product.quantity * product.product.Price).toFixed(2), 450, y, { width: 100 });
         y += 20;
     });
@@ -57,7 +67,9 @@ const generateInvoiceWithPdfKit = (cartData,data) => {
     );
 
     doc.fontSize(14).text(`Total: ${cartData.totalAmount.toFixed(2)}`, 350, y + 10, { width: 100 });
+    doc.moveDown(5)
 
+   
     doc.end();
 
     console.log(`Invoice saved as ${outputFilename}`);
@@ -122,8 +134,8 @@ const confirmpage = async (req, res) => {
                 model: 'Product', // Replace with your product model name
             })
             .sort({ orderDate: -1 })
-           
-            console.log('cartData is',cartData);
+
+        console.log('cartData is', cartData);
 
         let subtotal = 0
         for (const item of cartData.products) {
@@ -138,10 +150,10 @@ const confirmpage = async (req, res) => {
 
         }
 
-        console.log('data is',data);
-        const pdflink = generateInvoiceWithPdfKit(cartData,data)
-        console.log('pdflink',pdflink);
-        res.render('user/confirmpage', { user, data, subtotal,pdflink})
+        console.log('data is', data);
+        const pdflink = generateInvoiceWithPdfKit(cartData, data)
+        console.log('pdflink', pdflink);
+        res.render('user/confirmpage', { user, data, subtotal, pdflink })
     }
     catch (error) {
         console.error(error);
@@ -155,7 +167,7 @@ const orderhistory = async (req, res) => {
         const user = await UserModel.findById(userid)
             .populate('selectedAddress')
         // console.log('user is',user);
-        const orderData = await OrderModel.find({ user: userid })
+        const cartData = await OrderModel.find({ user: userid })
             .populate({
                 path: 'products.product', // Use 'path' to specify the nested reference
                 model: 'Product' // Replace with your product model name
@@ -164,30 +176,32 @@ const orderhistory = async (req, res) => {
             .populate({
                 path: 'shippingAddress',
                 model: 'address', // Replace with your address model name
-            }); 
-        orderData.sort((a, b) => new Date(b.orderDate) - new Date(a.orderDate))
+            });
+        cartData.sort((a, b) => new Date(b.orderDate) - new Date(a.orderDate))
 
-        // console.log('orderdata is', orderData);
-            // const order = orderData.sort(1)
-            // console.log('sorted');
+        // console.log('cartData is', cartData);
+        // const order = cartData.sort(1)
+        // console.log('sorted');
         // Check if the cancel button is clicked
-       
-         
+        // const data = {
+        //     user: user.name, // Include the user's name
+        //     products: cartData.products,
+        // }
 
 
-        // console.log('order data', orderData);
-        res.render('user/orderhistory', { user, orderData });
+        // console.log('orderhistory data', cartData);
+        res.render('user/orderhistory', { user, cartData });
     }
     catch (error) {
         console.error(error)
     }
-} 
+}
 
 
-const ordercancel = async (req,res) =>{
+const ordercancel = async (req, res) => {
     if (req.params.orderid) {
         const orderid = req.params.orderid;
-        console.log('orderId',orderid);
+        console.log('orderId', orderid);
         const order = await OrderModel.findById(orderid);
         // console.log(order)
 
@@ -215,18 +229,21 @@ const orderdetail = async (req, res) => {
             .populate({
                 path: 'shippingAddress',
                 model: 'address', // Replace with your address model name
-            });
-        // console.log('orderdata is', orderData);
+            })
 
+        // console.log('orderdata is', orderData)
+      
         // Combine the user's name with the cart data
-        // const data = {
-        //     user: user.name, // Include the user's name
-        //     products: orderData.products, // Include the cart products
-        // };
+        const data = {
+            user: user.name, // Include the user's name
+            products: orderData.products, // Include the cart products
+        }
 
-        // console.log('detail data',data);
+    
 
-        res.render('user/orderdetailpage', { user, orderData })
+        // console.log('detail data',data)
+        const pdflink = generateInvoiceWithPdfKit(orderData, data) 
+        res.render('user/orderdetailpage', { user, orderData, pdflink })
 
     }
     catch (error) {
@@ -240,5 +257,5 @@ const orderdetail = async (req, res) => {
 
 
 module.exports = {
-    orders, confirmpage, orderhistory, orderdetail,ordercancel,
+    orders, confirmpage, orderhistory, orderdetail, ordercancel,
 }

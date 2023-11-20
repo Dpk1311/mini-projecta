@@ -110,19 +110,40 @@
                         </div>
                     </div>
                     <%# console.log(pdflink); %>
-                        <a href="/salesreportpdf/<%= pdflink %>" download>Sales report</a>
-                        <button id="downloadButton">excel report</button>
+                        <!-- <a href="/salesreportpdf/<%#= pdflink %>" download>Sales report</a> -->
+                        <div class="flex items-center justify-center my-3">
+                            <label for="fromDate" class="mr-2">From:</label>
+                            <input type="date" id="fromDate" name="fromDate"
+                                class="border border-gray-300 px-2 py-1 rounded-md">
+                            <label for="toDate" class="ml-4 mr-2">To:</label>
+                            <input type="date" id="toDate" name="toDate"
+                                class="border border-gray-300 px-2 py-1 rounded-md">
+                            <button id="downloadButton"
+                                class="ml-4 px-4 py-2 bg-blue-500 text-white rounded-md">Download Report</button>
+                        </div>
 
                 </div>
             </div>
             <script>
 
                 document.getElementById('downloadButton').addEventListener('click', function () {
-                    fetch('/downloadExcel')
+                    // Get selected dates
+                    const fromDate = document.getElementById('fromDate').value;
+                    const toDate = document.getElementById('toDate').value;
+
+                    // Validate date inputs if needed
+                    if (!fromDate || !toDate) {
+                        alert('Please select both "From" and "To" dates.');
+                        return;
+                    }
+
+                    // Construct URL with date parameters
+                    const url = `/downloadExcel?fromDate=${fromDate}&toDate=${toDate}`;
+
+                    // Fetch the Excel file
+                    fetch(url)
                         .then(response => response.blob())
-                        
                         .then(blob => {
-                            console.log(blob);
                             const url = window.URL.createObjectURL(blob);
                             const a = document.createElement('a');
                             a.href = url;
@@ -130,6 +151,7 @@
                             a.click();
                         });
                 });
+
 
 
 
@@ -143,7 +165,7 @@
 
             <script>
                 const orderCounts = document.getElementById('orderCounts').textContent.split(',')
-                // console.log(orderCounts);
+                console.log('wcercevc', orderCounts);
                 let dates = document.getElementById('dates').textContent.split(',');
                 // console.log(dates);
                 // const Status = document.getElementById('Status').textContent

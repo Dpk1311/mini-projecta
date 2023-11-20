@@ -71,49 +71,65 @@ const generateInvoiceWithPdfKit = (orders, user) => {
 
 const generateExcelSalesReport = async (req, res) => {
     try {
-
-        const now = new Date();
-        const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
-        const endOfMonth = new Date(now.getFullYear(), now.getMonth() + 1, 0, 23, 59, 59);
-
+        const fromDate = req.query.fromDate;
+        const toDate = req.query.toDate;
+        const startOfMonth = new Date(fromDate);
+        const endOfMonth = new Date(toDate);
+        endOfMonth.setHours(23, 59, 59, 999);
         const ordersData = await OrderModel.find({
             orderDate: {
                 $gte: startOfMonth,
                 $lte: endOfMonth,
             },
         })
-            .populate('products')
+            .populate('products.product')
             .populate('shippingAddress')
+            .populate('user')
             .exec();
-            console.log(ordersData);
+        // console.log(ordersData);
 
         const workbook = new ExcelJS.Workbook();
         const worksheet = workbook.addWorksheet('Orders Data');
 
         worksheet.columns = [
+            { header: 'Customer', key: 'user.name' },
             { header: 'Order ID', key: '_id' },
-            { header: 'Ordered Address', key: 'shippingAddress.street' },
-            { header: 'Ordered City', key: 'shippingAddress.city' },
-            { header: 'Ordered State', key: 'shippingAddress.state' },
+            { header: 'Product Names', key: 'products.Name' },
+            { header: 'Product Quantity', key: 'products.Quantity' },
+            { header: 'Address', key: 'shippingAddress.street' },
+            { header: 'City', key: 'shippingAddress.city' },
+            { header: 'State', key: 'shippingAddress.state' },
             // { header: 'Ordered Pincode', key: 'shippingAddress.pincode' },
-            { header: 'Ordered Country', key: 'shippingAddress.country' },
-            // { header: 'Product Names', key: 'products.Name' },
-            { header: 'Order Price', key: 'totalAmount' },
+            { header: 'Country', key: 'shippingAddress.country' },
+            
+            { header: 'Total Amount', key: 'totalAmount' },
         ];
 
         ordersData.forEach(orderData => {
-            const products = orderData.products.map(product => product.productName).join(', ');
+            const products = orderData.products.map(product => product.product.Name).join(', ');
+            const quantity = orderData.products.map(product => product.quantity).join(', ');
+            // console.log('evfqvfwqvewrverwvrtv',products);
             worksheet.addRow({
+                'user.name': orderData.user.name,
                 _id: orderData._id,
+                'products.Name': products,
+                'products.Quantity':quantity,
                 'shippingAddress.street': orderData.shippingAddress.street,
                 'shippingAddress.city': orderData.shippingAddress.city,
                 'shippingAddress.state': orderData.shippingAddress.state,
                 'shippingAddress.postalCode': orderData.shippingAddress.pincode,
                 'shippingAddress.country': orderData.shippingAddress.country,
-                products: products,
+                
                 totalAmount: orderData.totalAmount,
             });
         });
+
+
+        worksheet.autoFilter = {
+            from: { row: 1, column: 8 },
+            to: { row: 1, column: 8 }
+        };
+
 
         res.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
         res.setHeader('Content-Disposition', 'attachment; filename=OrdersData.xlsx');
@@ -221,7 +237,7 @@ const adminhome = async (req, res) => {
             }
         });
 
-        // console.log('orderCounts', orderCounts);
+        console.log('orderCounts', orderCounts);
 
         const totalOrdersandSales = [
             {
@@ -380,9 +396,9 @@ const addproductpost = async (req, res) => {
             req.session.errmsg = 'Invalid Price'
             return res.redirect('/addproduct')
         }
-        if (Name.length > 15) {
+        if (Name.length > 50) {
             req.session.invalid = true
-            req.session.errmsg = 'Name Should be less than 15 Characters'
+            req.session.errmsg = 'Name Should be less than 50 Characters'
             return res.redirect('/addproduct')
         }
         if (Discount < 0 || Discount > 99) {
@@ -450,7 +466,7 @@ const editproductpost = async (req, res) => {
 
         let { Name, Description, Image, Price, Discount, Brand, Category, Size, Quantity } = req.body;
         console.log('Received signup request:', Name, Description, Image, Price, Discount, Brand, Category, Size, Quantity);
-
+        const productData = await productModel.findById(productId)
         Name = Name.trim()
         Description = Description.trim()
         Price = Price.trim()
@@ -472,9 +488,9 @@ const editproductpost = async (req, res) => {
             return res.redirect(`/editproduct/${productId}`)
 
         }
-        if (Name.length > 15) {
+        if (Name.length > 50) {
             req.session.invalid = true
-            req.session.errmsg = 'Name Should be less than 15 Characters'
+            req.session.errmsg = 'Name Should be less than 50 Characters'
             return res.redirect(`/editproduct/${productId}`)
 
         }
@@ -497,18 +513,24 @@ const editproductpost = async (req, res) => {
 
         }
 
-        const imagePaths = req.files.map(file => {
-            let imagePath = file.path;
+        let imagePaths = [];
+        if (req.files && req.files.length > 0) {
+            imagePaths = req.files.map(file => {
+                let imagePath = file.path;
 
-            if (imagePath.includes('public\\')) {
-                imagePath = imagePath.replace('public\\', '');
-            } else if (imagePath.includes('public/')) {
-                imagePath = imagePath.replace('public/', '');
-            }
-            return imagePath;
-        });
-        const productData = await productModel.findById(productId)
-        // console.log(productData);
+                if (imagePath.includes('public\\')) {
+                    imagePath = imagePath.replace('public\\', '');
+                } else if (imagePath.includes('public/')) {
+                    imagePath = imagePath.replace('public/', '');
+                }
+                return imagePath;
+            });
+        } else {
+            imagePaths = productData.Image;
+        }
+
+
+        console.log(productData);
         productData.Name = Name || productData.Name
         productData.Description = Description || productData.Description
         productData.Price = Price || productData.Price
@@ -721,8 +743,33 @@ const ordermanagement = async (req, res) => {
                 path: 'products.product',
                 model: 'Product'
             })
-        // console.log('order admin',order);
+        order.sort((a, b) => new Date(b.orderDate) - new Date(a.orderDate))
+        console.log('order admin', order)
         res.render('admin/ordermanagement', { order })
+    }
+    catch (error) {
+        console.error(error);
+    }
+}
+
+
+const adminoderdetail = async (req, res) => {
+
+    try {
+        const orderId = req.query.orderId
+        console.log('orderdetail is', orderId)
+        const orderData = await OrderModel.findById(orderId)
+            .populate({
+                path: 'products.product',
+                model: 'Product', // Replace with your product model name
+            })
+            .populate({
+                path: 'shippingAddress',
+                model: 'address', // Replace with your address model name
+            })
+        console.log('order admin', orderData);
+
+        res.render('admin/adminorderdetailpage', { orderData })
     }
     catch (error) {
         console.error(error);
@@ -784,6 +831,6 @@ const productlist = async (req, res) => {
 module.exports = {
     adminlogin, adminloginpost, adminhome, productmanagement, addproduct, addproductpost, categorymanagement, addcategory, addcategorypost, usersearch,
     userblock, userUnblock, ordermanagement, orderstatusupdate, editproduct, editproductpost, deleteproduct, usermanagement, generateExcelSalesReport,
-    productunlist, productlist, editcategory, editcategorypost, categorydelete
+    productunlist, productlist, editcategory, editcategorypost, categorydelete, adminoderdetail
 }
 

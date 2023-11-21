@@ -6,6 +6,7 @@ const { addressModel } = require('../model/user/addressSchema')
 const bcrypt = require('bcrypt')
 const walletModel = require('../model/user/walletSchema');
 const OrderModel = require('../model/user/orderSchema');
+const cartModel = require('../model/user/cartSchema')
 
 //  to generate a random OTP
 function generateOTP() {
@@ -33,6 +34,17 @@ const home = async (req, res) => {
                 await newwallet.save()
             }
             console.log('new wallet created');
+            let userCart = await cartModel.findOne({ user: userId });
+            // console.log('userCartis:', userCart);
+      
+            if (!userCart) {
+              // Create a new cart for the user if it doesn't exist
+              userCart = new cartModel({
+                user: userId,
+                products: [],
+              });
+              await userCart.save()
+            }
 
             res.render('user/home', { categorycollection, user });
         }

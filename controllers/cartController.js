@@ -54,7 +54,7 @@ const cart = async (req, res) => {
         res.json({ data: null });
       } else {
         // Render EJS (HTML) response
-        res.render('user/cart', { data: null });
+        res.render('user/cart', { data: null ,subtotal:null});
       }
     }
   } catch (error) {
@@ -240,6 +240,8 @@ const checkout = async (req, res) => {
       products: cartData.products, // Include the cart products
       selectedAddress: user.selectedAddress, // Include the selected address
     }
+
+    
 
     res.render('user/checkout', { user, data, subtotal, total })
 

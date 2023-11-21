@@ -30,6 +30,7 @@ const generateInvoiceWithPdfKit = (cartData, data) => {
     doc.fontSize(12).text(`Invoice Number: INV-${cartData._id}`).moveDown(0.5);
     doc.fontSize(12).text(`Invoice Date: ${formattedDate}`).moveDown(0.5);
     doc.fontSize(12).text(`Customer: ${data.user}`).moveDown(1);
+    doc.moveDown(10)
     doc.text('Shipping Address is:')
     doc.moveDown()
     doc.text(`${cartData.shippingAddress.street}`)
@@ -153,6 +154,7 @@ const confirmpage = async (req, res) => {
         console.log('data is', data);
         const pdflink = generateInvoiceWithPdfKit(cartData, data)
         console.log('pdflink', pdflink);
+        await cartModel.deleteOne({ user:userid })
         res.render('user/confirmpage', { user, data, subtotal, pdflink })
     }
     catch (error) {

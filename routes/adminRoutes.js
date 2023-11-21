@@ -25,7 +25,7 @@ const upload = multer({ storage: storage });
 router.get('/adminlogin', adminController.adminlogin)
 router.post('/adminlogin', adminController.adminloginpost)
 router.get('/adminhome',adminauthmiddleware, adminController.adminhome)
-router.get('/logout',adminController.adminlogout)
+router.get('/adminlogout',adminController.adminlogout)
 router.get('/productmanagement',adminauthmiddleware, adminController.productmanagement)
 router.get('/addproduct',adminauthmiddleware, adminController.addproduct)
 router.post('/addproduct',upload.array('Image',5),adminController.addproductpost)

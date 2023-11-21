@@ -252,6 +252,8 @@ const checkout = async (req, res) => {
 }
 
 
+const Keyid = process.env.RAZORPAY_KEY_ID
+const Keysecret = process.env.RAZORPAY_KEY_SECRET
 
 const payment = async (req, res) => {
   try {
@@ -259,7 +261,7 @@ const payment = async (req, res) => {
     const amount = parseFloat(discountedPrice)
     // console.log('discount price',amount);
 
-    var instance = new Razorpay({ key_id: 'rzp_test_46W9ONQBaPn6A8', key_secret: 'uKnujHxXw6cmPrUdFabchtEe' });
+    var instance = new Razorpay({ key_id: Keyid, key_secret: Keysecret });
 
     // Create a Razorpay order
     let order = await instance.orders.create({

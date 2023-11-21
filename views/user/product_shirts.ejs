@@ -44,7 +44,7 @@
                 <!-- Search Input -->
                 <div class="mb-4">
                     <label for="search" class="block text-sm font-medium text-gray-700">Search:</label>
-                    <input type="text" id="search" name="search" class="mt-1 p-2 w-full border rounded-md">
+                    <input type="text" id="userSearch-all" name="search" class="mt-1 p-2 w-full border rounded-md">
                 </div>
                 <div class="mb-4">
                     <label for="sort" class="block text-sm font-medium text-gray-700">Sort By:</label>
@@ -54,26 +54,28 @@
                     </select>
                 </div>
                 <div>
-                    <label class="block text-sm font-medium text-gray-700">Filter By:</label>
+                    <label class="block text-sm font-medium text-gray-700">Discount :</label>
                     <div class="mt-1">
-                        <label for="filter-instock" class="flex items-center">
-                            <input type="checkbox" id="filter-instock" name="filter-instock" class="mr-2">
-                            In Stock
-                        </label>
+                        <select id="discount" name="discount" onclick="discountfilter()" class="mr-2">
+                            <option value="">Select Discount</option>
+                            <option value="5">More than 5%</option>
+                            <option value="15">More than 15%</option>
+                            <option value="20">More than 20%</option>
+                        </select>
                     </div>
-                    <div class="mt-1">
-                        <label for="filter-sale" class="flex items-center">
-                            <input type="checkbox" id="filter-sale" name="filter-sale" class="mr-2">
-                            On Sale
-                        </label>
-                    </div>
+
+
                 </div>
             </div>
 
             <!-- Main Content (Product List) -->
-            <div class="flex flex-col w-10/12">
 
-                <div
+
+            <div class="flex flex-col w-10/12">
+                <div id="notfound" style="display: none;">
+                    <h1>not found</h1>
+                </div>
+                <div id="productList"
                     class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-3 gap-4 p-10 pb-0 mx-auto mb-4">
                     <!-- Your product list goes here -->
                     <!-- Example: -->
@@ -81,7 +83,7 @@
                         <%# console.log('details ejs', element); %>
                             <% if (element.Instock) { %>
                                 <!-- Product Item -->
-                                <div class="p-4 w-80 h-80 mb-24">
+                                <div class="p-4 w-80 h-80 mb-24 searchable-item-all">
                                     <!-- Your product card goes here -->
                                     <!-- Example: -->
                                     <a href="/productpage?product_Id=<%= element._id %>">
@@ -107,127 +109,194 @@
                 </div>
                 <div class="flex justify-center mb-4 ">
                     <div class="pagination flex justify-between">
-                        <% if (page > 1) { %>
+                        <% if (page> 1) { %>
                             <a class="bg-white border-2 rounded-full pagebutton" href="?page=1">&laquo;</a>
-                            <a class="bg-white border-2 rounded-full ml-3 pagebutton" href="?page=<%= Number(page) - 1 %>"><%= Number(page) - 1 %></a>
+                            <a class="bg-white border-2 rounded-full ml-3 pagebutton"
+                                href="?page=<%= Number(page) - 1 %>">
+                                <%= Number(page) - 1 %>
+                            </a>
                             <% } %>
-                        <a class="bg-white border-2 rounded-full ml-3 pagebutton" href="?page=<%= Number(page) %>"><%= Number(page) %></a>
-                        <%# console.log('page is',page); %>
-                        <% if (page < totalPages) { %>
-                            <a class="bg-white border-2 rounded-full ml-3 pagebutton" href="?page=<%= Number(page) + 1 %>"><%= Number(page) + 1 %></a>
-                            <a class="bg-white border-2 rounded-full ml-3 pagebutton" href="?page=<%= totalPages %>">&raquo;</a>
-                        <% } %>
+                                <a class="bg-white border-2 rounded-full ml-3 pagebutton"
+                                    href="?page=<%= Number(page) %>">
+                                    <%= Number(page) %>
+                                </a>
+                                <%# console.log('page is',page); %>
+                                    <% if (page < totalPages) { %>
+                                        <a class="bg-white border-2 rounded-full ml-3 pagebutton"
+                                            href="?page=<%= Number(page) + 1 %>">
+                                            <%= Number(page) + 1 %>
+                                        </a>
+                                        <a class="bg-white border-2 rounded-full ml-3 pagebutton"
+                                            href="?page=<%= totalPages %>">&raquo;</a>
+                                        <% } %>
                     </div>
                 </div>
             </div>
         </div>
 
 
-            <script>
-                document.getElementById('sort').addEventListener('change', function () {
-                    console.log('j')
-                    let sortBy = this.value;
-                    let url = '/products?sort=' + sortBy; // Assuming your API endpoint is '/api/products'
 
-                    fetch(url)
-                        .then(response => response.json())
-                        .then(data => {
-                            // Here, 'data' is the sorted list of products returned by the server.
-                            // You can update your page with this data.
+        <script>
 
-                            updatePage(data);
-                        })
-                        .catch(error => console.error('Error:', error));
-                });
+            function discountfilter() {
 
-                function updatePage(products) {
-                    // Get a reference to the product list div
-                    let productListDiv = document.getElementById('productList');
+                const discount = document.getElementById('discount').value
 
-                    // Clear the existing product list
-                    productListDiv.innerHTML = '';
+                console.log('morethan5', discount);
 
-                    // Add each product to the product list
-                    products.forEach(product => {
-                        // Create a new div for the product
-                        let productDiv = document.createElement('div');
-                        productDiv.className = 'w-full md:w-1/2 xl:w-1/3 px-4 mb-10';
-
-                        // Add the product details to the product div
-                        productDiv.innerHTML = `<div class="bg-white rounded-lg overflow-hidden">
-                <img src="${product.Image[0]}" alt="image" class="w-50 product-image" />
-                <div class="p-8 sm:p-9 md:p-7 xl:p-9 text-center ">
-                    <h3>
-                        <a href="javascript:void(0)" class="font-semibold text-dark text-xl sm:text-2xl md:text-xl lg:text-2xl xl:text-2xl 2xl:text-2xl mb-4 block hover:text-primary">
-                            ${product.Name}
-                        </a>
-                    </h3>
-                    <p class="text-base text-body-color leading-relaxed mb-7">
-                        Lorem ipsum dolor sit amet pretium consectetur adipiscing elit. Lorem consectetur
-                        adipiscing elit.
-                    </p>
-                    <a href='/productpage?product_Id=${product._id}' class="inline-block py-2 px-7 border border-[#E5E7EB] rounded-full text-base text-body-color font-medium hover:border-primary hover:bg-primary hover:text-white transition">
-                        View Details
-                    </a>
-                </div>
-            </div>`
-
-                        // Add the product div to the product list div
-                        productListDiv.appendChild(productDiv);
-                    });
-                }
-
-            </script>
+                fetch(`/productdiscount/${discount}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        updatePage(data);
+                    })
+                    .catch(error => console.error('Error:', error));
+            }
 
 
 
-            <!-- <script>
-                var products = <%#- JSON.stringify(productcollection) %>
-                    console.log('products are', products); // Log the data for testing
+        </script>
 
-                // Function to sort products by price or name
-                const sortProducts = (field) => {
-                    products.sort((a, b) => (a[field] > b[field]) ? 1 : -1);
-                    // Render the sorted products on the page
-                    renderProducts(products);
-                };
 
-                // Function to filter products by category
-                const filterProducts = (category) => {
-                    if (category === 'all') {
-                        renderProducts(products); // Show all products
+        <script>
+            const searchInput = document.getElementById('userSearch-all');
+            const searchableItems = document.querySelectorAll('.searchable-item-all');
+            const noResultsMessage = document.getElementById('notfound');
+
+
+            // Reference to the message element
+
+            searchInput.addEventListener('input', () => {
+                const searchText = searchInput.value.toLowerCase();
+                let found = false; // Flag to check if any matching items are found
+
+                searchableItems.forEach(item => {
+                    const itemText = item.textContent.toLowerCase();
+
+                    if (itemText.includes(searchText)) {
+                        item.style.display = 'block';
+                        found = true; // Set the flag to true if a matching item is found
                     } else {
-                        const filteredProducts = products.filter(product => product.category === category);
-                        renderProducts(filteredProducts); // Show filtered products
+                        item.style.display = 'none';
                     }
-                };
-
-                // Function to render products on the page
-                const renderProducts = (productsToRender) => {
-                    // Clear the existing product listing
-                    // Replace "productsContainer" with the actual container ID where you display products
-                    const productsContainer = document.getElementById('productsContainer');
-                    productsContainer.innerHTML = '';
-
-                    // Loop through the products and create HTML elements for each
-                    productsToRender.forEach(product => {
-                        // Create product HTML elements and append them to "productsContainer"
-                        // You can use EJS templating here to generate the product cards
-                    });
-                };
-
-                // Event listeners for sorting and filtering
-                document.getElementById('sort').addEventListener('change', (event) => {
-                    sortProducts(event.target.value);
                 });
 
-                document.getElementById('category').addEventListener('change', (event) => {
-                    filterProducts(event.target.value);
-                });
 
-                // Initial rendering of products
+                noResultsMessage.style.display = found ? 'none' : 'block';
+
+
+            });
+        </script>
+
+        <script>
+            document.getElementById('sort').addEventListener('change', function () {
+                // console.log('jcf')
+                let sortBy = this.value;
+                let url = '/products?sort=' + sortBy; // Assuming your API endpoint is '/api/products'
+
+                fetch(url)
+                    .then(response => response.json())
+                    .then(data => {
+                        // Here, 'data' is the sorted list of products returned by the server.
+                        // You can update your page with this data.
+
+                        updatePage(data);
+                    })
+                    .catch(error => console.error('Error:', error));
+            });
+
+            function updatePage(products) {
+                // Get a reference to the product list div
+                let productListDiv = document.getElementById('productList')
+
+                // Clear the existing product list
+                productListDiv.innerHTML = '';
+
+                // Add each product to the product list
+                products.forEach(product => {
+                    // Create a new div for the product
+                    let productDiv = document.createElement('div');
+                    productDiv.className = 'p-4 w-80 h-80 mb-24 searchable-item-all'
+
+                    // Add the product details to the product div
+                    productDiv.innerHTML =
+                        `<div class="p-4 w-80 h-80 mb-24 searchable-item-all">
+                                    <!-- Your product card goes here -->
+                                    <!-- Example: -->
+                                    <a href="/productpage?product_Id=${product._id}">
+                                        <div class="bg-white rounded-lg shadow-md p-4 ">
+                                            <!-- Product Image -->
+                                            <img src="/${product.Image[0]}" alt="Product Image"
+                                                class="w-full h-56 object-center mb-4 rounded-md">
+
+                                            <!-- Product Details -->
+                                            <h2 class="text-lg font-semibold">
+                                                ${product.Name}
+                                            </h2>
+                                            <p class="text-gray-700">
+                                                ${product.Description}
+                                            </p>
+                                            <span class="text-black font-semibold">₹ ${product.Price}</span>
+                                            <!-- Add more product details as needed -->
+                                        </div>
+                                    </a>
+                                </div>`
+
+                    // Add the product div to the product list div
+                    productListDiv.appendChild(productDiv);
+                });
+            }
+
+        </script>
+
+
+
+        <!-- <script>
+            var products = <#% - JSON.stringify(productcollection) %>
+                console.log('products are', products); // Log the data for testing
+
+            // Function to sort products by price or name
+            const sortProducts = (field) => {
+                products.sort((a, b) => (a[field] > b[field]) ? 1 : -1);
+                // Render the sorted products on the page
                 renderProducts(products);
-            </script> -->
+            };
+
+            // Function to filter products by category
+            const filterProducts = (category) => {
+                if (category === 'all') {
+                    renderProducts(products); // Show all products
+                } else {
+                    const filteredProducts = products.filter(product => product.category === category);
+                    renderProducts(filteredProducts); // Show filtered products
+                }
+            };
+
+            // Function to render products on the page
+            const renderProducts = (productsToRender) => {
+                // Clear the existing product listing
+                // Replace "productsContainer" with the actual container ID where you display products
+                const productsContainer = document.getElementById('productsContainer');
+                productsContainer.innerHTML = '';
+
+                // Loop through the products and create HTML elements for each
+                productsToRender.forEach(product => {
+                    // Create product HTML elements and append them to "productsContainer"
+                    // You can use EJS templating here to generate the product cards
+                });
+            };
+
+            // Event listeners for sorting and filtering
+            document.getElementById('sort').addEventListener('change', (event) => {
+                sortProducts(event.target.value);
+            });
+
+            document.getElementById('category').addEventListener('change', (event) => {
+                filterProducts(event.target.value);
+            });
+
+            // Initial rendering of products
+            renderProducts(products);
+        </script> -->
 
 
 </body>

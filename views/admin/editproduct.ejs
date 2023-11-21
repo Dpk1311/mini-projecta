@@ -43,13 +43,13 @@
                         </div>
                         <div class="mb-4">
                             <label for="Image" class="block mb-2 text-sm text-gray-600">Current Images</label>
-                            <img name="Image" src="/<%= productData.Image %>" alt="image">
+                            <img name="Image" src="/<%= productData.Image[0] %>" alt="image">
                         </div>
                         <div class="mb-4">
                             <label for="Image" class="block mb-2 text-sm text-gray-600">New Images</label>
                             <input type="file" id="Image" name="Image" multiple onchange="previewImage(event)"
                                 class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500">
-                            <img id="imagePreview" name="Image" src="/<%= productData.Image %>" alt="image">
+                            <img id="imagePreview" name="Image" src="/<%= productData.Image[0] %>" alt="image">
                         </div>
                         <div class="mb-6">
                             <label for="Discount" class="block mb-2 text-sm text-gray-600">Discount</label>

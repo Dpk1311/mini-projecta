@@ -27,9 +27,10 @@ app.use(session({
 
 
 const PORT = process.env.PORT;
+const dbURI = process.env.DB_URI;
 
-mongoose.connect("mongodb://0.0.0.0/Mini-project")
-.then(()=>{
+mongoose.connect(dbURI)
+.then(()=>{ 
     console.log('Database Connected');
 })
 .catch(()=>{

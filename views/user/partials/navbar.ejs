@@ -103,11 +103,13 @@
           class="mt-3 w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-blue-600 text-base font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm">
           Change Password
         </button>
+       
         <button type="button"
           class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:w-auto sm:text-sm"
           onclick="document.querySelector('.fixed').style.display='none'">
           Cancel
         </button>
+        <p id="errMsg" class="mr-3 text-red-600 font-semibold "></p>
 
       </div>
     </div>
@@ -118,7 +120,7 @@
     const oldpassword = document.getElementById('oldpassword').value
     const newpassword = document.getElementById('newpassword').value
     // console.log('oldpassword,newpassword',oldpassword,newpassword);
-    fetch(`/updatepassword/${oldpassword}/${newpassword}`, {
+    fetch('/updatepassword', {
       method: 'POST', // Change the request method to POST
       headers: {
         'Content-Type': 'application/json',
@@ -129,12 +131,18 @@
       if (!response.ok) {
         throw new Error('Failed to update password');
       }
+
+     
       return response.json(); // Return the response data
     })
     .then((data) => {
       // Handle the response data
-      console.log(data)
-      window.location.href = '/login'
+      // console.log(data)
+      if(data.status === 200){
+        window.location.href = '/login'
+      }else {
+        document.getElementById('errMsg').textContent = data.message
+      }
     })
     .catch((error) => {
       console.error('Failed:', error);

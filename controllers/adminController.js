@@ -101,7 +101,7 @@ const generateExcelSalesReport = async (req, res) => {
             { header: 'State', key: 'shippingAddress.state' },
             // { header: 'Ordered Pincode', key: 'shippingAddress.pincode' },
             { header: 'Country', key: 'shippingAddress.country' },
-            
+
             { header: 'Total Amount', key: 'totalAmount' },
         ];
 
@@ -113,13 +113,13 @@ const generateExcelSalesReport = async (req, res) => {
                 'user.name': orderData.user.name,
                 _id: orderData._id,
                 'products.Name': products,
-                'products.Quantity':quantity,
+                'products.Quantity': quantity,
                 'shippingAddress.street': orderData.shippingAddress.street,
                 'shippingAddress.city': orderData.shippingAddress.city,
                 'shippingAddress.state': orderData.shippingAddress.state,
                 'shippingAddress.postalCode': orderData.shippingAddress.pincode,
                 'shippingAddress.country': orderData.shippingAddress.country,
-                
+
                 totalAmount: orderData.totalAmount,
             });
         });
@@ -152,6 +152,7 @@ const adminloginpost = async (req, res) => {
         const check = await Admin.findOne({ fullName: req.body.FullName });
         if (check) {
             if (req.body.password === check.password) {
+                req.session.admin = check
                 res.redirect('/adminhome');
             } else {
                 res.send('Invalid Password');
@@ -162,6 +163,24 @@ const adminloginpost = async (req, res) => {
     } catch (error) {
         console.error(error);
         res.status(500).send('Wrong details');
+    }
+}
+
+
+const adminlogout = async (req, res) => {
+    try {
+        req.session.admin = null;
+        req.session.destroy((err) => {
+            if (err) {
+                console.error('Error destroying session:', err);
+                res.status(500).send('Error destroying session');
+            } else {
+                res.redirect('/adminlogin')
+            }
+        });
+    }
+    catch (error) {
+        console.log(error);
     }
 }
 
@@ -194,7 +213,6 @@ const adminhome = async (req, res) => {
                         year: { $year: "$orderDate" },
                         month: { $month: "$orderDate" },
                         day: { $dayOfMonth: "$orderDate" },
-                        hour: { $hour: "$orderDate" }
                     },
                     count: { $sum: 1 }
                 }
@@ -207,19 +225,17 @@ const adminhome = async (req, res) => {
                             year: "$_id.year",
                             month: "$_id.month",
                             day: "$_id.day",
-                            hour: "$_id.hour"
                         }
                     },
                     count: 1
                 }
             },
             {
-                $sort: { date: 1 }
+                $sort: { date: -1 }
             }
         ]);
 
         // console.log('ordersPerDay',ordersPerDay);
-
         const dates = ordersPerDay.map((entry) => entry.date.toISOString().split('T')[0]);
         const alldates = lastSevenDays.concat(dates);
         const orderCounts = [];
@@ -237,7 +253,7 @@ const adminhome = async (req, res) => {
             }
         });
 
-        console.log('orderCounts', orderCounts);
+        // console.log('orderCounts', orderCounts);
 
         const totalOrdersandSales = [
             {
@@ -249,20 +265,38 @@ const adminhome = async (req, res) => {
             },
         ];
 
+        const orderStatusCounts = await OrderModel.aggregate([
+            {
+                $group: {
+                    _id: "$Status",
+                    count: { $sum: 1 }
+                }
+            }
+        ]);
+
+        console.log('orderStatusCounts', orderStatusCounts);
+        const orderCancelled = orderStatusCounts.find(element => element._id === 'Order Cancelled');
+        const orderDelivered = orderStatusCounts.find(element => element._id === 'Order Delivered');
+        const orderReturned = orderStatusCounts.find(element => element._id === 'Order Returned');
+        const orderShipped = orderStatusCounts.find(element => element._id === 'Order Shipped');
+        const orderPending = orderStatusCounts.find(element => element._id === 'OrderPending');
+        // console.log('Order Cancelled count:', orderCancelled)
+
+
         const user = await UserModel.find()
         const totaluser = user.length
 
         const order = await OrderModel.find()
 
         const pdflink = generateInvoiceWithPdfKit(order, user)
-        console.log('totaluser', totaluser)
+        // console.log('totaluser', totaluser)
         const result = await OrderModel.aggregate(totalOrdersandSales)
 
         if (result.length > 0) {
             const { totalOrders, totalSales, totalUser } = result[0];
             console.log(`Total number of orders: ${totalOrders}`);
             console.log(`Total sales amount: ${totalSales}`);
-            res.render('admin/adminhome', { totalOrders, totalSales, lastSevenDays, monthly, orderCounts, totaluser, order, pdflink });
+            res.render('admin/adminhome', { totalOrders, totalSales, lastSevenDays, monthly, orderCounts, totaluser, order, pdflink, orderCancelled, orderDelivered, orderReturned, orderShipped, orderPending });
         } else {
             res.render('admin/adminhome', { totalOrders: 0, totalSales: 0 });
         }
@@ -589,53 +623,58 @@ const editcategory = async (req, res) => {
 
 const editcategorypost = async (req, res) => {
     try {
-        const productId = req.params.productId
-        console.log(productId);
+        const productId = req.params.productId;
 
-        let { Name, Description, gender, status } = req.body
-        // console.log('Received signup request:', Name, Description, gender, status);
+        let { Name, Description, image, gender, status } = req.body;
 
-        Name = Name.trim()
-        Description = Description.trim()
-        gender = gender.trim()
-        status = status.trim()
+        Name = Name.trim();
+        Description = Description.trim();
+        gender = gender.trim();
+        status = status.trim();
+        const categoryData = await CategoryModel.findById(productId);
         if (!Name || !status || !gender || !Description) {
-            req.session.invalid = true
-            req.session.errmsg = 'All Fields are necessary'
-            return res.redirect(`/editcategory/${productId}`)
+            req.session.invalid = true;
+            req.session.errmsg = 'All Fields are necessary';
+            return res.redirect(`/editcategory/${productId}`);
         }
+
         if (Name.length > 15) {
-            req.session.invalid = true
-            req.session.errmsg = 'Name Should be less than 15 Characters'
-            return res.redirect(`/editproduct/${productId}`)
-
+            req.session.invalid = true;
+            req.session.errmsg = 'Name Should be less than 15 Characters';
+            return res.redirect(`/editproduct/${productId}`);
         }
 
-        let imagePath = req.file.path;
-        if (imagePath.includes('public\\')) {
+        // let imagePath = req.file.path;
+        // if (imagePath.includes('public\\') || imagePath.includes('public/')) {
+        //     imagePath = imagePath.replace('public/', '').replace('public\\', '');
+        // }
 
+        let imagePath = req.file ? req.file.path : categoryData.image;
+
+        if (imagePath.includes('public\\')) {
             imagePath = imagePath.replace('public\\', '');
         } else if (imagePath.includes('public/')) {
-
             imagePath = imagePath.replace('public/', '');
         }
 
-        const categoryData = await CategoryModel.findById(productId)
-        categoryData.Name = Name || categoryData.Name
-        categoryData.Description = Description || categoryData.Description
-        categoryData.gender = gender || categoryData.gender
-        categoryData.Image = imagePath || categoryData.Image
-        categoryData.status = status || categoryData.status
+        console.log('imagePath', imagePath);
 
-        await categoryData.save()
+        categoryData.Name = Name || categoryData.Name;
+        categoryData.Description = Description || categoryData.Description;
+        categoryData.gender = gender || categoryData.gender;
+        categoryData.image = imagePath
+        categoryData.status = status || categoryData.status;
+
+        await categoryData.save();
         console.log('category updated');
-        res.redirect('/categorymanagement')
-
-    }
-    catch (error) {
+        res.redirect('/categorymanagement');
+    } catch (error) {
         console.error(error);
+        // Handle the error and send an appropriate response to the client
+        res.status(500).send('Internal Server Error');
     }
-}
+};
+
 
 
 
@@ -829,7 +868,7 @@ const productlist = async (req, res) => {
 
 
 module.exports = {
-    adminlogin, adminloginpost, adminhome, productmanagement, addproduct, addproductpost, categorymanagement, addcategory, addcategorypost, usersearch,
+    adminlogin, adminloginpost, adminhome,adminlogout, productmanagement, addproduct, addproductpost, categorymanagement, addcategory, addcategorypost, usersearch,
     userblock, userUnblock, ordermanagement, orderstatusupdate, editproduct, editproductpost, deleteproduct, usermanagement, generateExcelSalesReport,
     productunlist, productlist, editcategory, editcategorypost, categorydelete, adminoderdetail
 }

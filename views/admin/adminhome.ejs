@@ -13,39 +13,8 @@
 <body class="bg-gray-100">
     <%- include('adminpartials/navbar') %>
         <%# include('adminpartials/sidebar') %>
-
             <div class="flex items-center justify-center">
                 <div class="w-full mx-auto py-16">
-                    <!-- Buttons -->
-                    <div class="bg-white px-6 py-4 my-3 w-11/12 mx-auto shadow-md rounded-md flex items-center">
-                        <div class="w-full text-center mx-auto">
-                            <button type="button"
-                                class="border border-gray-200 bg-gray-200 text-gray-700 rounded-md px-4 py-2 m-2 transition duration-500 ease select-none hover:bg-green-600 focus:outline-none focus:shadow-outline">
-                                <a href="/categorymanagement">Category Management</a>
-                            </button>
-                            <button type="button"
-                                class="border border-gray-200 bg-gray-200 text-gray-700 rounded-md px-4 py-2 m-2 transition duration-500 ease select-none hover:bg-green-600 focus:outline-none focus:shadow-outline">
-                                <a href="/productmanagement">Product Management</a>
-                            </button>
-                            <button type="button"
-                                class="border border-gray-200 bg-gray-200 text-gray-700 rounded-md px-4 py-2 m-2 transition duration-500 ease select-none hover:bg-red-600 focus:outline-none focus:shadow-outline">
-                                <a href="/ordermanagement">Order Management</a>
-                            </button>
-                            <button type="button"
-                                class="border border-gray-200 bg-gray-200 text-gray-700 rounded-md px-4 py-2 m-2 transition duration-500 ease select-none hover:bg-red-600 focus:outline-none focus:shadow-outline">
-                                <a href="/coupon">Coupon Management</a>
-                            </button>
-                            <!-- <button type="button"
-                                class="border border-gray-200 bg-gray-200 text-gray-700 rounded-md px-4 py-2 m-2 transition duration-500 ease select-none hover:bg-red-600 focus:outline-none focus:shadow-outline">
-                                <a href="/stockmanagement">Stock Management</a>
-                            </button> -->
-                            <button type="button"
-                                class="border border-gray-200 bg-gray-200 text-gray-700 rounded-md px-4 py-2 m-2 transition duration-500 ease select-none hover:bg-red-600 focus:outline-none focus:shadow-outline">
-                                <a href="/usermanagement">User Management</a>
-                            </button>
-                        </div>
-                    </div>
-                    <!-- component -->
                     <div class="flex">
                         <div class="w-1/2 py-4 px-8 bg-white shadow-lg rounded-lg my-20 mx-7">
                             <div>
@@ -82,45 +51,52 @@
 
                     <span id="Status" hidden> <%- order %></span>
 
+                    <%# orderPending.forEach(element=> {%>
+                       <span id="orderPending" hidden><%- orderPending.count %></span> 
+                       <span id="orderShipped"hidden><%- orderShipped.count %></span> 
+                       <span id="orderReturned"hidden><%- orderReturned.count %></span> 
+                       <span id="orderDelivered"hidden><%- orderDelivered.count %></span> 
+                       <span id="orderCancelled"hidden><%- orderCancelled.count %></span>
+                            <%# }); %>
 
 
 
+                                </span>
 
-                    </span>
+                                <!-- Chart container -->
+                                <div class="bg-white p-3 shadow-sm rounded-sm mx-10">
+                                    <div class="flex flex-row justify-between">
+                                        <!-- First Chart -->
+                                        <div class=" p-4  mx-auto w-2/4 shadow-md rounded-lg">
+                                            <p class="font-bold">Last 7 days order</p>
+                                            <canvas id="myChart1" class="w-full h-auto"></canvas>
+                                        </div>
 
-                    <!-- Chart container -->
-                    <div class="bg-white p-3 shadow-sm rounded-sm mx-10">
-                        <div class="flex flex-row justify-between">
-                            <!-- First Chart -->
-                            <div class=" p-4  mx-auto w-2/4 shadow-md rounded-lg">
-                                <p class="font-bold">Last 7 days order</p>
-                                <canvas id="myChart1" class="w-full h-auto"></canvas>
-                            </div>
-
-                            <!-- Second Chart -->
-                            <div class=" p-4  mx-auto w-2/4 shadow-md rounded-lg">
-                                <p class="font-bold">Last 30 days order</p>
-                                <canvas id="myChart2" class="w-full h-auto"></canvas>
-                            </div>
-                            <!-- Third Chart -->
-                            <div class=" p-4   shadow-md rounded-lg">
-                                <p class="font-bold">Order Chart 3</p>
-                                <canvas id="myChart3"></canvas>
-                            </div>
-                        </div>
-                    </div>
-                    <%# console.log(pdflink); %>
-                        <!-- <a href="/salesreportpdf/<%#= pdflink %>" download>Sales report</a> -->
-                        <div class="flex items-center justify-center my-3">
-                            <label for="fromDate" class="mr-2">From:</label>
-                            <input type="date" id="fromDate" name="fromDate"
-                                class="border border-gray-300 px-2 py-1 rounded-md">
-                            <label for="toDate" class="ml-4 mr-2">To:</label>
-                            <input type="date" id="toDate" name="toDate"
-                                class="border border-gray-300 px-2 py-1 rounded-md">
-                            <button id="downloadButton"
-                                class="ml-4 px-4 py-2 bg-blue-500 text-white rounded-md">Download Report</button>
-                        </div>
+                                        <!-- Second Chart -->
+                                        <div class=" p-4  mx-auto w-2/4 shadow-md rounded-lg">
+                                            <p class="font-bold">Last 30 days order</p>
+                                            <canvas id="myChart2" class="w-full h-auto"></canvas>
+                                        </div>
+                                        <!-- Third Chart -->
+                                        <div class=" p-4   shadow-md rounded-lg">
+                                            <p class="font-bold">Order Status</p>
+                                            <canvas id="myChart3"></canvas>
+                                        </div>
+                                    </div>
+                                </div>
+                                <%# console.log(pdflink); %>
+                                    <!-- <a href="/salesreportpdf/<%#= pdflink %>" download>Sales report</a> -->
+                                    <div class="flex items-center justify-center my-3">
+                                        <label for="fromDate" class="mr-2">From:</label>
+                                        <input type="date" id="fromDate" name="fromDate"
+                                            class="border border-gray-300 px-2 py-1 rounded-md">
+                                        <label for="toDate" class="ml-4 mr-2">To:</label>
+                                        <input type="date" id="toDate" name="toDate"
+                                            class="border border-gray-300 px-2 py-1 rounded-md">
+                                        <button id="downloadButton"
+                                            class="ml-4 px-4 py-2 bg-blue-500 text-white rounded-md">Download
+                                            Report</button>
+                                    </div>
 
                 </div>
             </div>
@@ -152,13 +128,21 @@
                         });
                 });
 
-
-
-
-
             </script>
 
+            <script>
+                const orderPending = document.getElementById('orderPending').textContent
+                const orderCancelled = document.getElementById('orderCancelled').textContent
+                const orderDelivered = document.getElementById('orderDelivered').textContent
+                const orderReturned = document.getElementById('orderReturned').textContent
+                const orderShipped = document.getElementById('orderShipped').textContent
+                console.log('pending is', orderPending);
+                console.log('pending is', orderCancelled);
+                console.log('pending is', orderDelivered);
+                console.log('pending is', orderReturned);
+                console.log('pending is', orderShipped);
 
+            </script>
 
 
 
@@ -272,16 +256,18 @@
                         'Delivered',
                         'Pending',
                         'Cancelled',
-                        'Returned'
+                        'Returned',
+                        'Shipped'
                     ],
                     datasets: [{
-                        label: 'My First Dataset',
-                        data: [300, 50, 100, 20],
+                        label: 'Order Status',
+                        data: [orderDelivered, orderPending, orderCancelled, orderReturned,orderShipped],
                         backgroundColor: [
                             'rgb(0, 255, 0)',
                             'rgb(54, 162, 235)',
                             'rgb(255, 0, 0)',
                             'rgb(255, 205, 86)',
+                            'rgb(255, 205, 255)',
 
                         ],
                         hoverOffset: 4

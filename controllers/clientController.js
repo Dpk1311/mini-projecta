@@ -12,6 +12,10 @@ function generateOTP() {
     return Math.floor(1000 + Math.random() * 9000).toString();
 }
 
+
+const sendemail = process.env.OTP_EMAIL
+const sendemailpass = process.env.OTP_EMAIL_PASS
+
 const home = async (req, res) => {
     try {
 
@@ -117,6 +121,8 @@ const forgotpassword = (req, res) => {
     res.render('user/forgotpassword', { msg: '' })
 }
 
+
+
 const forgotpasswordpost = async (req, res) => {
     try {
         let { email } = req.body;
@@ -136,8 +142,8 @@ const forgotpasswordpost = async (req, res) => {
             const transporter = nodemailer.createTransport({
                 service: 'Gmail',
                 auth: {
-                    user: 'j29589289@gmail.com',
-                    pass: 'potl opgm ojjr cbfn',
+                    user: sendemail,
+                    pass: sendemailpass,
                 },
                 tls: {
                     rejectUnauthorized: false,
@@ -145,7 +151,7 @@ const forgotpasswordpost = async (req, res) => {
             });
 
             const mailOptions = {
-                from: 'j29589289@gmail.com',
+                from: sendemail,
                 to: email,
                 subject: 'OTP Verification',
                 text: `Your OTP for verification is: ${otp}`,
@@ -183,29 +189,37 @@ const forgotpasswordpost = async (req, res) => {
 
 
 const updatepassword = async (req, res) => {
-
-    const oldpassword = req.params.oldpassword
-    const newpassword = req.params.newpassword
-
-    const userid = req.session.user._id
+    // let oldpassword = req.params.oldpassword
+    // let newpassword = req.params.newpassword
+    const { oldpassword, newpassword } = req.body
+    // oldpassword = oldpassword.trim();
+    // newpassword = newpassword.trim();
+    if (oldpassword.trim() === '' || newpassword.trim() === '') {
+        console.log('All Fields are necessary');
+        return res.json({ status: 401, message: 'All Fields are necessary' });
+    }
+    const userid = req.session.user._id;
     const user = await UserModel.findOne({ _id: userid })
-    console.log(user)
-    const passwordMatch = await bcrypt.compare(oldpassword, user.password)
+
+    const passwordMatch = await bcrypt.compare(oldpassword, user.password);
+    // if (!oldpassword || !newpassword) {
+
+    // }
     if (!passwordMatch) {
-        res.json('oldpassword not match')
-    } if (newpassword.length < 7) {
-        res.json('password too short')
+        return res.json({ status: 404, message: 'Old password does not match' });
     }
-    else {
-        const hashedPassword = await bcrypt.hash(newpassword, 10)
-        user.password = hashedPassword
+
+    if (newpassword.length < 7) {
+        return res.json({ status: 401, message: 'Password too short' });
+    } else {
+        const hashedPassword = await bcrypt.hash(newpassword, 10);
+        user.password = hashedPassword;
         await user.save();
-        req.session.destroy()
-        res.json('Password updated successfully');
+        req.session.destroy();
+        return res.json({ status: 200, message: 'Password updated successfully' });
     }
+};
 
-
-}
 
 
 
@@ -299,8 +313,8 @@ const signuppost = async (req, res) => {
         const transporter = nodemailer.createTransport({
             service: 'Gmail',
             auth: {
-                user: 'j29589289@gmail.com',
-                pass: 'potl opgm ojjr cbfn',
+                user: sendemail,
+                pass: sendemailpass,
             },
             tls: {
                 rejectUnauthorized: false
@@ -308,7 +322,7 @@ const signuppost = async (req, res) => {
         });
 
         const mailOptions = {
-            from: 'j29589289@gmail.com',
+            from: sendemail,
             to: email,
             subject: 'OTP Verification',
             text: `Your OTP for verification is: ${otp}`,
@@ -469,7 +483,7 @@ const newpasswordpost = async (req, res) => {
         let { password } = req.body
         password = password.trim()
         email = req.session.email
-        console.log('emial is ',email)
+        console.log('emial is ', email)
         const user = await UserModel.findOne({ email })
 
         const hashedPassword = await bcrypt.hash(password, 10)
@@ -790,7 +804,7 @@ const product_shirts = async (req, res) => {
     const page = req.query.page || 1
     // console.log(page);
     const limit = 6; // Number of items per page
-    const skip = (Number(page) - 1) * limit; // Calculate the number of items to skip
+    const skip = (Number(page) - 1) * limit; // Calculate the number of items to skip   
 
     const productcollection = await productModel.find({ Category: categoryid }).skip(skip).limit(limit);
     const totalItems = await productModel.countDocuments({ Category: categoryid.toString() });
@@ -808,48 +822,62 @@ const product_shirts = async (req, res) => {
 
 const productsort = async (req, res) => {
     let sortBy = req.query.sort;
-    // console.log('sortby',sortBy);
+    console.log('sortby', sortBy);
     let order = 1; // Default order
 
-    if (sortBy === 'Price') {
+    if (sortBy === 'price') {
         sortBy = 'Price';
-        order = -1; // If sorting by price, sort in descending order
-    } else if (sortBy === 'Name') {
+        order = 1; // If sorting by price, sort in descending order
+    } else if (sortBy === 'name') {
         sortBy = 'Name';
-        order = 1;
+        order = -1
     }
 
     productModel.find().sort({ [sortBy]: order })
         .then(products => {
-            console.log('products are', products);
+            // Sort the products by the 'Price' or 'Name' field
+            products.sort((a, b) => {
+                if (a[sortBy] < b[sortBy]) {
+                    return -1;
+                }
+                if (a[sortBy] > b[sortBy]) {
+                    return 1;
+                }
+                // a must be equal to b
+                return 0;
+            });
+
+            // Now, 'products' is sorted correctly
             res.json(products);
         })
         .catch(err => {
             console.log(err);
             res.status(500).send('Error occurred while fetching products');
         });
+
 }
 
-const productsearch = async (req, res) => {
-    const { searchQuery } = req.query;
-    const user = req.session.user
-    console.log('search', searchQuery);
+
+const productdiscount = async (req, res) => {
     try {
-        if (!searchQuery) {
-            res.redirect('/product_shirts');
-            return;
+        const discount = req.params.discount
+        console.log('discount is', discount);
+        let products;
+        if (discount === '5') {
+            products = await productModel.find({ Discount: { $gt: 5 } });
+        } else if (discount === '15') {
+            products = await productModel.find({ Discount: { $gt: 15 } });
+        } else if (discount === '20') {
+            products = await productModel.find({ Discount: { $gt: 20 } })
         }
-        const productcollection = await productModel.find({ Name: { $regex: searchQuery, $options: 'i' } });
-        res.render('user/product_shirts', { productcollection, user })
-    }
-    catch (error) {
+        else {
+            products = await productModel.find();
+        }
+        res.json(products);
+    } catch (error) {
         console.error(error);
     }
 }
-
-
-
-
 
 
 module.exports = {
@@ -878,11 +906,11 @@ module.exports = {
     editaddress,
     editaddresspost,
     productsort,
-    productsearch,
     deleteaddress,
     fotppost,
     newpassword,
-    newpasswordpost
+    newpasswordpost,
+    productdiscount
 
 
 };

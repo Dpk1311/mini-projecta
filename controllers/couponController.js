@@ -41,11 +41,25 @@ const addcouponpost = async (req, res) => {
             req.session.errmsg = 'Min Code lenth is 5'
             return res.redirect('/addcoupon')
         }
-        if (name.lenght > 10) {
+        if (name.length > 10) {
             req.session.invalid = true
             req.session.errmsg = 'Max Name lenth is 10'
             return res.redirect('/addcoupon')
         }
+        let expiryDateObj = new Date(expiryDate);
+
+        if (!(expiryDateObj instanceof Date && !isNaN(expiryDateObj.valueOf()))) {
+            req.session.invalid = true;
+            req.session.errmsg = 'Invalid Expiry Date';
+            return res.redirect('/addcoupon');
+        }
+
+        if (expiryDateObj < new Date()) {
+            req.session.invalid = true;
+            req.session.errmsg = 'Expiry Date cannot be in the past';
+            return res.redirect('/addcoupon');
+        }
+
 
 
         const newCoupon = new couponSchema({
@@ -80,7 +94,7 @@ const applycoupon = async (req, res) => {
     console.log(isoString);
 
     if (expiryDate < currentdate) {
-        return res.json({ error: "Coupon has expired" }) 
+        return res.json({ error: "Coupon has expired" })
     }
 
 
@@ -95,7 +109,7 @@ const applycoupon = async (req, res) => {
 
     res.json({ message: 'Coupon applied successfully', discountedPrice });
 }
-  
+
 
 const coupondelete = async (req, res) => {
     try {
@@ -120,8 +134,8 @@ const couponedit = async (req, res) => {
         const couponid = req.params.couponid
         console.log(couponid);
         const coupondata = await couponSchema.findById(couponid)
-        console.log(coupondata);
-        if( req.session.invalid){
+        // console.log(coupondata);
+        if (req.session.invalid) {
             req.session.invalid = false
             res.render('admin/editcoupon', { coupondata, message: req.session.errmsg || '' })
         }
@@ -141,7 +155,7 @@ const couponeditpost = async (req, res) => {
         code = code.trim()
         discount = discount.trim()
 
-        if(!name || !code || !discount || !expiryDate){
+        if (!name || !code || !discount || !expiryDate) {
             req.session.invalid = true
             req.session.errmsg = 'All fields are necessary'
             return res.redirect(`/couponedit/${couponid}`)
@@ -160,6 +174,19 @@ const couponeditpost = async (req, res) => {
             req.session.errmsg = 'Max Name lenth is 10'
             return res.redirect(`/couponedit/${couponid}`)
         }
+        let expiryDateObj = new Date(expiryDate);
+
+        if (!(expiryDateObj instanceof Date && !isNaN(expiryDateObj.valueOf()))) {
+            req.session.invalid = true;
+            req.session.errmsg = 'Invalid Expiry Date';
+            return res.redirect(`/couponedit/${couponid}`);
+        }
+
+        if (expiryDateObj < new Date()) {
+            req.session.invalid = true;
+            req.session.errmsg = 'Expiry Date cannot be in the past';
+            return res.redirect(`/couponedit/${couponid}`);
+        }
 
         coupondata.name = name
         coupondata.code = code
@@ -169,7 +196,7 @@ const couponeditpost = async (req, res) => {
         await coupondata.save()
         console.log('coupon updated');
         res.redirect('/coupon')
-    } 
+    }
     catch (error) {
         console.error(error)
     }

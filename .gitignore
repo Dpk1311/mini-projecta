@@ -1,5 +1,2 @@
 node_modules
-public/uploads
-public/invoices
-public/salesreportpdf
 .env

@@ -883,7 +883,7 @@ const productsort = async (req, res) => {
 
 const productdiscount = async (req, res) => {
     try {
-        const discount = req.params.discount
+        const discount = req.params.discount 
         console.log('discount is', discount);
         let products;
         if (discount === '5') {

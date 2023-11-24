@@ -36,14 +36,14 @@ const home = async (req, res) => {
             console.log('new wallet created');
             let userCart = await cartModel.findOne({ user: userId });
             // console.log('userCartis:', userCart);
-      
+
             if (!userCart) {
-              // Create a new cart for the user if it doesn't exist
-              userCart = new cartModel({
-                user: userId,
-                products: [],
-              });
-              await userCart.save()
+                // Create a new cart for the user if it doesn't exist
+                userCart = new cartModel({
+                    user: userId,
+                    products: [],
+                });
+                await userCart.save()
             }
 
             res.render('user/home', { categorycollection, user });
@@ -820,10 +820,34 @@ const product_shirts = async (req, res) => {
 
     const productcollection = await productModel.find({ Category: categoryid }).skip(skip).limit(limit);
     const totalItems = await productModel.countDocuments({ Category: categoryid.toString() });
-    console.log(totalItems);
+    // console.log(totalItems);
     const totalPages = Math.ceil(totalItems / limit);
 
     res.render('user/product_shirts', { productcollection, totalPages, page, user })
+}
+
+
+const allproducts = async (req, res) => {
+    const categorycollection = await CategoryModel.find()
+    const user = req.session.user
+    const page = req.query.page || 1
+    // console.log(page);
+    const limit = 9; // Number of items per page
+    const skip = (Number(page) - 1) * limit; // Calculate the number of items to skip   
+    const productcollection = await productModel.find().skip(skip).limit(limit)
+    const totalItems = await productModel.countDocuments()
+    // console.log('totalitems are',totalItems);
+    const totalPages = Math.ceil(totalItems / limit);
+
+    res.render('user/allproducts', {productcollection, totalPages, page, user, categorycollection })
+}
+
+const categorysort = async (req,res) =>{
+    const categoryid = req.params.categoryid
+    console.log('category id is',categoryid);
+    const categorycollection = await productModel.find({Category: categoryid});
+    console.log('category is',categorycollection);
+    res.json(categorycollection)
 }
 
 
@@ -836,29 +860,17 @@ const productsort = async (req, res) => {
     let sortBy = req.query.sort;
     console.log('sortby', sortBy);
     let order = 1; // Default order
-
-    if (sortBy === 'price') {
+ 
+    if (sortBy === 'High_to_Low') {
         sortBy = 'Price';
-        order = 1; // If sorting by price, sort in descending order
-    } else if (sortBy === 'name') {
-        sortBy = 'Name';
-        order = -1
+        order = -1; // If sorting by price, sort in descending order
+    } else if (sortBy === 'Low_to_High') {
+        sortBy = 'Price';
+        order = 1
     }
-
+ 
     productModel.find().sort({ [sortBy]: order })
         .then(products => {
-            // Sort the products by the 'Price' or 'Name' field
-            products.sort((a, b) => {
-                if (a[sortBy] < b[sortBy]) {
-                    return -1;
-                }
-                if (a[sortBy] > b[sortBy]) {
-                    return 1;
-                }
-                // a must be equal to b
-                return 0;
-            });
-
             // Now, 'products' is sorted correctly
             res.json(products);
         })
@@ -866,9 +878,8 @@ const productsort = async (req, res) => {
             console.log(err);
             res.status(500).send('Error occurred while fetching products');
         });
-
-}
-
+ }
+ 
 
 const productdiscount = async (req, res) => {
     try {
@@ -922,7 +933,9 @@ module.exports = {
     fotppost,
     newpassword,
     newpasswordpost,
-    productdiscount
+    productdiscount,
+    allproducts,
+    categorysort
 
 
 };

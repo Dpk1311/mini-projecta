@@ -9,7 +9,7 @@ const blockingmiddleware = async (req, res, next) => {
         const block = user.block;
         // console.log('status', block);
         if (block === false) {
-            next();
+            next();  
         }
         else {
             req.session.destroy()

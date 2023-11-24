@@ -26,18 +26,18 @@ const walletreturnadd = async (req, res) => {
     console.log('orderid', orderid);
 
     try {
-        // Find the wallet document for the user  
+      
         let wallet = await walletModel.findOne({ userId: userId });
 
         if (!wallet) {
             return res.status(404).json({ error: 'Wallet not found' });
         }
 
-        // Update the wallet document by adding the totalAmount to the balance and pushing a new transaction
+      
         wallet.balance += totalAmount
         wallet.transactions.push({ amount: totalAmount, transactionType: 'credit' });
 
-        // Save the updated wallet document
+      
         await wallet.save();
 
 
@@ -46,7 +46,7 @@ const walletreturnadd = async (req, res) => {
         console.log('update', orderdata.Status);
 
         // console.log('wallet updated', wallet); 
-        res.json(wallet); // Send the updated wallet document in the response
+        res.json(wallet); 
     } catch (error) {
         console.error(error);
         res.status(500).json({ error: 'Internal Server Error' });
@@ -60,18 +60,17 @@ const walletcanceladd = async (req, res) => {
     console.log('orderid', orderid);
 
     try {
-        // Find the wallet document for the user  
+         
         let wallet = await walletModel.findOne({ userId: userId });
 
         if (!wallet) {
             return res.status(404).json({ error: 'Wallet not found' });
         }
 
-        // Update the wallet document by adding the totalAmount to the balance and pushing a new transaction
+      
         wallet.balance += totalAmount
         wallet.transactions.push({ amount: totalAmount, transactionType: 'credit' });
 
-        // Save the updated wallet document
         await wallet.save();
 
 
@@ -80,7 +79,7 @@ const walletcanceladd = async (req, res) => {
         console.log('update', orderdata.Status);
 
         // console.log('wallet updated', wallet); 
-        res.json(wallet); // Send the updated wallet document in the response
+        res.json(wallet); 
     } catch (error) {
         console.error(error);
         res.status(500).json({ error: 'Internal Server Error' });

@@ -37,7 +37,42 @@
         <%- include('partials/navbar.ejs',{ user: user }) %>
           <% } %>
             <%- include('partials/banner.ejs') %>
-              <%- include('partials/cards.ejs',{categorycollection}) %>
+                  <div>
+                    <a href="/allproducts">
+                      <div class="flex flex-row ml-8  my-16">
+                        <!-- Card 1 -->
+                        <div class="p-4" style="height:683px ; width:475px ;">
+                          <div class="bg-white rounded-lg shadow-md p-4" style="height:720px ; width:475px ;">
+                            <!-- Product Image -->
+                            <img src="uploads/home 1.webp" alt="Produfct Image" class="w-full h-56  mb-4 rounded-md"
+                              style="height:683px ; width:475px ;">
+                          </div>
+                        </div>
+
+                        <!-- Card 2 -->
+                        <div class="p-4" style="height:683px ; width:475px ;">
+                          <div class="bg-white rounded-lg shadow-md p-4" style="height:720px ; width:475px ;">
+                            <!-- Product Image -->
+                            <img src="uploads/home 2.webp" alt="Product Image"
+                              class="w-full h-56 object-cover mb-4 rounded-md" style="height:683px ; width:475px ;">
+                          </div>
+                        </div>
+
+                        <!-- Card 3 -->
+                        <div class="p-4" style="height:683px ; width:475px ;">
+                          <div class="bg-white rounded-lg shadow-md p-4" style="height:720px ; width:475px ;">
+                            <!-- Product Image -->
+                            <img src="uploads/home3.webp" alt="Product Image"
+                              class="w-full h-56 object-cover mb-4 rounded-md" style="height:683px ; width:475px ;">
+                          </div>
+                        </div>
+                      </div>
+                    </a>
+                    <!-- <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                      View More
+                    </button> -->
+                  </div>
+                    <%- include('partials/cards.ejs',{categorycollection}) %>
 
 
 
@@ -48,26 +83,26 @@
 
 
 
-              <%- include('partials/footer.ejs') %>
-                <script src="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.js"></script>
+                      <%- include('partials/footer.ejs') %>
+                        <script src="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.js"></script>
 
-                <!-- Initialize Swiper -->
-                <script>
-                  var swiper = new Swiper(".mySwiper", {
-                    pagination: {
-                      el: ".swiper-pagination",
-                      type: "progressbar",
-                    },
-                    navigation: {
-                      nextEl: ".swiper-button-next",
-                      prevEl: ".swiper-button-prev",
-                    },
-                  });
+                        <!-- Initialize Swiper -->
+                        <script>
+                          var swiper = new Swiper(".mySwiper", {
+                            pagination: {
+                              el: ".swiper-pagination",
+                              type: "progressbar",
+                            },
+                            navigation: {
+                              nextEl: ".swiper-button-next",
+                              prevEl: ".swiper-button-prev",
+                            },
+                          });
 
 
-                </script>
+                        </script>
 
-                
+
 </body>
 
 </html>

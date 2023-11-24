@@ -86,10 +86,10 @@ const orders = async (req, res) => {
         const cartData = await cartModel.findOne({ user: userid })
             .populate({
                 path: 'products.product',
-                model: 'Product', // Replace with your product model name
+                model: 'Product', 
             })
-        console.log('cartdata is', cartData);
-
+        console.log('cartdata isss', cartData);
+ 
         let subtotal = 0
         for (const item of cartData.products) {
             subtotal += item.product.Price * item.quantity
@@ -103,17 +103,13 @@ const orders = async (req, res) => {
             user: user._id, // Store user's ID
             products: cartData.products,
             totalAmount: totalfinal,
-            shippingAddress: user.selectedAddress[0], // Use the selected address
-            paymentMethod: 'Cash on Delivery', // Example payment method
+            shippingAddress: user.selectedAddress[0], 
+            paymentMethod: 'Cash on Delivery', 
         };
 
         // console.log('database orderdata',orderData);
-        // Create a new order document and save it to the database
         const newOrder = new OrderModel(orderData);
         await newOrder.save();
-
-        // After saving the order, you can clear the user's shopping cart or take any other necessary actions.
-
         res.redirect('/confirmpage');
 
     }
@@ -132,7 +128,7 @@ const confirmpage = async (req, res) => {
         const cartData = await OrderModel.findOne({ user: userid })
             .populate({
                 path: 'products.product',
-                model: 'Product', // Replace with your product model name
+                model: 'Product', 
             })
             .sort({ orderDate: -1 })
 
@@ -144,9 +140,9 @@ const confirmpage = async (req, res) => {
         }
 
         const data = {
-            user: user.name, // Include the user's name
-            products: cartData.products, // Include the cart products
-            selectedAddress: user.selectedAddress,// Include the selected address
+            user: user.name,
+            products: cartData.products, 
+            selectedAddress: user.selectedAddress,
             total: cartData.totalAmount
 
         }
@@ -171,13 +167,13 @@ const orderhistory = async (req, res) => {
         // console.log('user is',user);
         const cartData = await OrderModel.find({ user: userid })
             .populate({
-                path: 'products.product', // Use 'path' to specify the nested reference
-                model: 'Product' // Replace with your product model name
+                path: 'products.product', 
+                model: 'Product' 
 
             })
             .populate({
                 path: 'shippingAddress',
-                model: 'address', // Replace with your address model name
+                model: 'address',
             });
         cartData.sort((a, b) => new Date(b.orderDate) - new Date(a.orderDate))
 
@@ -207,7 +203,7 @@ const ordercancel = async (req, res) => {
         const order = await OrderModel.findById(orderid);
         // console.log(order)
 
-        // Check if the order status is "Order Pending"
+       
         if (order.Status === 'OrderPending') {
             order.Status = 'Order Cancelled';
             await order.save();
@@ -226,19 +222,19 @@ const orderdetail = async (req, res) => {
         const orderData = await OrderModel.findById(orderId)
             .populate({
                 path: 'products.product',
-                model: 'Product', // Replace with your product model name
+                model: 'Product', 
             })
             .populate({
                 path: 'shippingAddress',
-                model: 'address', // Replace with your address model name
+                model: 'address', 
             })
 
         // console.log('orderdata is', orderData)
       
-        // Combine the user's name with the cart data
+       
         const data = {
-            user: user.name, // Include the user's name
-            products: orderData.products, // Include the cart products
+            user: user.name,
+            products: orderData.products, 
         }
 
     

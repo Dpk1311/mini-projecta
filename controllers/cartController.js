@@ -17,7 +17,7 @@ const cart = async (req, res) => {
       const cartData = await cartModel.findOne({ user: userId })
         .populate({
           path: 'products.product',
-          model: 'Product', // Replace with your product model name
+          model: 'Product', 
         });
       // console.log(cartData);
 
@@ -31,29 +31,27 @@ const cart = async (req, res) => {
       // Fetch the user's name
       const user = await UserModel.findById(userId);
 
-      // Combine the user's name with the cart data
+     
       const data = {
-        user: user.name, // Include the user's name
-        products: cartData.products, // Include the cart products
+        user: user.name, 
+        products: cartData.products, 
       };
       console.log(data);
-      // Check the request's 'Accept' header to determine the response type
+     
       const acceptHeader = req.get('Accept');
 
       if (acceptHeader.includes('application/json')) {
-        // Send JSON response
+       
         res.json({ data, subtotal, user });
       } else {
-        // Render EJS (HTML) response
+       
         res.render('user/cart', { data, subtotal, user });
       }
 
     } else {
       if (req.accepts('application/json')) {
-        // Send JSON response
         res.json({ data: null });
       } else {
-        // Render EJS (HTML) response
         res.render('user/cart', { data: null ,subtotal:null});
       }
     }
@@ -66,51 +64,44 @@ const cart = async (req, res) => {
 const addToCart = async (req, res) => {
   try {
     if (req.session.user && req.session.user._id) {
-      const userId = req.session.user._id // Assuming you have user information in the session
+      const userId = req.session.user._id 
       // console.log("userId", userId);
-      const productId = req.params.productId // Assuming the product ID is passed as a query parameter
+      const productId = req.params.productId 
       // console.log('productId:', productId);
 
-      // Find the product by ID 
       const product = await productModel.findById(productId);
 
       if (!product) {
         return res.status(404).json({ error: 'Product not found' });
       }
 
-      // Check if the user already has a cart
       let userCart = await cartModel.findOne({ user: userId });
       // console.log('userCartis:', userCart);
 
       if (!userCart) {
-        // Create a new cart for the user if it doesn't exist
         userCart = new cartModel({
           user: userId,
           products: [],
         });
       }
 
-      // Check if the product is already in the user's cart
       const existingProduct = userCart.products.find((item) =>
         item.product.equals(productId)
       );
 
       if (existingProduct) {
-        // If the product is already in the cart, increase the quantity
         existingProduct.quantity += 1;
 
       }
       else {
-        // If not, add it to the cart with quantity 1
         userCart.products.push({
           product: productId,
           quantity: 1,
-          // price: product.price, // You may need to adjust this based on your schema
+          // price: product.price,
         });
       }
 
 
-      // Save the updated cart
       await userCart.save();
 
       const userWishlist = await WishlistModel.findOne({ user: userId })
@@ -127,8 +118,7 @@ const addToCart = async (req, res) => {
 
       // console.log('cart saved');
 
-      // Redirect or respond with a success message
-      return res.redirect('/cart'); // You can redirect the user to their cart page
+      return res.redirect('/cart')
     } else {
       console.log('session not found');
     }
@@ -143,9 +133,9 @@ const addToCart = async (req, res) => {
 const removefromcart = async (req, res) => {
   try {
     if (req.session.user && req.session.user._id) {
-      const userId = req.session.user._id // Assuming you have user information in the session
+      const userId = req.session.user._id 
       // console.log("userId", userId);
-      const productId = req.params.productId // Assuming the product ID is passed as a query parameter
+      const productId = req.params.productId 
       // console.log('productId:', productId);
 
 
@@ -157,17 +147,17 @@ const removefromcart = async (req, res) => {
       );
 
       if (existingProduct) {
-        // If the product is already in the cart, increase the quantity
+       
         existingProduct.quantity -= 1;
 
       }
 
-      // Save the updated cart
+      
       await userCart.save();
       // console.log('cart saved');
 
-      // Redirect or respond with a success message
-      return res.redirect('/cart'); // You can redirect the user to their cart page
+     
+      return res.redirect('/cart'); 
     } else {
       console.log('session not found');
     }
@@ -182,8 +172,8 @@ const removefromcart = async (req, res) => {
 const deleteFromCart = async (req, res) => {
   try {
     if (req.session.user && req.session.user._id) {
-      const userId = req.session.user._id; // Assuming you have user information in the session
-      const productId = req.params.productId; // Assuming the product ID is passed as a parameter
+      const userId = req.session.user._id; 
+      const productId = req.params.productId; 
 
       let userCart = await cartModel.findOne({ user: userId });
 
@@ -192,15 +182,15 @@ const deleteFromCart = async (req, res) => {
       );
 
       if (existingProductIndex !== -1) {
-        // If the product is in the cart, remove it from the array
+        
         userCart.products.splice(existingProductIndex, 1);
 
-        // Save the updated cart
+       
         await userCart.save();
         console.log('product removed successfully');
 
-        // Redirect or respond with a success message
-        return res.redirect('/cart'); // You can redirect the user to their cart page
+       
+        return res.redirect('/cart'); 
       } else {
         return res.status(404).json({ error: 'Product not found in cart' });
       }
@@ -225,7 +215,7 @@ const checkout = async (req, res) => {
     const cartData = await cartModel.findOne({ user: userid })
       .populate({
         path: 'products.product',
-        model: 'Product', // Replace with your product model name
+        model: 'Product', 
       });
 
     let subtotal = 0;
@@ -236,9 +226,9 @@ const checkout = async (req, res) => {
     let total = (subtotal + 4.99).toFixed(2)
 
     const data = {
-      user: user.name, // Include the user's name
-      products: cartData.products, // Include the cart products
-      selectedAddress: user.selectedAddress, // Include the selected address
+      user: user.name,
+      products: cartData.products, 
+      selectedAddress: user.selectedAddress, 
     }
 
     
@@ -265,9 +255,9 @@ const payment = async (req, res) => {
 
     var instance = new Razorpay({ key_id: Keyid, key_secret: Keysecret });
 
-    // Create a Razorpay order
+   
     let order = await instance.orders.create({
-      amount: amount * 100, // Convert to paisa
+      amount: amount * 100, 
       currency: "INR",
       receipt: "receipt#1",
     });

@@ -68,9 +68,20 @@
                 <div class="mb-4">
                     <label for="sort" class="block text-sm font-medium text-gray-700">Sort By:</label>
                     <select id="sort" name="sort" class="mt-1 p-2 w-full border rounded-md">
-                        <option value="price">Price</option>
-                        <option value="name">Name</option>
+                        <option value="High_to_Low">High to Low</option>
+                        <option value="Low_to_High">Low to High</option>
                     </select>
+                </div>
+                <div class="mb-4">
+                    <label for="sort" class="block text-sm font-medium text-gray-700">Sort By Category:</label>
+                    <select onchange="categoryid(this.value)">
+                        <% categorycollection.forEach(element=> { %>
+                            <option value="<%= element._id %>">
+                                <%= element.Name %>
+                            </option>
+                            <% }); %>
+                    </select>
+
                 </div>
                 <div>
                     <label class="block text-sm font-medium text-gray-700">Discount :</label>
@@ -121,7 +132,8 @@
                                             <span class="text-black font-semibold">₹ <%= element.Price %></span>
                                             <!-- Add more product details as needed -->
                                             <a href="/cartpost/<%= element._id %>"><button
-                                                class=" button rounded-xl font-semibold ">Add to Cart</button></a>
+                                                    class=" button rounded-xl font-semibold ">Add to Cart</button></a>
+
                                         </div>
                                     </a>
                                 </div>
@@ -173,6 +185,18 @@
                     .catch(error => console.error('Error:', error));
             }
 
+            function categoryid(categoryid) {
+                console.log('id is', categoryid);
+                fetch(`/categorysort/${categoryid}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        // Here, 'data' is the sorted list of products returned by the server.
+                        // You can update your page with this data.
+
+                        updatePage(data);
+                    })
+                    .catch(error => console.error('Error:', error));
+            }
 
 
         </script>
@@ -258,7 +282,7 @@
                                             </p>
                                             <span class="text-black font-semibold">₹ ${product.Price}</span>
                                             <!-- Add more product details as needed -->
-                                            <a href="/cartpost/<%= product._id %>">
+                                            <a href="/cartpost/${product._id}">
                                                 <button class=" button rounded-xl font-semibold ">Add to Cart</button></a>
                                         </div>
                                     </a>

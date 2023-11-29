@@ -788,6 +788,63 @@ const addaddresspost = async (req, res) => {
 }
 
 
+const addaddresscheck = (req, res) => {
+    try {
+        if (req.session.invalid) {
+            req.session.invalid = false;
+            res.render('user/addaddresscheck', { message: req.session.errmsg || '' });
+        } else if (req.session.user) {
+            res.render('user/addaddresscheck', { message: '' });
+        } else {
+            res.redirect('/checkout')
+        }
+    } catch (error) {
+        console.error(error);
+    }
+}
+
+
+const addaddresscheckpost = async (req, res) => {
+    try {
+        const usermail = req.session.useremail;
+        const user = await UserModel.findOne({ email: usermail }).populate('address');
+        console.log(user);
+
+        let { street, city, state, pincode, country } = req.body;
+        street = street.trim();
+        city = city.trim();
+        pincode = pincode.trim();
+        country = country.trim();
+
+        if (!street || !city || !pincode || !country) {
+            req.session.invalid = true;
+            req.session.errmsg = "All Fields are necessary";
+            return res.redirect('/addaddresscheck');
+        }
+
+        const newAddress = new addressModel({
+            street,
+            city,
+            state,
+            pincode,
+            country
+        });
+        await newAddress.save();
+
+        user.address.push(newAddress);
+        await user.save();
+        console.log('newaddress saved to database');
+        res.redirect('/checkout');
+
+    } catch (error) {
+        console.error(error);
+    }
+}
+
+
+
+
+
 const deleteaddress = async (req, res) => {
     const addressid = req.params.addressid
     const userid = req.session.user._id
@@ -922,6 +979,8 @@ module.exports = {
     userprofile,
     addaddress,
     addaddresspost,
+    addaddresscheckpost,
+    addaddresscheck,
     edituser,
     editpost,
     saveaddress,

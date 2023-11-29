@@ -123,16 +123,19 @@ const confirmpage = async (req, res) => {
     try {
         const userid = req.session.user._id
         const user = await UserModel.findById(userid)
-            .populate('selectedAddress')
 
         const cartData = await OrderModel.findOne({ user: userid })
             .populate({
                 path: 'products.product',
                 model: 'Product', 
             })
+            .populate({
+                path: 'shippingAddress',
+                model: 'address', 
+            })
             .sort({ orderDate: -1 })
 
-        console.log('cartData is', cartData);
+        // console.log('cartData is', cartData);
 
         let subtotal = 0
         for (const item of cartData.products) {
@@ -142,7 +145,6 @@ const confirmpage = async (req, res) => {
         const data = {
             user: user.name,
             products: cartData.products, 
-            selectedAddress: user.selectedAddress,
             total: cartData.totalAmount
 
         }
@@ -176,18 +178,6 @@ const orderhistory = async (req, res) => {
                 model: 'address',
             });
         cartData.sort((a, b) => new Date(b.orderDate) - new Date(a.orderDate))
-
-        // console.log('cartData is', cartData);
-        // const order = cartData.sort(1)
-        // console.log('sorted');
-        // Check if the cancel button is clicked
-        // const data = {
-        //     user: user.name, // Include the user's name
-        //     products: cartData.products,
-        // }
-
-
-        // console.log('orderhistory data', cartData);
         res.render('user/orderhistory', { user, cartData });
     }
     catch (error) {

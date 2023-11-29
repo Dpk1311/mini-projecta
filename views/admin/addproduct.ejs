@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="dist/output.css">
     <script src="https://cdn.tailwindcss.com"></script>
-
+    <script src="https://unpkg.com/cropperjs@next"></script>
     <title>Document</title>
 </head>
 
@@ -23,44 +23,42 @@
                     <div class="mb-4">
                         <label for="Name" class="block mb-2 text-sm text-gray-600">Name</label>
                         <input type="Name" id="Name" name="Name"
-                            class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500"
-                            >
+                            class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500">
                     </div>
                     <div class="mb-4">
                         <label for="Description" class="block mb-2 text-sm text-gray-600">Description</label>
                         <textarea name="Description" type="text" id="Description" cols="15" rows="5"
-                            class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500"
-                            ></textarea>
+                            class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500"></textarea>
                     </div>
                     <div class="mb-4">
                         <label for="Price" class="block mb-2 text-sm text-gray-600">Price</label>
                         <input type="number" id="Price" name="Price"
-                            class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500"
-                            >
+                            class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500">
                     </div>
                     <div class="mb-4">
                         <label for="Image" class="block mb-2 text-sm text-gray-600">Images</label>
                         <input type="file" id="Image" name="Image" multiple
                             class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500">
                     </div>
+                    <canvas id="canvas"></canvas>
+                    <button id="cropButton">Crop</button>
+                    <button id="restoreButton">Restore</button>
+
                     <div class="mb-6">
                         <label for="Discount" class="block mb-2 text-sm text-gray-600">Discount</label>
                         <input type="number" id="Discount" name="Discount"
-                            class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500"
-                            >
+                            class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500">
                     </div>
                     <div class="mb-6">
                         <label for="Brand" class="block mb-2 text-sm text-gray-600">Brand</label>
                         <input type="text" id="Brand" name="Brand"
-                            class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500"
-                            >
+                            class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500">
                     </div>
 
                     <div class="mb-6">
                         <label for="Category" class="block mb-2 text-sm text-gray-600">Category</label>
                         <select id="Category" name="Category"
-                            class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500 mb-4"
-                            >
+                            class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500 mb-4">
                             <% displaycategory.forEach(category=> { %>
                                 <option value="<%= category._id %>">
                                     <%= category.Name %>
@@ -73,20 +71,54 @@
                     <div class="mb-6">
                         <label for="Size" class="block mb-2 text-sm text-gray-600">Size</label>
                         <input type="text" id="Size" name="Size"
-                            class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500"
-                            >
+                            class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500">
                     </div>
                     <div class="mb-6">
                         <label for="Quantity" class="block mb-2 text-sm text-gray-600">Quantity</label>
                         <input type="number" id="Quantity" name="Quantity"
                             class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500">
                     </div>
-                    <span class="ml-5 mb-3 font-bold text-red-600"> <%= message %></span>
+                    <span class="ml-5 mb-3 font-bold text-red-600">
+                        <%= message %>
+                    </span>
                     <button type="submit"
                         class="w-32 bg-gradient-to-r from-cyan-400 to-cyan-600 text-white py-2 rounded-lg mx-auto block focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-cyan-500 mb-2 mt-3">Submit</button>
                 </form>
             </div>
         </div>
+
+
+
+
+        <script>
+            const image = document.getElementById('Image');
+            const canvas = document.getElementById('canvas');
+            const cropper = new Cropper(image, {
+                aspectRatio: 1,
+                crop(event) {
+                    console.log(event.detail.x);
+                    console.log(event.detail.y);
+                    console.log(event.detail.width);
+                    console.log(event.detail.height);
+                    console.log(event.detail.rotate);
+                    console.log(event.detail.scaleX);
+                    console.log(event.detail.scaleY);
+                },
+            });
+
+
+
+            document.getElementById('cropButton').addEventListener('click', () => {
+                const croppedCanvas = cropper.getCroppedCanvas();
+                canvas.appendChild(croppedCanvas);
+            });
+
+            document.getElementById('restoreButton').addEventListener('click', () => {
+                cropper.restore();
+            });
+
+
+        </script>
 </body>
 
 </html>

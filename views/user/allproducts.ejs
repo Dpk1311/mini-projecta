@@ -11,6 +11,7 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.css" />
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/medium-zoom@1.0.6/dist/medium-zoom.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bodymovin/5.7.5/lottie.min.js"></script>
 
     <title>Products Page</title>
     <style>
@@ -102,9 +103,7 @@
 
 
             <div class="flex flex-col w-10/12">
-                <div id="notfound" style="display: none;">
-                    <h1>not found</h1>
-                </div>
+                <div class="m-auto h-96 w-96" id="notfound" style="display: none;"></div>
                 <div id="productList"
                     class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-3 gap-4 p-10 pb-0 mx-auto mb-4">
                     <!-- Your product list goes here -->
@@ -121,7 +120,9 @@
                                             <!-- Product Image -->
                                             <img src="/<%= element.Image[0] %>" alt="Product Image"
                                                 class="w-full h-56 object-center mb-4 rounded-md">
-
+                                            <a href="/wishlistadd/<%= element._id  %>"><img width="20" height="20"
+                                                    src="https://img.icons8.com/ios/50/like--v1.png"
+                                                    alt="like--v1" /></a>
                                             <!-- Product Details -->
                                             <h2 class="text-lg font-semibold">
                                                 <%= element.Name %>
@@ -133,6 +134,7 @@
                                             <!-- Add more product details as needed -->
                                             <a href="/cartpost/<%= element._id %>"><button
                                                     class=" button rounded-xl font-semibold ">Add to Cart</button></a>
+
 
                                         </div>
                                     </a>
@@ -201,36 +203,39 @@
 
         </script>
 
+<script>
+const searchInput = document.getElementById('userSearch-all');
+const searchableItems = document.querySelectorAll('.searchable-item-all');
+const noResultsMessage = document.getElementById('notfound');
+let animation = null; // Variable to hold the animation instance
 
-        <script>
-            const searchInput = document.getElementById('userSearch-all');
-            const searchableItems = document.querySelectorAll('.searchable-item-all');
-            const noResultsMessage = document.getElementById('notfound');
+searchInput.addEventListener('input', () => {
+   const searchText = searchInput.value.toLowerCase();
+   let found = false;
 
+   searchableItems.forEach(item => {
+       const itemText = item.textContent.toLowerCase();
 
-            // Reference to the message element
+       if (itemText.includes(searchText)) {
+           item.style.display = 'block';
+           found = true;
+       } else {
+           item.style.display = 'none';
+       }
+   });
 
-            searchInput.addEventListener('input', () => {
-                const searchText = searchInput.value.toLowerCase();
-                let found = false; // Flag to check if any matching items are found
+   noResultsMessage.style.display = found ? 'none' : 'block';
 
-                searchableItems.forEach(item => {
-                    const itemText = item.textContent.toLowerCase();
+   if (!animation) {
+      animation = bodymovin.loadAnimation({
+          container: noResultsMessage,
+          path: 'Not_found_animation.json',
+          renderer: 'svg',
+      });
+  }
+});
+</script>
 
-                    if (itemText.includes(searchText)) {
-                        item.style.display = 'block';
-                        found = true; // Set the flag to true if a matching item is found
-                    } else {
-                        item.style.display = 'none';
-                    }
-                });
-
-
-                noResultsMessage.style.display = found ? 'none' : 'block';
-
-
-            });
-        </script>
 
         <script>
             document.getElementById('sort').addEventListener('change', function () {

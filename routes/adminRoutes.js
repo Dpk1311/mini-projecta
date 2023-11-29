@@ -38,7 +38,7 @@ router.get('/categorydelete/:productId',adminauthmiddleware,adminController.cate
 router.get('/usersearch',adminauthmiddleware,adminController.usersearch)
 router.get('/userblock/:userId',adminauthmiddleware,adminController.userblock)
 router.get('/userUnblock/:userId',adminController.userUnblock)
-router.get('/ordermanagement',adminController.ordermanagement)
+router.get('/ordermanagement',adminauthmiddleware,adminController.ordermanagement)
 router.get('/adminorderdetail',adminauthmiddleware,adminController.adminoderdetail)
 router.get('/orderstatusupdate/:orderid',adminauthmiddleware,adminController.orderstatusupdate)
 router.get('/editproduct/:productId',adminController.editproduct)
@@ -54,6 +54,7 @@ router.get('/couponedit/:couponid',adminauthmiddleware,couponController.couponed
 router.post('/couponedit/:couponid',couponController.couponeditpost)
 router.get('/usermanagement',adminauthmiddleware,adminController.usermanagement) 
 router.get('/downloadExcel',adminController.generateExcelSalesReport) 
+router.post('/deleteimage',adminController.deleteimage)
 
 
 

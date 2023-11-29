@@ -14,98 +14,157 @@
 <body>
 
     <%- include('adminpartials/navbar') %>
-        <div class="min-h-screen flex items-center justify-center">
-            <div class="max-w-md w-full p-6 bg-white rounded-lg shadow-lg">
-                <div class="flex justify-center mb-8">
-                    <h1 class="w-30 h-20 font-bold">V A S T R A</h1>
+        <div class=" flex items-center justify-center">
+            <div class="w-full p-6 bg-white rounded-lg shadow-lg ">
+                <div class="flex justify-center">
+                    <h1 class="w-30 h-10 font-bold">V A S T R A</h1>
                 </div>
-                <h1 class="text-2xl font-semibold text-center text-gray-500 mt-8 mb-6">Edit Product</h1>
+                <h1 class="text-2xl font-semibold text-start text-gray-500 mt-8 pb-3 pl-4">Edit Product</h1>
                 <%# console.log(productData); %>
                     <form action="/editproduct/<%= productData._id %>" method="post" enctype="multipart/form-data">
-                        <div class="mb-4">
-                            <label for="Name" class="block mb-2 text-sm text-gray-600">Name</label>
-                            <input type="text" id="Name" name="Name" value="<%= productData.Name %>"
-                                class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500"
-                                >
-                        </div>
-                        <div class="mb-4">
-                            <label for="Description" class="block mb-2 text-sm text-gray-600">Description</label>
-                            <input type="text" id="Description" name="Description"
-                                value="<%= productData.Description %>"
-                                class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500"
-                                >
-                        </div>
-                        <div class="mb-4">
-                            <label for="Price" class="block mb-2 text-sm text-gray-600">Price</label>
-                            <input type="number" id="Price" name="Price" value="<%= productData.Price %>"
-                                class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500"
-                                >
-                        </div>
-                        <div class="mb-4">
-                            <label for="Image" class="block mb-2 text-sm text-gray-600">Current Images</label>
-                            <img name="Image" src="/<%= productData.Image[0] %>" alt="image">
-                        </div>
-                        <div class="mb-4">
-                            <label for="Image" class="block mb-2 text-sm text-gray-600">New Images</label>
-                            <input type="file" id="Image" name="Image" multiple onchange="previewImage(event)"
-                                class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500">
-                            <img id="imagePreview" name="Image" src="/<%= productData.Image[0] %>" alt="image">
-                        </div>
-                        <div class="mb-6">
-                            <label for="Discount" class="block mb-2 text-sm text-gray-600">Discount</label>
-                            <input type="number" id="Discount" name="Discount" value="<%= productData.Discount %>"
-                                class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500"
-                                >
-                        </div>
-                        <div class="mb-6">
-                            <label for="Brand" class="block mb-2 text-sm text-gray-600">Brand</label>
-                            <input type="text" id="Brand" name="Brand" value="<%= productData.Brand %>"
-                                class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500"
-                                >
-                        </div>
+                        <div class="grid grid-cols-2 px-8  gap-8">
+                            <div class="">
+                                <label for="Name" class="block  text-sm text-gray-600">Name</label>
+                                <input type="text" id="Name" name="Name" value="<%= productData.Name %>"
+                                    class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500">
+                            </div>
+                            <div class="">
+                                <label for="Description" class="block  text-sm text-gray-600">Description</label>
+                                <input type="text" id="Description" name="Description"
+                                    value="<%= productData.Description %>"
+                                    class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500">
+                            </div>
+                            <div class="">
+                                <label for="Price" class="block  text-sm text-gray-600">Price</label>
+                                <input type="number" id="Price" name="Price" value="<%= productData.Price %>"
+                                    class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500">
+                            </div>
 
-                        <div class="mb-6">
-                            <label for="Category" class="block mb-2 text-sm text-gray-600">Category</label>
-                            <select type="text" id="Category" name="Category"
-                                class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500 mb-4"
-                                >
-                                <% displaycategory.forEach(category=> { %>
-                                    <option value="<%= category._id %>">
-                                        <%= category.Name %>
-                                    </option>
+                            <div class="">
+                                <label for="Discount" class="block  text-sm text-gray-600">Discount</label>
+                                <input type="number" id="Discount" name="Discount" value="<%= productData.Discount %>"
+                                    class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500">
+                            </div>
+                            <div class="">
+                                <label for="Brand" class="block  text-sm text-gray-600">Brand</label>
+                                <input type="text" id="Brand" name="Brand" value="<%= productData.Brand %>"
+                                    class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500">
+                            </div>
+
+                            <div class="">
+                                <label for="Category" class="block  text-sm text-gray-600">Category</label>
+                                <select type="text" id="Category" name="Category"
+                                    class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500 mb-4">
+                                    <% displaycategory.forEach(category=> { %>
+                                        <option value="<%= category._id %>">
+                                            <%= category.Name %>
+                                        </option>
+                                        <% }); %>
+                                </select>
+                            </div>
+
+                            <div class="">
+                                <label for="Size" class="block  text-sm text-gray-600">Size</label>
+                                <input type="number" id="Size" name="Size" value="<%= productData.Size %>"
+                                    class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500">
+                            </div>
+                            <div class="">
+                                <label for="Quantity" class="block  text-sm text-gray-600">Quantity</label>
+                                <input type="text" id="Quantity" name="Quantity" value="<%= productData.Quantity %>"
+                                    class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500">
+                            </div>
+                            <div class="flex flex-row gap-4 ">
+                                <% productData.Image.forEach((data,index)=> { %>
+                                    <div class="mb-4">
+                                        <label for="Image" class="block  text-sm text-gray-600">Current
+                                            Images</label>
+                                        <img name="Image"
+                                            class="w-32 rounded-lg h-24 md:h-32 flex items-center justify-center"
+                                            src="/<%= data %>" alt="image">
+
+                                        <%# console.log('log',data); %>
+                                            <button type="button"
+                                                onclick="deleteImage('<%= index %>', '<%= productData._id %>')">Delete</button>
+
+                                    </div>
                                     <% }); %>
-                            </select>
-                        </div>
+                            </div>
+                            <div class="flex flex-row gap-4">
 
-                        <div class="mb-6">
-                            <label for="Size" class="block mb-2 text-sm text-gray-600">Size</label>
-                            <input type="number" id="Size" name="Size" value="<%= productData.Size %>"
-                                class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500"
-                                >
+                                <% productData.Image.forEach(element=> { %>
+                                    <div class="mb-4">
+                                        <label for="Image" class="block  text-sm text-gray-600">New Images</label>
+                                        <img id="imagePreview"
+                                            class="w-32 rounded-lg h-24 md:h-32 flex items-center justify-center"
+                                            name="Image" src="/<%= element %>" alt="image">
+                                        <input type="file" id="Image" name="Image" multiple
+                                            onchange="previewImage(event)"
+                                            class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500">
+                                    </div>
+                                    <% }); %>
+                            </div>
+                            <span class="ml-5 mb-3 font-bold text-red-600">
+                                <%= message %>
+                            </span>
+                            <button type="submit"
+                                class="w-32 bg-gradient-to-r from-cyan-400 to-cyan-600 text-white py-2 rounded-lg mx-auto block focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-cyan-500 mb-2">Update</button>
                         </div>
-                        <div class="mb-6">
-                            <label for="Quantity" class="block mb-2 text-sm text-gray-600">Quantity</label>
-                            <input type="text" id="Quantity" name="Quantity" value="<%= productData.Quantity %>"
-                                class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500"
-                                >
-                        </div>
-                        <span class="ml-5 mb-3 font-bold text-red-600"> <%= message %></span>
-                        <button type="submit"
-                            class="w-32 bg-gradient-to-r from-cyan-400 to-cyan-600 text-white py-2 rounded-lg mx-auto block focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-cyan-500 mb-2">Update</button>
                     </form>
             </div>
         </div>
 </body>
 <script>
 
-    function previewImage(event) {
-        const reader = new FileReader();
+function previewImages(event) {
+    const reader = new FileReader();
+    const output = document.getElementById('imagePreview');
+
+    // Clear previous previews
+    output.innerHTML = '';
+
+    // Iterate through selected files
+    for (const file of event.target.files) {
+        // Create a new image element for each file
+        const img = document.createElement('img');
+        img.className = 'preview-image'; // Optional: Add a class for styling
         reader.onload = function () {
-            const output = document.getElementById('imagePreview');
-            output.src = reader.result;
+            img.src = reader.result;
         };
-        reader.readAsDataURL(event.target.files[0]);
+
+        // Read the contents of the current file
+        reader.readAsDataURL(file);
+
+        // Append the image to the output container
+        output.appendChild(img);
     }
+}
+
+
+
+    function deleteImage(index, productid) {
+       
+        const requestData = {
+            data: index,
+            productid: productid
+        };
+        console.log(requestData);
+
+        fetch(`/deleteimage`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(requestData),
+        })
+            .then(response => response.json())
+            .then(data => {
+                window.location.reload();
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+            });
+    }
+
 
 </script>
 

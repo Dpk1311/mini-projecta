@@ -23,7 +23,7 @@ app.use(session({
     secret: 'your-secret-key', // Change this to a secure secret
     resave: false,
     saveUninitialized: false,
-}));
+})); 
 
 
 const PORT = process.env.PORT;
@@ -41,7 +41,7 @@ mongoose.connect(dbURI)
 app.use('/',clientrouter)
 app.use('/',adminrouter)
 app.use('*', (req, res) => {
-    res.status(404).send('Error: Page not found');
+    res.render('user/404page');
   });
   
  

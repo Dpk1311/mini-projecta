@@ -30,13 +30,13 @@ const cart = async (req, res) => {
 
       // Fetch the user's name
       const user = await UserModel.findById(userId);
-
-     
+ 
+      
       const data = {
         user: user.name, 
         products: cartData.products, 
       };
-      console.log(data);
+      // console.log(data);
      
       const acceptHeader = req.get('Accept');
 
@@ -50,9 +50,9 @@ const cart = async (req, res) => {
 
     } else {
       if (req.accepts('application/json')) {
-        res.json({ data: null });
+        res.json({ data: null,subtotal: null });
       } else {
-        res.render('user/cart', { data: null ,subtotal:null});
+        res.render('user/cart', { data: null , subtotal:null})
       }
     }
   } catch (error) {
@@ -300,11 +300,22 @@ const wishlistadd = async (req, res) => {
       products: [productId]
     });
   } else {
-    userWishlist.products.push(productId);
-  }
+    // Check if the product already exists in the wishlist
+    if (!userWishlist.products.includes(productId)) {
+      userWishlist.products.push(productId);
+    }
+  } 
 
   await userWishlist.save();
-  res.json('product added to wishlist')
+  const acceptHeader = req.get('Accept');
+
+  if (acceptHeader.includes('application/json')) {
+   
+    res.json('product added to wishlist')
+  } else {
+   
+    res.redirect('/wishlist');
+  }
 }
 
 

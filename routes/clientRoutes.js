@@ -39,6 +39,8 @@ router.post('/deletecart/:productId',authMiddleware,blockingmiddleware,cartContr
 router.get('/userprofile', authMiddleware,blockingmiddleware,clientController.userprofile) 
 router.get('/addaddress', authMiddleware,clientController.addaddress)
 router.post('/addaddress', authMiddleware,clientController.addaddresspost)
+router.get('/addaddresscheck', authMiddleware,clientController.addaddresscheck)
+router.post('/addaddresscheck', authMiddleware,clientController.addaddresscheckpost)
 router.get('/edituser', authMiddleware,clientController.edituser)
 router.post('/edituser', authMiddleware,clientController.editpost)
 router.get('/checkout', authMiddleware,blockingmiddleware,cartController.checkout)

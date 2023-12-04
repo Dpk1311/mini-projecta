@@ -896,14 +896,14 @@ const allproducts = async (req, res) => {
     // console.log('totalitems are',totalItems);
     const totalPages = Math.ceil(totalItems / limit);
 
-    res.render('user/allproducts', {productcollection, totalPages, page, user, categorycollection })
+    res.render('user/allproducts', { productcollection, totalPages, page, user, categorycollection })
 }
 
-const categorysort = async (req,res) =>{
+const categorysort = async (req, res) => {
     const categoryid = req.params.categoryid
-    console.log('category id is',categoryid);
-    const categorycollection = await productModel.find({Category: categoryid});
-    console.log('category is',categorycollection);
+    console.log('category id is', categoryid);
+    const categorycollection = await productModel.find({ Category: categoryid });
+    console.log('category is', categorycollection);
     res.json(categorycollection)
 }
 
@@ -917,7 +917,7 @@ const productsort = async (req, res) => {
     let sortBy = req.query.sort;
     console.log('sortby', sortBy);
     let order = 1; // Default order
- 
+
     if (sortBy === 'High_to_Low') {
         sortBy = 'Price';
         order = -1; // If sorting by price, sort in descending order
@@ -925,7 +925,7 @@ const productsort = async (req, res) => {
         sortBy = 'Price';
         order = 1
     }
- 
+
     productModel.find().sort({ [sortBy]: order })
         .then(products => {
             // Now, 'products' is sorted correctly
@@ -935,12 +935,12 @@ const productsort = async (req, res) => {
             console.log(err);
             res.status(500).send('Error occurred while fetching products');
         });
- }
- 
+}
+
 
 const productdiscount = async (req, res) => {
     try {
-        const discount = req.params.discount 
+        const discount = req.params.discount
         console.log('discount is', discount);
         let products;
         if (discount === '5') {
@@ -958,6 +958,47 @@ const productdiscount = async (req, res) => {
         console.error(error);
     }
 }
+
+const applyFilters = async (req, res) => {
+    try {
+        const discount = parseInt(req.body.discount)
+        const categoryid = req.body.categoryid
+        const sort = req.body.sort
+
+        console.log('discount is', discount);
+        console.log('category id is', categoryid);
+        console.log('sort id is', sort);
+
+        let filter = {};
+
+        if (discount) {
+            filter.Discount = { $gt: discount >= 20 ? 20 : discount };
+        }
+
+        if (categoryid) {
+            filter.Category = categoryid;
+        }
+
+        let products = await productModel.find(filter);
+
+        if (sort === 'Low_to_High' ) {
+            products.sort((a, b) => a.Price - b.Price)
+        }else if(sort === 'High_to_Low'){
+            products.sort((a,b)=> b.Price - a.Price)
+        }
+
+        // const products = await productModel.find(filter);
+        return res.json(products);
+
+    } catch (error) {
+        console.error(error);
+        return res.status(500).json({ error: 'Internal Server Error' });
+    }
+}
+
+
+
+
 
 
 module.exports = {
@@ -994,7 +1035,8 @@ module.exports = {
     newpasswordpost,
     productdiscount,
     allproducts,
-    categorysort
+    categorysort,
+    applyFilters
 
 
 };

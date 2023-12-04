@@ -95,9 +95,9 @@
                                     <button id="downloadButton"
                                         class="ml-4 px-4 py-2 bg-blue-500 text-white rounded-md">Download
                                         Report</button>
-                                        <a href="/salesreportpdf/<%= pdflink %>" download><button
-                                        class="ml-4 px-4 py-2 bg-red-500 text-white rounded-md">Download
-                                        Report</button></a>
+                                    <a href="/salesreportpdf/<%= pdflink %>" download><button
+                                            class="ml-4 px-4 py-2 bg-red-500 text-white rounded-md">Download
+                                            Report</button></a>
                                 </div>
 
                 </div>
@@ -109,7 +109,26 @@
                     const fromDate = document.getElementById('fromDate').value;
                     const toDate = document.getElementById('toDate').value;
 
-                    // Validate date inputs if needed
+                    // Validate date inputs
+                    const fromDateObj = new Date(fromDate);
+                    const toDateObj = new Date(toDate);
+
+                    // Get current date
+                    const currentDate = new Date();
+
+                    // Check if the selected 'From' date is greater than the current date
+                    if (fromDateObj > currentDate) {
+                        alert('The "From" date cannot be in the future.');
+                        return;
+                    }
+
+                    // Check if the selected 'To' date is less than the current date
+                    if (toDateObj < currentDate) {
+                        alert('The "To" date cannot be in the past.');
+                        return;
+                    }
+
+                    // Check if both dates are selected
                     if (!fromDate || !toDate) {
                         alert('Please select both "From" and "To" dates.');
                         return;
@@ -120,15 +139,27 @@
 
                     // Fetch the Excel file
                     fetch(url)
-                        .then(response => response.blob())
+                        .then(response => {
+                            if (!response.ok) {
+                                // Display a message if there is no data
+                                alert('No data available for the selected date range.');
+                                throw new Error('No data available.');
+                            }
+                            return response.blob();
+                        })
                         .then(blob => {
                             const url = window.URL.createObjectURL(blob);
                             const a = document.createElement('a');
                             a.href = url;
                             a.download = 'OrdersData.xlsx';
                             a.click();
+                        })
+                        .catch(error => {
+                            // Handle any errors that occurred during the fetch
+                            console.error('Fetch error:', error);
                         });
                 });
+
 
             </script>
 
@@ -290,102 +321,102 @@
             <script>
 
 
-const name = document.getElementById('nameinvoice').textContent
-    console.log('name_is', name)
-    const street = document.getElementById('addressstreet').textContent
-    console.log('address_is', street)
-    const city = document.getElementById('addresscity').textContent
-    console.log('address_is', city)
-    const state = document.getElementById('addressstate').textContent
-    console.log('address_is', state)
-    const pincode = document.getElementById('addresspincode').textContent
-    console.log('address_is', pincode)
-    const productnames = document.querySelectorAll('.productname');
-    const productquantitys = document.querySelectorAll('.productquantity')
-    const productprices = document.querySelectorAll('.productprice')
+                const name = document.getElementById('nameinvoice').textContent
+                console.log('name_is', name)
+                const street = document.getElementById('addressstreet').textContent
+                console.log('address_is', street)
+                const city = document.getElementById('addresscity').textContent
+                console.log('address_is', city)
+                const state = document.getElementById('addressstate').textContent
+                console.log('address_is', state)
+                const pincode = document.getElementById('addresspincode').textContent
+                console.log('address_is', pincode)
+                const productnames = document.querySelectorAll('.productname');
+                const productquantitys = document.querySelectorAll('.productquantity')
+                const productprices = document.querySelectorAll('.productprice')
 
-    const productsnamearray = []
-    const productsquantityarray = []
-    const productspricearray = []
+                const productsnamearray = []
+                const productsquantityarray = []
+                const productspricearray = []
 
-    productnames.forEach(element => {
-        const productnames = element.value
-        productsnamearray.push(productnames)
-    });
-    productquantitys.forEach(element => {
-        const productquantitys = element.value
-        productsquantityarray.push(productquantitys)
-    })
+                productnames.forEach(element => {
+                    const productnames = element.value
+                    productsnamearray.push(productnames)
+                });
+                productquantitys.forEach(element => {
+                    const productquantitys = element.value
+                    productsquantityarray.push(productquantitys)
+                })
 
-    productprices.forEach(element => {
-        const productprices = element.value
-        productspricearray.push(productprices)
-    })
-    console.log('product name', productsnamearray);
-    console.log('product_quantity', productsquantityarray);
-    console.log('product_price', productspricearray);
-
-
-    function downloadInvoice() {
-    const orderData = {
-        currency: 'USD',
-        taxNotation: 'vat', // or gst
-        marginTop: 25,
-        marginRight: 25,
-        marginLeft: 25,
-        marginBottom: 25,
-        logo: 'https://www.example.com/logo.png', // Optional
-        background: 'https://www.example.com/background.png', // Optional
-        sender: {
-            company: 'Your Company',
-            address: '123 Main Street',
-            zip: '12345',
-            city: 'City',
-            country: 'Country',
-            phone: '123456789',
-            email: 'info@yourcompany.com',
-        },
-        invoiceNumber: '2023001',
-        invoiceDate: '2023-01-01',
-        client: {
-            company: 'Client Company',
-            address: '456 Client Street',
-            zip: '54321',
-            city: 'Client City',
-            country: 'Client Country',
-            phone: '987654321',
-            email: 'client@example.com',
-        },
-        products: [
-            {
-                quantity: 2,
-                description: 'Product A',
-                tax: 10,
-                price: 50,
-            },
-            {
-                quantity: 1,
-                description: 'Product B',
-                tax: 5,
-                price: 30,
-            },
-        ],
-        bottomNotice: 'Thank you for your business!',
-    };
-
-    // Add client name to each product
-    orderData.products.forEach(product => {
-        product.clientName = orderData.client.company;
-    });
-
-    easyinvoice.createInvoice(orderData, function (result) {
-        easyinvoice.download('invoice.pdf', result.pdf);
-    });
-}
+                productprices.forEach(element => {
+                    const productprices = element.value
+                    productspricearray.push(productprices)
+                })
+                console.log('product name', productsnamearray);
+                console.log('product_quantity', productsquantityarray);
+                console.log('product_price', productspricearray);
 
 
+                function downloadInvoice() {
+                    const orderData = {
+                        currency: 'USD',
+                        taxNotation: 'vat', // or gst
+                        marginTop: 25,
+                        marginRight: 25,
+                        marginLeft: 25,
+                        marginBottom: 25,
+                        logo: 'https://www.example.com/logo.png', // Optional
+                        background: 'https://www.example.com/background.png', // Optional
+                        sender: {
+                            company: 'Your Company',
+                            address: '123 Main Street',
+                            zip: '12345',
+                            city: 'City',
+                            country: 'Country',
+                            phone: '123456789',
+                            email: 'info@yourcompany.com',
+                        },
+                        invoiceNumber: '2023001',
+                        invoiceDate: '2023-01-01',
+                        client: {
+                            company: 'Client Company',
+                            address: '456 Client Street',
+                            zip: '54321',
+                            city: 'Client City',
+                            country: 'Client Country',
+                            phone: '987654321',
+                            email: 'client@example.com',
+                        },
+                        products: [
+                            {
+                                quantity: 2,
+                                description: 'Product A',
+                                tax: 10,
+                                price: 50,
+                            },
+                            {
+                                quantity: 1,
+                                description: 'Product B',
+                                tax: 5,
+                                price: 30,
+                            },
+                        ],
+                        bottomNotice: 'Thank you for your business!',
+                    };
 
-                
+                    // Add client name to each product
+                    orderData.products.forEach(product => {
+                        product.clientName = orderData.client.company;
+                    });
+
+                    easyinvoice.createInvoice(orderData, function (result) {
+                        easyinvoice.download('invoice.pdf', result.pdf);
+                    });
+                }
+
+
+
+
             </script>
 
 

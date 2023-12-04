@@ -78,6 +78,10 @@ const generateExcelSalesReport = async (req, res) => {
             .populate('user')
             .exec();
         // console.log(ordersData);
+        if (ordersData.length === 0) {
+            // If no data found, send a response with a message
+            return res.status(404).send('No data available for the selected date range.')
+        }
 
         const workbook = new ExcelJS.Workbook();
         const worksheet = workbook.addWorksheet('Orders Data');
@@ -135,13 +139,13 @@ const generateExcelSalesReport = async (req, res) => {
 
 
 const adminlogin = (req, res) => {
-    if(req.session.invalid){
+    if (req.session.invalid) {
         req.session.invalid = false
-       return res.render('admin/login',{msg: req.session.errmsg})
-    }else{
-        res.render('admin/login',{msg:''})
+        return res.render('admin/login', { msg: req.session.errmsg })
+    } else {
+        res.render('admin/login', { msg: '' })
     }
-    
+
 }
 
 const adminloginpost = async (req, res) => {
@@ -157,10 +161,10 @@ const adminloginpost = async (req, res) => {
                 return res.redirect('/adminlogin')
             }
         } else {
-        req.session.invalid = true
-        req.session.errmsg = "User not Found"
-        return res.redirect('/adminlogin')
-    }
+            req.session.invalid = true
+            req.session.errmsg = "User not Found"
+            return res.redirect('/adminlogin')
+        }
     } catch (error) {
         console.error(error);
         res.status(500).send('Wrong details');
@@ -555,7 +559,7 @@ const editproductpost = async (req, res) => {
 
         let imagePaths = [];
         if (req.files && req.files.length > 0) {
-            imagePaths = req.files.map(file => {
+            imagePaths = productData.Image.concat(req.files.map(file => {
                 let imagePath = file.path;
 
                 if (imagePath.includes('public\\')) {
@@ -564,7 +568,7 @@ const editproductpost = async (req, res) => {
                     imagePath = imagePath.replace('public/', '');
                 }
                 return imagePath;
-            });
+            }))
         } else {
             imagePaths = productData.Image;
         }
@@ -605,7 +609,7 @@ const deleteimage = async (req, res) => {
             return res.status(404).json({ error: 'Product not found' });
         }
 
-        if (data >= 0 ) {
+        if (data >= 0) {
             product.Image.splice(data, 1);
             console.log('Product deleted:', product);
             await product.save()
@@ -672,7 +676,9 @@ const editcategorypost = async (req, res) => {
         Description = Description.trim();
         gender = gender.trim();
         status = status.trim();
+        let ucategory = await CategoryModel.findOne({ Name: Name })
         const categoryData = await CategoryModel.findById(productId);
+        console.log('category is', categoryData);
         if (!Name || !status || !gender || !Description) {
             req.session.invalid = true;
             req.session.errmsg = 'All Fields are necessary';
@@ -684,6 +690,12 @@ const editcategorypost = async (req, res) => {
             req.session.errmsg = 'Name Should be less than 15 Characters';
             return res.redirect(`/editproduct/${productId}`);
         }
+        if(ucategory.Name === Name){
+            req.session.invalid = true;
+            req.session.errmsg = 'Category already exists';
+            return res.redirect(`/editcategory/${productId}`);
+        }
+
 
         // let imagePath = req.file.path;
         // if (imagePath.includes('public\\') || imagePath.includes('public/')) {
@@ -822,7 +834,7 @@ const ordermanagement = async (req, res) => {
                 path: 'products.product',
                 model: 'Product'
             });
-            
+
         order.sort((a, b) => new Date(b.orderDate) - new Date(a.orderDate));
 
         function generateRandomOrderId() {

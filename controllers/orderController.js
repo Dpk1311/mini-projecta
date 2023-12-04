@@ -70,7 +70,7 @@ const generateInvoiceWithPdfKit = (cartData, data) => {
     doc.fontSize(14).text(`Total: ${cartData.totalAmount.toFixed(2)}`, 350, y + 10, { width: 100 });
     doc.moveDown(5)
 
-   
+
     doc.end();
 
     console.log(`Invoice saved as ${outputFilename}`);
@@ -86,10 +86,10 @@ const orders = async (req, res) => {
         const cartData = await cartModel.findOne({ user: userid })
             .populate({
                 path: 'products.product',
-                model: 'Product', 
+                model: 'Product',
             })
         console.log('cartdata isss', cartData);
- 
+
         let subtotal = 0
         for (const item of cartData.products) {
             subtotal += item.product.Price * item.quantity
@@ -103,8 +103,8 @@ const orders = async (req, res) => {
             user: user._id, // Store user's ID
             products: cartData.products,
             totalAmount: totalfinal,
-            shippingAddress: user.selectedAddress[0], 
-            paymentMethod: 'Cash on Delivery', 
+            shippingAddress: user.selectedAddress[0],
+            paymentMethod: 'Cash on Delivery',
         };
 
         // console.log('database orderdata',orderData);
@@ -123,15 +123,15 @@ const confirmpage = async (req, res) => {
     try {
         const userid = req.session.user._id
         const user = await UserModel.findById(userid)
-
+            .populate('selectedAddress')
         const cartData = await OrderModel.findOne({ user: userid })
             .populate({
                 path: 'products.product',
-                model: 'Product', 
+                model: 'Product',
             })
             .populate({
                 path: 'shippingAddress',
-                model: 'address', 
+                model: 'address',
             })
             .sort({ orderDate: -1 })
 
@@ -144,7 +144,8 @@ const confirmpage = async (req, res) => {
 
         const data = {
             user: user.name,
-            products: cartData.products, 
+            products: cartData.products,
+            selectedAddress: user.selectedAddress,
             total: cartData.totalAmount
 
         }
@@ -152,7 +153,7 @@ const confirmpage = async (req, res) => {
         console.log('data is', data);
         const pdflink = generateInvoiceWithPdfKit(cartData, data)
         console.log('pdflink', pdflink);
-        await cartModel.deleteOne({ user:userid })
+        await cartModel.deleteOne({ user: userid })
         res.render('user/confirmpage', { user, data, subtotal, pdflink })
     }
     catch (error) {
@@ -169,8 +170,8 @@ const orderhistory = async (req, res) => {
         // console.log('user is',user);
         const cartData = await OrderModel.find({ user: userid })
             .populate({
-                path: 'products.product', 
-                model: 'Product' 
+                path: 'products.product',
+                model: 'Product'
 
             })
             .populate({
@@ -193,7 +194,7 @@ const ordercancel = async (req, res) => {
         const order = await OrderModel.findById(orderid);
         // console.log(order)
 
-       
+
         if (order.Status === 'OrderPending') {
             order.Status = 'Order Cancelled';
             await order.save();
@@ -212,25 +213,25 @@ const orderdetail = async (req, res) => {
         const orderData = await OrderModel.findById(orderId)
             .populate({
                 path: 'products.product',
-                model: 'Product', 
+                model: 'Product',
             })
             .populate({
                 path: 'shippingAddress',
-                model: 'address', 
+                model: 'address',
             })
 
         // console.log('orderdata is', orderData)
-      
-       
+
+
         const data = {
             user: user.name,
-            products: orderData.products, 
+            products: orderData.products,
         }
 
-    
+
 
         // console.log('detail data',data)
-        const pdflink = generateInvoiceWithPdfKit(orderData, data) 
+        const pdflink = generateInvoiceWithPdfKit(orderData, data)
         res.render('user/orderdetailpage', { user, orderData, pdflink })
 
     }

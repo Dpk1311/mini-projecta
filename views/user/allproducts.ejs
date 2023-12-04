@@ -67,33 +67,35 @@
                     <input type="text" id="userSearch-all" name="search" class="mt-1 p-2 w-full border rounded-md">
                 </div>
                 <div class="mb-4">
-                    <label for="sort" class="block text-sm font-medium text-gray-700">Sort By:</label>
-                    <select id="sort" name="sort" class="mt-1 p-2 w-full border rounded-md">
-                        <option value="High_to_Low">High to Low</option>
-                        <option value="Low_to_High">Low to High</option>
-                    </select>
-                </div>
-                <div class="mb-4">
                     <label for="sort" class="block text-sm font-medium text-gray-700">Sort By Category:</label>
-                    <select onchange="categoryid(this.value)">
+                    <select id="category" onchange="applyFilters()">
                         <% categorycollection.forEach(element=> { %>
                             <option value="<%= element._id %>">
                                 <%= element.Name %>
                             </option>
                             <% }); %>
                     </select>
-
+                </div>
+                <div class="mb-4">
+                    <label for="sort" class="block text-sm font-medium text-gray-700">Sort By:</label>
+                    <select id="sort" name="sort" class="mt-1 p-2 w-full border rounded-md" onchange="applyFilters()">
+                        <option value="High_to_Low">High to Low</option>
+                        <option value="Low_to_High">Low to High</option>
+                    </select>
                 </div>
                 <div>
                     <label class="block text-sm font-medium text-gray-700">Discount :</label>
                     <div class="mt-1">
-                        <select id="discount" name="discount" onclick="discountfilter()" class="mr-2">
+                        <select id="discount" name="discount" onchange="applyFilters()" class="mr-2">
                             <option value="">Select Discount</option>
                             <option value="5">More than 5%</option>
                             <option value="15">More than 15%</option>
                             <option value="20">More than 20%</option>
                         </select>
                     </div>
+                    <button class="block text-sm font-medium text-gray-700 mt-5" onclick="reload()">
+                        Clear Filters
+                    </button>
 
 
                 </div>
@@ -134,8 +136,6 @@
                                             <!-- Add more product details as needed -->
                                             <a href="/cartpost/<%= element._id %>"><button
                                                     class=" button rounded-xl font-semibold ">Add to Cart</button></a>
-
-
                                         </div>
                                     </a>
                                 </div>
@@ -173,87 +173,82 @@
 
         <script>
 
-            function discountfilter() {
+            async function applyFilters() {
+                const discount = document.getElementById('discount').value;
+                const categoryid = document.getElementById('category').value;
+                const sort = document.getElementById('sort').value
 
-                const discount = document.getElementById('discount').value
+                console.log('discount', discount);
+                console.log('category id', categoryid);
+                console.log('sort is ', sort);
 
-                console.log('morethan5', discount);
+                try {
+                    const response = await fetch('/applyfilters', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({
+                            discount: discount,
+                            categoryid: categoryid,
+                            sort: sort
+                        }),
+                    });
 
-                fetch(`/productdiscount/${discount}`)
-                    .then(response => response.json())
-                    .then(data => {
-                        updatePage(data);
-                    })
-                    .catch(error => console.error('Error:', error));
-            }
+                    const data = await response.json();
+                    console.log('data', data);
+                    updatePage(data);
+                } catch (error) {
+                    console.error('Error:', error);
+                }
 
-            function categoryid(categoryid) {
-                console.log('id is', categoryid);
-                fetch(`/categorysort/${categoryid}`)
-                    .then(response => response.json())
-                    .then(data => {
-                        // Here, 'data' is the sorted list of products returned by the server.
-                        // You can update your page with this data.
-
-                        updatePage(data);
-                    })
-                    .catch(error => console.error('Error:', error));
             }
 
 
         </script>
+        <script>
 
-<script>
-const searchInput = document.getElementById('userSearch-all');
-const searchableItems = document.querySelectorAll('.searchable-item-all');
-const noResultsMessage = document.getElementById('notfound');
-let animation = null; // Variable to hold the animation instance
 
-searchInput.addEventListener('input', () => {
-   const searchText = searchInput.value.toLowerCase();
-   let found = false;
+            function reload() {
+                window.location.reload()
+            }
+        </script>
 
-   searchableItems.forEach(item => {
-       const itemText = item.textContent.toLowerCase();
+        <script>
+            const searchInput = document.getElementById('userSearch-all');
+            const searchableItems = document.querySelectorAll('.searchable-item-all');
+            const noResultsMessage = document.getElementById('notfound');
+            let animation = null; // Variable to hold the animation instance
 
-       if (itemText.includes(searchText)) {
-           item.style.display = 'block';
-           found = true;
-       } else {
-           item.style.display = 'none';
-       }
-   });
+            searchInput.addEventListener('input', () => {
+                const searchText = searchInput.value.toLowerCase()
+                let found = false
 
-   noResultsMessage.style.display = found ? 'none' : 'block';
+                searchableItems.forEach(item => {
+                    const itemText = item.textContent.toLowerCase()
 
-   if (!animation) {
-      animation = bodymovin.loadAnimation({
-          container: noResultsMessage,
-          path: 'Not_found_animation.json',
-          renderer: 'svg',
-      });
-  }
-});
-</script>
+                    if (itemText.includes(searchText)) {
+                        item.style.display = 'block';
+                        found = true;
+                    } else {
+                        item.style.display = 'none';
+                    }
+                });
+
+                noResultsMessage.style.display = found ? 'none' : 'block';
+
+                if (!animation) {
+                    animation = bodymovin.loadAnimation({
+                        container: noResultsMessage,
+                        path: 'Not_found_animation.json',
+                        renderer: 'svg',
+                    });
+                }
+            });
+        </script>
 
 
         <script>
-            document.getElementById('sort').addEventListener('change', function () {
-                // console.log('jcf')
-                let sortBy = this.value;
-                let url = '/products?sort=' + sortBy; // Assuming your API endpoint is '/api/products'
-
-                fetch(url)
-                    .then(response => response.json())
-                    .then(data => {
-                        // Here, 'data' is the sorted list of products returned by the server.
-                        // You can update your page with this data.
-
-                        updatePage(data);
-                    })
-                    .catch(error => console.error('Error:', error));
-            });
-
             function updatePage(products) {
                 // Get a reference to the product list div
                 let productListDiv = document.getElementById('productList')

@@ -62,6 +62,7 @@ router.get('/walletadd/:totalAmount/:orderid', walletController.walletreturnadd)
 router.get('/walletcanceladd/:totalAmount/:orderid', walletController.walletcanceladd)
 router.post('/walletpayment/:amount',walletController.walletpayment)
 router.post('/addressdelete/:addressid',clientController.deleteaddress)
+router.post('/applyfilters',clientController.applyFilters)
 
 
 module.exports = router 

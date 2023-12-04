@@ -150,8 +150,8 @@ var animation = bodymovin.loadAnimation({
                                     })
                                     .then(data => {
                                         // Update the subtotal element
-                                        const subtotalElement = document.getElementById('subtotal');
-                                        subtotalElement.textContent = `₹${data.subtotal.toFixed(2)}`;
+                                        const subtotalElement = document.getElementById('subtotal')
+                                        subtotalElement.textContent = `₹${data.subtotal.toFixed(2)}`
                                         const shippingCharge = 4.99; // Your shipping charge
                                         const finalTotal = data.subtotal + shippingCharge;
                                         const finaltotalElement = document.getElementById('finaltotal')
@@ -196,9 +196,9 @@ var animation = bodymovin.loadAnimation({
                                 incrementButton.addEventListener('click', async () => {
                                     const productId = product.getAttribute('data-product-id');
                                     const quantity = parseInt(quantityInput.value) + 1;
-                                    console.log(quantity);
+                                    console.log(quantity)
                                     quantityInput.value = quantity;
-                                    updateTotalPrice();
+                                    updateTotalPrice()
 
 
                                     const addToCartUrl = `/cartadd/${productId}`;

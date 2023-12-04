@@ -42,7 +42,7 @@ const cart = async (req, res) => {
 
       if (acceptHeader.includes('application/json')) {
        
-        res.json({ data, subtotal, user });
+        res.json({ data, subtotal, user })
       } else {
        
         res.render('user/cart', { data, subtotal, user });

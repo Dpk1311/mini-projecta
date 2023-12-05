@@ -268,7 +268,7 @@ const signuppost = async (req, res) => {
             req.session.issue = true
             req.session.errmsg = "All Fields are necessary"
             return res.redirect('/signup');
-
+ 
         }
         let uemail = await UserModel.findOne({ email: email })
         console.log("uemail", uemail);

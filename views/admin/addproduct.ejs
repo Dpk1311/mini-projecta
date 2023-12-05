@@ -40,10 +40,6 @@
                         <input type="file" id="Image" name="Image" multiple
                             class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500">
                     </div>
-                    <canvas id="canvas"></canvas>
-                    <button id="cropButton">Crop</button>
-                    <button id="restoreButton">Restore</button>
-
                     <div class="mb-6">
                         <label for="Discount" class="block mb-2 text-sm text-gray-600">Discount</label>
                         <input type="number" id="Discount" name="Discount"
@@ -86,39 +82,6 @@
                 </form>
             </div>
         </div>
-
-
-
-
-        <script>
-            const image = document.getElementById('Image');
-            const canvas = document.getElementById('canvas');
-            const cropper = new Cropper(image, {
-                aspectRatio: 1,
-                crop(event) {
-                    console.log(event.detail.x);
-                    console.log(event.detail.y);
-                    console.log(event.detail.width);
-                    console.log(event.detail.height);
-                    console.log(event.detail.rotate);
-                    console.log(event.detail.scaleX);
-                    console.log(event.detail.scaleY);
-                },
-            });
-
-
-
-            document.getElementById('cropButton').addEventListener('click', () => {
-                const croppedCanvas = cropper.getCroppedCanvas();
-                canvas.appendChild(croppedCanvas);
-            });
-
-            document.getElementById('restoreButton').addEventListener('click', () => {
-                cropper.restore();
-            });
-
-
-        </script>
 </body>
 
 </html>
